@@ -1,0 +1,307 @@
+<div class="row page-titles text-center">
+  <div class="col-12">
+    <h1 class="text-dark m-b-0">Brand</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <form class="form-horizontal" id="brandForm" #BrandForm="ngForm" (ngSubmit)="addBrand(BrandForm)">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="form-group">
+                <label>Brand Name
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="name" required [ngModel]="brand?.name" #name="ngModel">
+                <span class="help-block">
+                  <small>Example : UberEats</small>
+                </span>
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                  <div *ngIf="name.errors.required">Brand Name is required.</div>
+                </div>
+              </div>
+              <!-- <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isDisabled" name="isDisabled" [ngModel]="brand?.isDisabled">
+                  <label class="custom-control-label" for="isDisabled"> Disable App </label>
+                </div>
+              </div> -->
+              <!-- <div class="form-group">
+                <label>Business Model
+                  <span>*</span>
+                </label>
+                <br />
+                <div class="row">
+                  <div class="col-sm-6">
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input" id="singleBrand" required name="bizModel" [ngModel]="brand?.bizModel" #bizModel="ngModel"
+                    value="SingleBrand">
+                  <label class="custom-control-label" for="singleBrand">Single Brand</label>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input" id="aggregator" required name="bizModel" [ngModel]="brand?.bizModel" #bizModel="ngModel"
+                    value="Aggregator">
+                  <label class="custom-control-label" for="aggregator">Aggregator</label>
+                </div>
+              </div>
+              </div>
+              </div> -->
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Features</h4>
+              <small>Enable / Disable features that you want to configure on a global level to your app users.</small>
+              <hr>
+              <div class="row" ngModelGroup="features">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isPickup" name="isPickup" [ngModel]="brand?.features?.isPickup">
+                      <label class="custom-control-label" for="isPickup"> Enable Take Away </label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isDelivery" name="isDelivery" [ngModel]="brand?.features?.isDelivery">
+                      <label class="custom-control-label" for="isDelivery"> Enable Delivery </label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isTableRes" name="isTableRes" [ngModel]="brand?.features?.isTableRes">
+                      <label class="custom-control-label" for="isTableRes"> Table Reservation </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isWallet" name="isWallet" [ngModel]="brand?.features?.isWallet">
+                      <label class="custom-control-label" for="isWallet">Wallet </label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isReferral" name="isReferral" [ngModel]="brand?.features?.isReferral">
+                      <label class="custom-control-label" for="isReferral">Referral </label>
+                    </div>
+                    <!-- <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isMembership" name="isMembership" [ngModel]="brand?.features?.isMembership">
+                      <label class="custom-control-label" for="isMembership">Prime Membership </label>
+                    </div>-->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ngModelGroup="image">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Images</h4>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Outlet Default Image</label>
+                      <br>
+                      <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                      <input type="hidden" name="outlet" [ngModel]="brand?.image?.outlet" #outletImage="ngModel">
+                      <br>
+                      <br>
+                      <div *ngIf="brand?.image?.outlet">
+                        <img [src]="brand?.image?.outlet" class="img-upload-disp-wrapper">
+                        <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Brand Logo</label>
+                      <br>
+                      <input type="file" (change)="uploadFile($event, 'logo')" accept=".jpg" />
+                      <input type="hidden" name="logo" [ngModel]="brand?.image?.logo" #logoImage="ngModel">
+                      <br>
+                      <br>
+                      <div *ngIf="brand?.image?.logo">
+                        <img [src]="brand?.image?.logo" class="img-upload-disp-wrapper">
+                        <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('logo')">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div ngModelGroup="contact">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Contact Details</h4>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Email
+                        <span>*</span>
+                      </label>
+                      <input class="form-control" type="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                             [ngModel]="brand?.contact?.email" #email="ngModel">
+                      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+                        <div *ngIf="email.errors.required">E-mail is required.</div>
+                        <div *ngIf="email.errors.pattern && email.value != ''">Email should be in proper format.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Mobile Number
+                        <span>*</span>
+                      </label>
+                      <input class="form-control" type="text" maxlength="10" name="mobile" required [ngModel]="brand?.contact?.mobile"
+                             #mobile="ngModel">
+                      <div *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)" class="alert alert-danger">
+                        <div *ngIf="mobile.errors.required">Mobile Number is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Website</label>
+                      <input class="form-control" pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                             type="text" name="website" [ngModel]="brand?.contact?.website" #website="ngModel">
+                      <div *ngIf="website.errors && (website.dirty || website.touched)" class="alert alert-danger">
+                        <div [hidden]="!website.errors.pattern">
+                          Enter a valid URL!
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Landline
+                      </label>
+                      <input class="form-control" type="text" maxlength="11" name="landline" [ngModel]="brand?.contact?.landline"
+                             #landline="ngModel">
+                    </div>
+                  </div>
+                </div> -->
+                <!-- <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Toll Free</label>
+                      <input class="form-control" type="text" maxlength="12" name="tollFree" [ngModel]="brand?.contact?.tollFree" #tollFree="ngModel">
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Tax ID</label>
+                      <input class="form-control" type="text" name="taxID" [ngModel]="brand?.contact?.taxID" #taxID="ngModel">
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="card" ngModelGroup="address">
+            <div class="card-body">
+              <h4 class="card-title">Address Details</h4>
+              <hr>
+              <div class="form-group">
+                <label>Address
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="address" required #search [ngModel]="brand?.address?.address"
+                       #address="ngModel">
+                <div *ngIf="address.invalid && (address.dirty || address.touched)" class="alert alert-danger">
+                  <div *ngIf="address.errors.required">Address is required.</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>City
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="city" required [ngModel]="brand?.address?.city" #city="ngModel">
+                    <div *ngIf="city.invalid && (city.dirty || city.touched)" class="alert alert-danger">
+                      <div *ngIf="city.errors.required">City is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>State
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="state" required [ngModel]="brand?.address?.state"
+                           #state="ngModel">
+                    <div *ngIf="state.invalid && (state.dirty || state.touched)" class="alert alert-danger">
+                      <div *ngIf="state.errors.required">State is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Zip Code
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="zip" required [ngModel]="brand?.address?.zip" #zip="ngModel">
+                    <div *ngIf="zip.invalid && (zip.dirty || zip.touched)" class="alert alert-danger">
+                      <div *ngIf="zip.errors.required">zip Code is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Country
+                      <span>*</span>
+                    </label>
+                    <select class="form-control" name="country" required [ngModel]="brand?.address?.country" #country="ngModel"
+                            [compareWith]="compareByOptionCode">
+                      <option *ngFor="let option of countries" [ngValue]="option.value">{{option.label}}</option>
+                    </select>
+                    <div *ngIf="country.invalid && (country.dirty || country.touched)" class="alert alert-danger">
+                      <div *ngIf="country.errors.required">Country is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Latitude
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="lat" required [ngModel]="brand?.address?.lat" #lat="ngModel">
+                    <div *ngIf="lat.invalid && (lat.dirty || lat.touched)" class="alert alert-danger">
+                      <div *ngIf="lat.errors.required">Latitude is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Longitude
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="long" required [ngModel]="brand?.address?.long"
+                           #long="ngModel">
+                    <div *ngIf="long.invalid && (long.dirty || long.touched)" class="alert alert-danger">
+                      <div *ngIf="long.errors.required">Longitude is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

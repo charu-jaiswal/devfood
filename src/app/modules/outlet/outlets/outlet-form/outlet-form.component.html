@@ -1,0 +1,1144 @@
+<h1 class="text-center title" *ngIf="!outletID">Add New Outlet</h1>
+<h1 class="text-center title" *ngIf="outletID">Edit Outlet</h1>
+<br>
+<form class="form-horizontal" id="outletForm" #OutletForm="ngForm" (ngSubmit)="addOutlet(OutletForm)">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+
+          <div class="row">
+            <div class="col-md-9 col-xs-12">
+              <div class="form-group">
+                <label>Outlet Name
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="name" required [ngModel]="outlet?.name" #name="ngModel">
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                  <div *ngIf="name.errors.required">Outlet Name is required.</div>
+                </div>
+
+              </div>
+            </div>
+            <div class="col-md-3 col-xs-12">
+              <div class="form-group min-w-90px">
+                <label>Sort Weight</label>
+                <input class="form-control" type="text" name="sort" [ngModel]="outlet?.sort" #sort="ngModel">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label>Outlet URL ID</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">http://yourwebsite.com/#/outlet/</div>
+                  </div>
+                  <input class="form-control" type="text" name="outletURLID" pattern="^[a-zA-Z0-9-]*$"
+                    [ngModel]="outlet?.outletURLID" #outletURLID="ngModel">
+                </div>
+                <div *ngIf="outletURLID.errors && (outletURLID.dirty || outletURLID.touched)" class="alert alert-danger">
+                  <div [hidden]="!outletURLID.errors.pattern">
+                    Only alphanumberic characters and dashes are allowed. No Spaces.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isDisabled" name="isDisabled"
+                         [ngModel]="outlet?.isDisabled">
+                  <label class="custom-control-label" for="isDisabled">Disable Outlet</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isHidden" name="isHidden"
+                         [ngModel]="outlet?.isHidden">
+                  <label class="custom-control-label" for="isHidden">Hidden Outlet</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isDisableInApp" name="isDisableInApp"
+                       #isDisableInApp="ngModel"  [ngModel]="outlet?.isDisableInApp">
+                  <label class="custom-control-label" for="isDisableInApp">Hidden in App</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isCategory" name="isCategory"
+                       #catImgCheck="ngModel"  [ngModel]="outlet?.isCategory">
+                  <label class="custom-control-label" for="isCategory">Enable Category Layout</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isIfSoldOut" name="isIfSoldOut"
+                       [ngModel]="outlet?.isIfSoldOut">
+                  <label class="custom-control-label" for="isIfSoldOut">Enable "If sold out" in cart.</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isAdultAgree" name="isAdultAgree"
+                       [ngModel]="outlet?.isAdultAgree">
+                  <label class="custom-control-label" for="isAdultAgree">Enable "18+" in cart.</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isPostDeliTime" name="isPostDeliTime"
+                       #isPostDeliTime="ngModel"  [ngModel]="outlet?.isPostDeliTime">
+                  <label class="custom-control-label" for="isPostDeliTime">Enable Pre-Checkout Delivery Time</label>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-sm-6" [hidden]="!catImgCheck.value">
+              <div class="form-group">
+                <label>Category Image<span>*</span>
+                </label>
+                <input type="file" (change)="uploadFile1($event, 'image')" accept=".jpg" />
+                <input type="hidden" name="catDefaultImg" [ngModel]="outlet?.catDefaultImg" #catImg="ngModel" [required]="catImgCheck.value">
+                <br>
+                <br>
+                <div *ngIf="outlet?.catDefaultImg">
+                  <img [src]="outlet?.catDefaultImg" class="img-upload-disp-wrapper">
+                  <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile1('image')">Delete</button>
+                </div>
+                <div *ngIf="catImg.invalid && (catImg.dirty || catImg.touched)" class="alert alert-danger">
+                  <div *ngIf="catImg.errors.required">Image is required.</div>
+                </div>
+                <span class="help-block">
+                  <small> Max File Size: 300kb. Max Image Size : 640px by 480px. Format: jpg only. </small>
+                </span>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="card" [hidden]="!isPostDeliTime.value" ngModelGroup="postDeliTime">
+        <div class="card-body">
+          <h5 class="card-title">Pre-Checkout Delivery Time</h5>
+          <hr>
+          <div class="form-grouping-wrapper my-3" ngModelGroup="timeRange">
+            <h5>Timeslots</h5>
+            <div class="row" *ngFor="let timeRange of outlet?.postDeliTime?.timeRange; let i = index" [ngModelGroup]="i">
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label>From <span>*</span></label>
+                  <select class="form-control" name="fromTime" [required]="isPostDeliTime.value" [ngModel]="timeRange?.fromTime" #fromRangeTime="ngModel">
+                    <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                      {{option.label}}</option>
+                  </select>
+                  <div *ngIf="fromRangeTime.invalid && (fromRangeTime.dirty || fromRangeTime.touched)" class="alert alert-danger">
+                    <div *ngIf="fromRangeTime.errors.required">From Time is required.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label>To <span>*</span></label>
+                  <select class="form-control" name="toTime" [required]="isPostDeliTime.value" [ngModel]="timeRange?.toTime" #toRangeTime="ngModel">
+                    <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                      {{option.label}}</option>
+                  </select>
+                  <div *ngIf="toRangeTime.invalid && (toRangeTime.dirty || toRangeTime.touched)" class="alert alert-danger">
+                    <div *ngIf="toRangeTime.errors.required">To Time is required.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label>Delivery Price <span>*</span>
+                  </label>
+                  <input class="form-control" type="number" name="price" [required]="isPostDeliTime.value" [ngModel]="timeRange?.price" #rangePrice="ngModel">
+                  <div *ngIf="rangePrice.invalid && (rangePrice.dirty || rangePrice.touched)" class="alert alert-danger">
+                    <div *ngIf="rangePrice.errors.required">Delivery Price is required.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label>Max No of Orders <span>*</span>
+                  </label>
+                  <input class="form-control" type="number" name="maxOrders" [ngModel]="timeRange?.maxOrders" #rangeMaxOrders="ngModel">
+                </div>
+              </div>
+              <div class="col-md-1 mt-1">
+                <br>
+                <button type="button" class="btn btn-sm btn-danger" (click)="deleteTimeRange(i)">
+                  <i class="ti-close"></i>
+                </button>
+              </div>
+              <div class="col-md-12">
+                <hr>
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="button" class="btn btn-sm btn-success" (click)="addMoreTimeRanges()">
+                <i class="ti-plus"></i> &nbsp; Add</button>
+            </div>
+          </div>
+          <h5>Settings</h5>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label>Offset Time <span>*</span>
+                </label>
+                <div class="input-group">
+                  <input class="form-control" type="number" name="offsetTime" [required]="isPostDeliTime.value" [ngModel]="outlet?.postDeliTime?.offsetTime" #offsetTime="ngModel">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">hours</div>
+                  </div>
+                </div>
+                <div *ngIf="offsetTime.invalid && (offsetTime.dirty || offsetTime.touched)" class="alert alert-danger">
+                  <div *ngIf="offsetTime.errors.required">Offset Time is required.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isExpressDeli" name="isExpressDeli"
+                       #isExpressDeli="ngModel"  [ngModel]="outlet?.postDeliTime?.isExpressDeli">
+                  <label class="custom-control-label" for="isExpressDeli">Enable Express Delivery</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div [hidden]="!(isPostDeliTime.value && isExpressDeli.value)" ngModelGroup="expressDeli">
+            <h5>Express Delivery</h5>
+            <div ngModelGroup="timeRange">
+              <h5>Time Range</h5>
+              <div class="row" *ngFor="let timeRange of outlet?.postDeliTime?.expressDeli?.timeRange; let i = index" [ngModelGroup]="i">
+                <div class="col-sm-5">
+                  <div class="form-group">
+                    <label>From <span>*</span></label>
+                    <select class="form-control" name="fromTime" [required]="isPostDeliTime.value && isExpressDeli.value" [ngModel]="timeRange?.fromTime" #fromExpDeliTime="ngModel">
+                      <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                        {{option.label}}</option>
+                    </select>
+                    <div *ngIf="fromExpDeliTime.invalid && (fromExpDeliTime.dirty || fromExpDeliTime.touched)" class="alert alert-danger">
+                      <div *ngIf="fromExpDeliTime.errors.required">From Time is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-group">
+                    <label>To <span>*</span></label>
+                    <select class="form-control" name="toTime" [required]="isPostDeliTime.value && isExpressDeli.value" [ngModel]="timeRange?.toTime" #toExpDeliTime="ngModel">
+                      <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                        {{option.label}}</option>
+                    </select>
+                    <div *ngIf="toExpDeliTime.invalid && (toExpDeliTime.dirty || toExpDeliTime.touched)" class="alert alert-danger">
+                      <div *ngIf="toExpDeliTime.errors.required">To Time is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1 mt-1">
+                  <br>
+                  <button type="button" class="btn btn-sm btn-danger" (click)="deleteExpressTimeRange(i)">
+                    <i class="ti-close"></i>
+                  </button>
+                </div>
+                <div class="col-md-12">
+                  <hr>
+                </div>
+              </div>
+              <div class="text-center">
+                <button type="button" class="btn btn-sm btn-success" (click)="addMoreExpressTimeRanges()">
+                  <i class="ti-plus"></i> &nbsp; Add</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Title <span>*</span>
+                  </label>
+                  <input class="form-control" type="text" name="title" [required]="isPostDeliTime.value && isExpressDeli.value" [ngModel]="outlet?.postDeliTime?.expressDeli?.title" #expressDeliTitle="ngModel">
+                  <div *ngIf="expressDeliTitle.invalid && (expressDeliTitle.dirty || expressDeliTitle.touched)" class="alert alert-danger">
+                    <div *ngIf="expressDeliTitle.errors.required">Title is required.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Delivery Price <span>*</span>
+                  </label>
+                  <input class="form-control" type="number" name="price" [required]="isPostDeliTime.value && isExpressDeli.value" [ngModel]="outlet?.postDeliTime?.expressDeli?.price" #expressDeliPrice="ngModel">
+                  <div *ngIf="expressDeliPrice.invalid && (expressDeliPrice.dirty || expressDeliPrice.touched)" class="alert alert-danger">
+                    <div *ngIf="expressDeliPrice.errors.required">Delivery Price is required.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">
+            Information</h4>
+          <hr>
+          <div ngModelGroup="info">
+            <div class="form-group">
+              <label>Outlet Subtitle
+                <!-- <span>*</span> -->
+              </label>
+              <input type="text" class="form-control" name="subTitle" #subtitle="ngModel"
+                     [ngModel]="outlet?.info?.subTitle">
+              <!-- <div *ngIf="subtitle.invalid && (subtitle.dirty || subtitle.touched)" class="alert alert-danger">
+                <div *ngIf="subtitle.errors.minLengthError">Outlet Subtitle should be minimium 30 characters.</div>
+              </div> -->
+            </div>
+            <!--<div class="form-group">
+              <label>Outlet Description
+                </label>
+              <quill-editor name="desc" [ngModel]="outlet?.info?.desc" #desc="ngModel" placeholder="Enter outlet description.."
+                [style]="{height: '150px'}" [modules]="quillToolbar"></quill-editor>
+               <div *ngIf="desc.invalid && (desc.dirty || desc.touched)" class="alert alert-danger">
+                <div *ngIf="desc.errors.required">Outlet Description is required.</div>
+                <div *ngIf="desc.errors.minLengthError">Outlet Description should be minimium 30 characters.</div>
+              </div>
+            </div>
+
+            <div class="row mb-3 px-3">
+              <table class="w-100">
+                <tr>
+                  <td class="form-group" width="32%">
+                    <label>Display Ribbon</label>
+                    <input class="form-control" type="text" name="textDisplay" [ngModel]="outlet?.info?.textDisplay"
+                      #textDisplay="ngModel">
+                  </td>
+                  <td class="form-group px-2-percent" width="32%">
+                    <label>Ribbon bg Color</label>
+                    <input class="form-control" [hidden]="true" type="text" name="bgColor" [ngModel]="outlet?.info?.bgColor">
+                    <input class="form-control text-center" [value]="bgColor" [style.background]="bgColor"
+                      [cpAlphaChannel]="'always'" [cpOutputFormat]="'hex'" [cpPresetColors]="['#fff', '#2889e9']"
+                      [cpAddColorButton]="true" [(colorPicker)]="bgColor" name="bColor" (colorPickerChange)="onChangeColor($event, 'bgColor')" />
+                  </td>
+                  <td class="form-group" width="32%">
+                    <label>Ribbon Text Color</label>
+                    <input class="form-control" [hidden]="true" type="text" name="textColor" [ngModel]="outlet?.info?.textColor">
+                    <input class="form-control text-center" [value]="textColor" [style.background]="textColor"
+                      [cpAlphaChannel]="'always'" [cpOutputFormat]="'hex'" [cpPresetColors]="['#fff', '#2889e9']"
+                      [cpAddColorButton]="true" [(colorPicker)]="textColor" name="tColor" (colorPickerChange)="onChangeColor($event, 'textColor')" />
+                  </td>
+                </tr>
+              </table>
+               <div class="form-group col-md-4">
+                <label>Display Ribbon</label>
+                <input class="form-control" type="text" name="textDisplay" [ngModel]="outlet?.displayRebbon?.textDisplay" #textDisplay="ngModel">
+              </div>
+              <div class="form-group col-md-4">
+                <label>Ribbon bg Color</label>
+                <input class="form-control" [hidden]="true" type="text" name="bgColor" [ngModel]="outlet?.info?.bgColor">
+                <input class="form-control text-center" [value]="outlet.info.bgColor" [style.background]="outlet.info.bgColor" [cpAlphaChannel]="'always'"
+                  [cpOutputFormat]="'hex'" [cpPresetColors]="['#fff', '#2889e9']" [cpAddColorButton]="true" [(colorPicker)]="outlet.info.bgColor"
+                  name="bColor" (colorPickerChange)="onChangeColor($event, OutletForm, 'bgColor')" />
+              </div>
+              <div class="form-group col-md-4">
+                <label>Ribbon Text Color</label>
+                <input class="form-control" [hidden]="true" type="text" name="textColor" [ngModel]="outlet?.info?.textColor">
+                <input class="form-control text-center" [value]="outlet.info.textColor" [style.background]="outlet.info.textColor" [cpAlphaChannel]="'always'"
+                  [cpOutputFormat]="'hex'" [cpPresetColors]="['#fff', '#2889e9']" [cpAddColorButton]="true" [(colorPicker)]="outlet.info.textColor"
+                  name="tColor" (colorPickerChange)="onChangeColor($event, OutletForm, 'textColor')" />
+              </div> 
+            </div>-->
+            <div class="form-group">
+              <label>Outlet Logo
+              </label>
+              <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+              <input type="hidden" name="image" [ngModel]="outlet?.info?.image">
+              <br>
+              <br>
+              <div *ngIf="outlet?.info?.image">
+                <img [src]="outlet?.info?.image" class="img-upload-disp-wrapper">
+                <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+              </div>
+              <span class="help-block">
+                <small> Max File Size: 300kb. Max Image Size : 640px by 480px. Format: jpg only. </small>
+              </span>
+            </div>
+            <div class="form-group">
+              <label>Video</label>
+              <input class="form-control" type="text" name="video" [ngModel]="outlet?.info?.video">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" ngModelGroup="address">
+          <h4 class="card-title">
+            Address Details</h4>
+          <hr>
+          <div class="form-group">
+            <label>Business Address
+              <span>*</span>
+            </label>
+            <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+                   class="form-control" autocomplete="off" name="address" #address="ngModel" #search required
+                   [ngModel]="outlet?.address?.address">
+            <!-- <input [hidden]="true" class="form-control" type="text" name="address" [ngModel]="outlet?.address?.address"
+              #address="ngModel">-->
+            <div *ngIf="address.invalid && (address.dirty || address.touched)" class="alert alert-danger">
+              <div *ngIf="address.errors.required">Address is required.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Area
+                </label>
+                <select class="custom-select col-12" name="city" [ngModel]="outlet?.address?.city" #city="ngModel">
+                  <option *ngFor="let option of cityList" [value]="option.value">{{option.label}}</option>
+                </select>
+                <span class="help-block">
+                  <small> Add Area Master from "Global Settings" first.</small>
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>State
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="state" required [ngModel]="outlet?.address?.state"
+                       #state="ngModel">
+                <div *ngIf="state.invalid && (state.dirty || state.touched)" class="alert alert-danger">
+                  <div *ngIf="state.errors.required">State is required.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Zip Code
+              <span>*</span>
+            </label>
+            <input class="form-control" type="text" name="zip" required [ngModel]="outlet?.address?.zip" #zip="ngModel">
+            <div *ngIf="zip.invalid && (zip.dirty || zip.touched)" class="alert alert-danger">
+              <div *ngIf="zip.errors.required">Zip Code is required.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Latitude
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="number" name="lat" required [ngModel]="outlet?.address?.lat"
+                       #lat="ngModel">
+                <div *ngIf="lat.invalid && (lat.dirty || lat.touched)" class="alert alert-danger">
+                  <div *ngIf="lat.errors.required">Latitude is required.</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Longitude
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="number" name="long" required [ngModel]="outlet?.address?.long"
+                       #long="ngModel">
+                <div *ngIf="long.invalid && (long.dirty || long.touched)" class="alert alert-danger">
+                  <div *ngIf="long.errors.required">Longitude is required.</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <span class="help-block">
+                <small> Do a reverse lookup for the outlet address and get exact latitue & longitute.
+                  <a href="https://www.latlong.net/convert-address-to-lat-long.html" target="_blank"> Learn More </a>
+                </small>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" ngModelGroup="features">
+          <h4 class="card-title">Features</h4>
+          <hr>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isPickup" name="isPickup"
+                         [ngModel]="outlet?.features?.isPickup">
+                  <label class="custom-control-label" for="isPickup"> Enable Take Away</label>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isDelivery" name="isDelivery"
+                         [ngModel]="outlet?.features?.isDelivery">
+                  <label class="custom-control-label" for="isDelivery"> Enable Delivery </label>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isTableRes" name="isTableRes"
+                         [ngModel]="outlet?.features?.isTableRes" #isTableRes="ngModel">
+                  <label class="custom-control-label" for="isTableRes"> Table Reservation </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" [hidden]="!isTableRes.value" ngModelGroup="table">
+        <div class="card-body">
+          <h4 class="card-title">Table Reservation</h4>
+          <hr>
+          <div class="row" ngModelGroup="timing">
+            <!-- <div class="col-sm-6">
+              <div class="form-group">
+                <label>Block Table
+                  <span>*</span>
+                </label>
+                <div class="input-group">
+                  <input class="form-control" type="number" name="blockMins"
+                         [ngModel]="outlet?.table?.timing?.blockMins" [required]="isTableRes.value"
+                         #blockTable="ngModel">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">Minutes</div>
+                  </div>
+                </div>
+                <div *ngIf="blockTable.invalid && (blockTable.dirty || blockTable.touched)" class="alert alert-danger">
+                  <div *ngIf="blockTable.errors.required">Block Table is required.</div>
+                </div>
+              </div>
+            </div> -->
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Advanced Reservation
+                  <span>*</span>
+                </label>
+                <div class="input-group">
+                  <input class="form-control" type="number" name="prebook" [ngModel]="outlet?.table?.timing?.prebook"
+                         [required]="isTableRes.value" #preBookDays="ngModel">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">Days</div>
+                  </div>
+                </div>
+                <div *ngIf="preBookDays.invalid && (preBookDays.dirty || preBookDays.touched)"
+                     class="alert alert-danger">
+                  <div *ngIf="preBookDays.errors.required">Advanced Reservation is required.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ngModelGroup="charge">
+            <div class="form-group">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="enable" name="enable"
+                       [ngModel]="outlet?.table?.charge?.enable" #enable="ngModel">
+                <label class="custom-control-label" for="enable">Enable Reservation Charges</label>
+              </div>
+            </div>
+            <div [hidden]="!enable.value">
+              <div class="form-group">
+                <label>Charge
+                  <span>*</span></label>
+                <br />
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" [required]="enable.value" id="perReservation"
+                             name="type" [ngModel]="outlet?.table?.charge?.type" #charge="ngModel" value="reservation">
+                      <label class="custom-control-label" for="perReservation">Per Reservation</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" [required]="enable.value" id="perPerson"
+                             name="type" [ngModel]="outlet?.table?.charge?.type" #charge="ngModel" value="person">
+                      <label class="custom-control-label" for="perPerson">Per Person</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Amount to Charge
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="number" name="amount" [required]="enable.value"
+                       [ngModel]="outlet?.table?.charge?.amount" #amtCharge="ngModel">
+                <div *ngIf="amtCharge.invalid && (amtCharge.dirty || amtCharge.touched)" class="alert alert-danger">
+                  <div *ngIf="amtCharge.errors.required">Amount to Charge is required.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">
+            Configurations</h4>
+          <hr>
+          <div ngModelGroup="config">
+            <div class="form-group">
+              <label>Cuisines </label>
+              <ng-select [items]="cuisineList" bindLabel="label" bindValue="value" name="cuisines"
+                         [ngModel]="outlet?.config?.cuisines" #cuisines="ngModel" [multiple]="true"
+                         [closeOnSelect]="false">
+              </ng-select>
+              <span class="help-block">
+                <small> Add Cuisines Master from "Global Settings" first.</small>
+              </span>
+            </div>
+            <!-- <div class="form-group">
+              <label>Tags </label>
+              <ng-select [items]="tagsList" bindLabel="label" bindValue="value" name="tags"
+                         [ngModel]="outlet?.config?.tags" #tags="ngModel" [multiple]="true" [closeOnSelect]="false">
+              </ng-select>
+              <span class="help-block">
+                <small> Add Tags Master from "Global Settings" first.</small>
+              </span>
+            </div> -->
+            <div class="form-group">
+              <label>Filter </label>
+              <ng-select [items]="filterList" bindLabel="label" bindValue="value" name="filter"
+                         [ngModel]="outlet?.config?.filter" #tags="ngModel" [multiple]="true" [closeOnSelect]="false">
+              </ng-select>
+              <span class="help-block">
+                <small> Add Filter Master from "Global Settings" first.</small>
+              </span>
+            </div>
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <label>Cost for Two </label>
+                  <input class="form-control" type="text" name="avgCost1" [ngModel]="outlet?.config?.avgCost1">
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <label>Prep Time (Mins) </label>
+                  <input class="form-control" type="number" name="preTime" [ngModel]="outlet?.config?.preTime"
+                         #preTime="ngModel">
+                </div>
+              </div>
+            </div>
+            <!-- <label>Serves
+            </label>
+            <br /> -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Rating</label>
+                  <input class="form-control" type="number" name="rating" [ngModel]="outlet?.config?.rating"
+                         #addRating="ngModel">
+                </div>
+              </div>
+            </div>
+            <div class="row m-0">
+              <div class="w-50">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isRoundOff" name="isRoundOff"
+                           [ngModel]="outlet?.config?.isRoundOff">
+                    <label class="custom-control-label" for="isRoundOff">Round Off Total</label>
+                  </div>
+                </div>
+              </div>
+              <div class="w-50">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isPreOrder" name="isPreOrder"
+                         [ngModel]="outlet?.config?.isPreOrder" #preOrderEnable="ngModel">
+                  <label class="custom-control-label" for="isPreOrder"> Enable Pre Ordering </label>
+                </div>
+                <!--  <div class="custom-control custom-radio" >
+                    <input type="radio" class="custom-control-input" id="veg" name="serve" required [ngModel]="outlet?.config?.serve"
+                     #serve="ngModel" value="Veg">
+                    <label class="custom-control-label" for="veg">Veg Only</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" id="vegNonVeg" name="serve" required [ngModel]="outlet?.config?.serve"
+                    #serve="ngModel" value="NonVeg">
+                    <label class="custom-control-label" for="vegNonVeg">Non Veg</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" id="none" name="serve" required [ngModel]="outlet?.config?.serve"
+                    #serve="ngModel" value="None"  >
+                    <label class="custom-control-label" for="none">None</label>
+                  </div>
+                  <div *ngIf="serve.invalid && (serve.dirty || serve.touched)" class="alert alert-danger">
+                    <div *ngIf="serve.errors.required">Serves Field is required.</div>
+                  </div>-->
+                <!-- <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="isVeg" name="isVeg" [ngModel]="outlet?.config?.isVeg">
+                        <label class="custom-control-label" for="isVeg">Serves Veg Only</label>
+                      </div>
+                    </div>
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isAlcohol" name="isAlcohol" [ngModel]="outlet?.config?.isAlcohol">
+                    <label class="custom-control-label" for="isAlcohol">Serves Alcohol</label>
+                  </div>
+                </div> -->
+
+              </div>
+            </div>
+            <div class="form-group" [hidden]="!preOrderEnable.value">
+              <label>Pre Order Number of days
+              </label>
+              <input class="form-control" type="number" maxlength="3" name="preOrderDay"
+                     [required]="preOrderEnable.value" [ngModel]="outlet?.config?.preOrderDay" #preOrderDay="ngModel">
+              <!-- <div *ngIf="preOrderDay.invalid && (preOrderDay.dirty || preOrderDay.touched)" class="alert alert-danger">
+                <div *ngIf="preOrderDay.errors.required">Pre-order Days is required.</div>
+              </div>-->
+            </div>
+
+            <div class="form-group">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="showUnavailableAlert" name="showUnavailableAlert"
+                       [ngModel]="outlet?.config?.showUnavailableAlert" #unavailableAlertEnable="ngModel">
+                <label class="custom-control-label" for="showUnavailableAlert"> Show Alert if outlet is unavailable </label>
+              </div>
+            </div>
+            <div class="form-group" [hidden]="!unavailableAlertEnable.value">
+              <label>Unavailable Alert</label>
+              <textarea class="form-control" rows="2" name="unavailableAlert" [required]="unavailableAlertEnable.value" [ngModel]="outlet?.config?.unavailableAlert" #unavailableAlert="ngModel"></textarea>
+              <div *ngIf="unavailableAlert.invalid && (unavailableAlert.dirty || unavailableAlert.touched)" class="alert alert-danger">
+                <div *ngIf="unavailableAlert.errors.required">Unavailable Alert is required.</div>
+              </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>Outlet Rating   </label>
+                    <input class="form-control" type="number" name="avgCost" [ngModel]="outlet?.config?.outletRate" #outletRate="ngModel"
+                   pattern="[0-5]+" maxlength="1">
+                    <div *ngIf="outletRate.invalid && (outletRate.dirty || outletRate.touched)" class="alert alert-danger">
+                        Enter the Rating Value is 0-5
+                      </div>
+                  </div>
+                </div>
+                </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">
+            Operating Hours
+          </h4>
+          <hr>
+          <div class="form-grouping-wrapper my-3" ngModelGroup="opHrs">
+            <div class="row" *ngFor="let opHr of outlet?.opHrs; let i = index" [ngModelGroup]="i">
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>Day
+                  </label>
+                  <select class="custom-select col-12" name="day" [ngModel]="opHr?.day" #day="ngModel">
+                    <option *ngFor="let option of dayList" [value]="option.value">{{option.label}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>From</label>
+                  <select class="form-control" name="fromTime" [ngModel]="opHr?.fromTime" #fromTime="ngModel">
+                    <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                      {{option.label}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>To</label>
+                  <select class="form-control" name="toTime" [ngModel]="opHr?.toTime" #toTime="ngModel">
+                    <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                      {{option.label}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-1 mt-1">
+                <br>
+                <button type="button" class="btn btn-sm btn-danger" (click)="deleteOperatingHour(i)">
+                  <i class="ti-close"></i>
+                </button>
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="button" class="btn btn-sm btn-success" (click)="addMoreOperatingHours()">
+                <i class="ti-plus"></i> &nbsp; Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" ngModelGroup="contact">
+          <h4 class="card-title">
+            Contact Details</h4>
+          <hr>
+          <!-- <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Email for display
+                   <span>*</span>
+                </label>
+                <input class="form-control" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                       [ngModel]="outlet?.contact?.email" #email="ngModel">
+                <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+                  <div *ngIf="email.errors.required">E-mail is required.</div>
+                  <div *ngIf="email.errors.pattern && email?.value != ''">Email should be in proper format.</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Tax ID for Display
+                </label>
+                <input class="form-control" type="text" name="taxID" pattern="[a-zA-Z0-9 ]+" [ngModel]="outlet?.contact?.taxID"
+                       #taxID="ngModel">
+                <div *ngIf="taxID.invalid && (taxID.dirty || taxID.touched)" class="alert alert-danger">
+                  <div *ngIf="taxID.errors.pattern">Tax ID for Display should be Alphanumeric</div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Mobile Number for Display </label>
+                <input class="form-control" type="text" name="mobile" [ngModel]="outlet?.contact?.mobile"
+                       #mobile="ngModel">
+              </div>
+            </div>
+            <!-- <div class="col-sm-6">
+              <div class="form-group">
+                <label>Landline for Display </label>
+                <input class="form-control" type="number" name="landLine" [ngModel]="outlet?.contact?.landLine"
+                       #landLine="ngModel">
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" ngModelGroup="notify">
+          <h4 class="card-title">
+            Order Notification</h4>
+          <hr>
+          <div class="form-group">
+            <label>Number for Text Message</label>
+            <ng-select name="sms" [ngModel]="outlet?.notify?.sms" [addTag]="addSMS" #sms="ngModel" [multiple]="true">
+            </ng-select>
+            <span class="help-block">
+              <small> Add Mobile Numbers without + or Zero.</small>
+            </span>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <ng-select name="email" [ngModel]="outlet?.notify?.email" [addTag]="addEmail" #email="ngModel"
+                       [multiple]="true" maxSelectedItems="2">
+            </ng-select>
+          </div>
+          <!-- <div class="form-group">
+            <label>Phone Number for Call</label>
+            <ng-select name="call" [ngModel]="outlet?.notify?.call" [addTag]="addCall" #call="ngModel"
+                       [multiple]="true">
+            </ng-select>
+            <span class="help-block">
+              <small> Automated Call will be placed to this number, if order not accepted for a long period of
+                time.</small>
+            </span>
+          </div> -->
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">
+            Outlet Commission Setup</h4>
+          <hr>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isCommissionCheck" name="isCommission"
+                         [ngModel]="outlet?.isCommission" #isCommissionCheck="ngModel">
+                  <label class="custom-control-label" for="isCommissionCheck">Enable Commission</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ngModelGroup="commission">
+            <!-- <div class="row" [hidden]="!isCommissionCheck.value">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isTableResCheck" name="isTableRes"
+                           [ngModel]="outlet?.commission?.isTableRes" #isTableResCheck="ngModel">
+                    <label class="custom-control-label" for="isTableResCheck">Table Reservation</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="row" ngModelGroup="tableRes" [hidden]="!isTableResCheck.value">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Percentage</label>
+                      <div class="input-group">
+                        <input class="form-control" type="number" name="perc"
+                               [ngModel]="outlet?.commission?.tableRes?.perc" #tablePercValue="ngModel"
+                               [required]="isTableResCheck.value">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">%</div>
+                        </div>
+                      </div>
+                      <div *ngIf="tablePercValue.invalid && (tablePercValue.dirty || tablePercValue.touched)"
+                           class="alert alert-danger">
+                        <div *ngIf="tablePercValue.errors.required">Percentage is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Flat</label>
+                      <input class="form-control" type="number" name="flat"
+                             [ngModel]="outlet?.commission?.tableRes?.flat" #tableFlatValue="ngModel"
+                             [required]="isTableResCheck.value">
+                      <div *ngIf="tableFlatValue.invalid && (tableFlatValue.dirty || tableFlatValue.touched)"
+                           class="alert alert-danger">
+                        <div *ngIf="tableFlatValue.errors.required">Flat is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <div class="row" [hidden]="!isCommissionCheck.value">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isDeliveryCheck" name="isDelivery"
+                           [ngModel]="outlet?.commission?.isDelivery" #isDeliveryCheck="ngModel">
+                    <label class="custom-control-label" for="isDeliveryCheck">Delivery</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="row" ngModelGroup="delivery" [hidden]="!isDeliveryCheck.value">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Percentage</label>
+                      <div class="input-group">
+                        <input class="form-control" type="number" name="perc"
+                               [ngModel]="outlet?.commission?.delivery?.perc" #deliveryPercValue="ngModel"
+                               [required]="isDeliveryCheck.value">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">%</div>
+                        </div>
+                      </div>
+                      <div *ngIf="deliveryPercValue.invalid && (deliveryPercValue.dirty || deliveryPercValue.touched)"
+                           class="alert alert-danger">
+                        <div *ngIf="deliveryPercValue.errors.required">Percentage is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Flat</label>
+                      <input class="form-control" type="number" name="flat"
+                             [ngModel]="outlet?.commission?.delivery?.flat" #deliveryFlatValue="ngModel"
+                             [required]="isDeliveryCheck.value">
+                      <div *ngIf="deliveryFlatValue.invalid && (deliveryFlatValue.dirty || deliveryFlatValue.touched)"
+                           class="alert alert-danger">
+                        <div *ngIf="deliveryFlatValue.errors.required">Flat is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" [hidden]="!isCommissionCheck.value">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isTakeAwayCheck" name="isTakeAway"
+                           [ngModel]="outlet?.commission?.isTakeAway" #isTakeAwayCheck="ngModel">
+                    <label class="custom-control-label" for="isTakeAwayCheck">Take Away</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="row" ngModelGroup="takeAway" [hidden]="!isTakeAwayCheck.value">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Percentage</label>
+                      <div class="input-group">
+                        <input class="form-control" type="number" name="perc"
+                               [ngModel]="outlet?.commission?.takeAway?.perc" #takePercValue="ngModel"
+                               [required]="isTakeAwayCheck.value">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">%</div>
+                        </div>
+                      </div>
+                      <div *ngIf="takePercValue.invalid && (takePercValue.dirty || takePercValue.touched)"
+                           class="alert alert-danger">
+                        <div *ngIf="takePercValue.errors.required">Percentage is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Flat</label>
+                      <input class="form-control" type="number" name="flat"
+                             [ngModel]="outlet?.commission?.takeAway?.flat" #takeFlatValue="ngModel"
+                             [required]="isTakeAwayCheck.value">
+                      <div *ngIf="takeFlatValue.invalid && (takeFlatValue.dirty || takeFlatValue.touched)"
+                           class="alert alert-danger">
+                        <div *ngIf="takeFlatValue.errors.required">Flat is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ngModelGroup="disPayment">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title text-center">
+              Disable Payment Methods</h4>
+            <hr>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="cashCheck" name="cash"
+                           #cashCheck="ngModel" [ngModel]="outlet?.disPayment?.cash">
+                    <label class="custom-control-label" for="cashCheck">Cash</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="codCheck" name="cod"
+                           #codCheck="ngModel" [ngModel]="outlet?.disPayment?.cod">
+                    <label class="custom-control-label" for="codCheck">Card on Delivery</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="razorpayCheck" name="razorpay"
+                           #razorpayCheck="ngModel" [ngModel]="outlet?.disPayment?.razorpay">
+                    <label class="custom-control-label" for="razorpayCheck">Razorpay</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="stripeCheck" name="stripe"
+                           #stripeCheck="ngModel" [ngModel]="outlet?.disPayment?.stripe">
+                    <label class="custom-control-label" for="stripeCheck">Stripe</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="paypalCheck" name="paypal"
+                           #paypalCheck="ngModel" [ngModel]="outlet?.disPayment?.paypal">
+                    <label class="custom-control-label" for="paypalCheck">Paypal</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ngModelGroup="integration">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title text-center">
+              Integrations</h4>
+            <hr>
+            <div class="row">
+
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isQuiqup" name="isQuiqup" [ngModel]="outlet?.integration?.isQuiqup" #isQuiqupEnable="ngModel">
+                    <label class="custom-control-label" for="isQuiqup">Enable Quiqup</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <label>Outlet Identifer</label>
+                  <input class="form-control" type="text" name="identifer" [ngModel]="outlet?.integration?.identifer">
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-12" *ngIf="outlet?.lang">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Language</h4>
+          <hr>
+          <div class="row" ngModelGroup="lang">
+            <div class="col-md-12" *ngFor="let langField of outlet?.lang | keyvalue" [ngModelGroup]="langField?.key">
+              <h5>{{langField?.value?.name}}</h5>
+              <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+              <div class="row" ngModelGroup="lList">
+                <div class="col-md-3" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                  <div class="form-group row">
+                    <label class="col-2 text-right">{{row?.id}}</label>
+                    <input type="hidden" name="id" [ngModel]="row?.id">
+                    <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                  </div>
+                </div>
+              </div>
+              <br>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center">
+    <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+            *ngIf="!outletID">Submit</button>
+    <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+            *ngIf="outletID">Update</button>
+    <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light"
+            [routerLink]="['../..']">Cancel</button>
+  </div>
+</form>

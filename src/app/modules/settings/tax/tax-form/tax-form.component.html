@@ -1,0 +1,149 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!taxID">Add Tax</h1>
+    <h1 class="text-center title" *ngIf="taxID">Edit Tax</h1>
+    <form class="form-horizontal" id="taxForm" #TaxForm="ngForm" (ngSubmit)="addTax(TaxForm)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>Tax Name
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="name" required [ngModel]="tax?.name" #name="ngModel">
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                      <div *ngIf="name.errors.required">Tax Name is required.</div>
+                    </div>
+                    <span class="help-block">
+                      <small>Ex. VAT for Delivery Orders. (Not Displayed to Customers)</small>
+                    </span>
+                  </div>
+                  <div class="form-group">
+                    <label>Display Name
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="dispName" required [ngModel]="tax?.dispName"
+                           #dispName="ngModel">
+                    <div *ngIf="dispName.invalid && (dispName.dirty || dispName.touched)" class="alert alert-danger">
+                      <div *ngIf="dispName.errors.required">Display Name is required.</div>
+                    </div>
+                    <span class="help-block">
+                      <small>Ex. VAT @ 2.5%</small>
+                    </span>
+                  </div>
+                  <!-- <div class="form-group">
+                    <label>Tax Description
+                    </label>
+                    <textarea class="form-control" rows="3" name="desc" #desc="ngModel" [ngModel]="tax?.desc"></textarea>
+                  </div> -->
+                </div>
+              </div>
+              <div class="card" ngModelGroup="logic">
+                <div class="card-body">
+                  <h4 class="card-title">
+                    Logics</h4>
+                  <hr>
+                  <div class="form-group">
+                    <label>Tax Percentage
+                      <span>*</span>
+                    </label>
+                    <div class="input-group">
+                      <input class="form-control" type="number" min="0" max="100" name="percAmnt" required [ngModel]="tax?.logic?.percAmnt"
+                             #percAmnt="ngModel">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">%</div>
+                      </div>
+                    </div>
+                    <div *ngIf="percAmnt.invalid && (percAmnt.dirty || percAmnt.touched)" class="alert alert-danger">
+                      <div *ngIf="percAmnt.errors.required">Tax Percentage is required.</div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="card" ngModelGroup="condition">
+                <div class="card-body">
+                  <h4 class="card-title">
+                    Conditions</h4>
+                  <hr>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isAllItems" name="isAllItems" [ngModel]="tax?.condition?.isAllItems">
+                    <label class="custom-control-label" for="isAllItems"> Forced Apply on All Items </label>
+                  </div>
+                  <!-- <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isBackward" name="isBackward" [ngModel]="tax?.condition?.isBackward">
+                    <label class="custom-control-label" for="isBackward"> Make This Backward Tax </label>
+                  </div> -->
+                  <span class="help-block">
+                    <small>If you want to reverse work the tax portion and display in Line Item, if all prices are in
+                      "inclusive
+                      tax" format.</small>
+                  </span>
+                  <br />
+                  <br />
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isAllOutlets" name="isAllOutlets" [ngModel]="tax?.condition?.isAllOutlets"
+                           #applyOutlets="ngModel">
+                    <label class="custom-control-label" for="isAllOutlets"> Apply for all outlets </label>
+                  </div>
+                  <div [hidden]="applyOutlets.value" class="form-group">
+                    <label>Applicable for Outlets
+                      <span>*</span>
+                    </label>
+                    <ng-select [items]="outletList" [required]="!applyOutlets.value" bindLabel="name" bindValue="id"
+                               name="outlets" [ngModel]="tax?.condition?.outlets" #outlets="ngModel" [multiple]="true"
+                               [closeOnSelect]="false">
+                    </ng-select>
+                    <div *ngIf="outlets.invalid && (outlets.dirty || outlets.touched)" class="alert alert-danger">
+                      <div *ngIf="outlets.errors.required">Applicable for Outlets is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-sm-2"></div>
+        <div class="col-md-1"></div>
+        <div class="col-md-9" *ngIf="tax?.lang">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Language</h4>
+              <hr>
+              <div class="row" ngModelGroup="lang">
+                <div class="col-md-12" *ngFor="let langField of tax?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                  <h5>{{langField?.value?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                  <div class="row" ngModelGroup="lList">
+                    <div class="col-md-4" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                      <div class="form-group row">
+                        <label class="col-2 text-right">{{row?.id}}</label>
+                        <input type="hidden" name="id" [ngModel]="row?.id">
+                        <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="taxID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="!taxID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light" [routerLink]="['/settings/tax/list']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button class="btn btn-success" type="button" [routerLink]="['/brand/driver/add/new']">
+            <i class="ti-plus"></i> &nbsp; Add Driver</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let driver of driverList | async">
+                <td>{{ driver.name }}</td>
+                <td>{{ driver.email }}</td>
+                <td class="actionList">
+                  <button class="btn btn-sm btn-info" type="button" [routerLink]="['../edit', driver.id]">
+                    <!-- <i class="ti-pencil"></i> -->Edit
+                  </button>
+                  <button class="btn btn-sm btn-danger" type="button" (click)="deleteDriver($event, driver.id)">Delete
+                    <!-- <i class="ti-trash"></i> -->
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

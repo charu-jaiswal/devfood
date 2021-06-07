@@ -1,0 +1,522 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!couponID">Add Coupon</h1>
+    <h1 class="text-center title" *ngIf="couponID">Edit Coupon</h1>
+    <form class="form-horizontal" id="couponForm" #CouponForm="ngForm" (ngSubmit)="addCoupon(CouponForm)">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Coupon Reference Name
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="name" required [ngModel]="coupon?.name" #name="ngModel">
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                      <div *ngIf="name.errors.required">Coupon Name is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Coupon Code
+                      <span>*</span>
+                    </label>
+                    <input class="form-control text-uppercase" type="text" name="code" required [ngModel]="coupon?.code"
+                           #code="ngModel">
+                    <div *ngIf="code.invalid && (code.dirty || code.touched)" class="alert alert-danger">
+                      <div *ngIf="code.errors.required">Coupon Code is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="dispApp" name="dispApp"
+                           #dispAppCheck="ngModel"  [ngModel]="coupon?.dispApp">
+                      <label class="custom-control-label" for="dispApp">Display this coupon in App</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card" *ngIf="dispAppCheck.value">
+            <div class="card-body" ngModelGroup="desc">
+              <div class="form-group">
+                <label>Display Name</label>
+                <input class="form-control" type="text" name="dispName" [required]="dispAppCheck.value" [ngModel]="coupon?.desc?.dispName" #dispName="ngModel">
+                <div *ngIf="dispName.invalid && (dispName.dirty || dispName.touched)" class="alert alert-danger">
+                  <div *ngIf="dispName.errors.required">Display Name is required.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Description
+                </label>
+                <quill-editor name="desc" [required]="dispAppCheck.value" #desc="ngModel" [ngModel]="coupon?.desc?.desc"
+                                [modules]="quillToolbar" [style]="{height: '150px'}"></quill-editor>
+                <div *ngIf="desc.invalid && (desc.dirty || desc.touched)" class="alert alert-danger">
+                  <div *ngIf="desc.errors.required">Description is required.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Coupon Graphic</label>
+                <input class="form-control" type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                <input type="hidden" name="image" [ngModel]="coupon?.desc?.image">
+                <br>
+                <div *ngIf="coupon?.desc?.image">
+                  <img [src]="coupon?.desc?.image" class="img-upload-disp-wrapper">
+                  <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+                </div>
+                <span class="help-block">
+                  <small> Max File Size: 300kb. Max Image Size : 640px by 480px. Format: jpg only. </small>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" ngModelGroup="logic">
+              <h4 class="card-title">Promo Type</h4>
+              <hr>
+              <div class="form-group">
+                <label>Calculate At <span>*</span> </label>
+                <br />
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="pretax" name="calcAt" [ngModel]="coupon?.logic?.calcAt"
+                             #calcAt="ngModel" value="PreTax" required>
+                      <label class="custom-control-label" for="pretax">Subtotal</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="grandtotal" name="calcAt" [ngModel]="coupon?.logic?.calcAt"
+                             #calcAt="ngModel" value="GrandTotal" required>
+                      <label class="custom-control-label" for="grandtotal">Grand total</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Discount Logic
+                  <span>*</span>
+                </label>
+
+                <br />
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="discPercentage" required name="type"
+                             [ngModel]="coupon?.logic?.type" #type="ngModel" value="DiscPerc">
+                      <label class="custom-control-label" for="discPercentage">Discount Percentage</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="discFixedAmt" required name="type" [ngModel]="coupon?.logic?.type"
+                             #type="ngModel" value="DiscAmnt">
+                      <label class="custom-control-label" for="discFixedAmt">Discount Fixed Amount</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="freeDelivery" required name="type" [ngModel]="coupon?.logic?.type"
+                             #type="ngModel" value="FreeDeli">
+                      <label class="custom-control-label" for="freeDelivery">Free Delivery</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="cashPercentage" required name="type"
+                             [ngModel]="coupon?.logic?.type" #type="ngModel" value="CashPerc">
+                      <label class="custom-control-label" for="cashPercentage">Cashback Percentage</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="cashFixedAmt" required name="type" [ngModel]="coupon?.logic?.type"
+                             #type="ngModel" value="CashAmnt">
+                      <label class="custom-control-label" for="cashFixedAmt">Cashback Fixed Amount</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" [hidden]="!((type.value === 'DiscPerc') || (type.value === 'CashPerc'))">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>
+                      <span class="text-secondary" *ngIf="(type.value === 'DiscPerc')">Discount</span>
+                      <span class="text-secondary" *ngIf="(type.value === 'CashPerc')">Cashback</span> Percentage
+                      <span>*</span>
+                    </label>
+                    <div class="input-group">
+                      <input class="form-control" type="number" name="percAmnt" [required]="(type.value === 'DiscPerc') || (type.value === 'CashPerc')"
+                             [ngModel]="coupon?.logic?.percAmnt" #percAmnt="ngModel">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">%</div>
+                      </div>
+                    </div>
+                    <div *ngIf="percAmnt.invalid && (percAmnt.dirty || percAmnt.touched)" class="alert alert-danger">
+                      <div *ngIf="percAmnt.errors.required">Discount Percentage is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Max
+                      <span class="text-secondary" *ngIf="(type.value === 'DiscPerc')">Discount</span>
+                      <span class="text-secondary" *ngIf="(type.value === 'CashPerc')">Cashback</span> Amount
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="maxPercAmnt" [required]="(type.value === 'DiscPerc') || (type.value === 'CashPerc')"
+                           [ngModel]="coupon?.logic?.maxPercAmnt" #maxPercAmnt="ngModel">
+                    <div *ngIf="maxPercAmnt.invalid && (maxPercAmnt.dirty || maxPercAmnt.touched)" class="alert alert-danger">
+                      <div *ngIf="maxPercAmnt.errors.required">Max Discount Amount is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" [hidden]="!((type.value === 'DiscAmnt') || (type.value === 'CashAmnt'))">
+                <label>
+                  <span class="text-secondary" *ngIf="(type.value === 'DiscAmnt')">Discount</span>
+                  <span class="text-secondary" *ngIf="(type.value === 'CashAmnt')">Cashback</span> Amount
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="number" name="fixedAmnt" [required]="(type.value === 'DiscAmnt') || (type.value === 'CashAmnt')"
+                       [ngModel]="coupon?.logic?.fixedAmnt" #fixedAmnt="ngModel">
+                <div *ngIf="fixedAmnt.invalid && (fixedAmnt.dirty || fixedAmnt.touched)" class="alert alert-danger">
+                  <div *ngIf="fixedAmnt.errors.required">Discount Amount is required.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body" ngModelGroup="condition">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Minimum Cart Value
+                    </label>
+                    <input class="form-control" type="number" name="minCartAmnt" [ngModel]="coupon?.condition?.minCartAmnt"
+                           #minCartAmnt="ngModel">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Max number of Coupons Usage
+                    </label>
+                    <input class="form-control" type="number" name="maxUsage" [ngModel]="coupon?.condition?.maxUsage"
+                           #maxUsage="ngModel">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isOnePerUser" name="isOnePerUser" [ngModel]="coupon?.condition?.isOnePerUser">
+                  <label class="custom-control-label" for="isOnePerUser">One Time Use Per Customer Coupon</label>
+                </div>
+              </div>
+              <div ngModelGroup="applyOutlet">
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="alloutlet" name="outType" [ngModel]="coupon?.condition?.applyOutlet?.outType"
+                               value="AllOutlets" #outType="ngModel">
+                        <label class="custom-control-label" for="alloutlet">Applicable for All Outlets</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="singleoutlet" name="outType" [ngModel]="coupon?.condition?.applyOutlet?.outType"
+                               value="SingleOutlet" #outType="ngModel">
+                        <label class="custom-control-label" for="singleoutlet">Applicable for Single Outlet</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="multioutlet" name="outType" [ngModel]="coupon?.condition?.applyOutlet?.outType"
+                               value="MultiOutlets" #outType="ngModel">
+                        <label class="custom-control-label" for="multioutlet">Applicable for Multi Outlets</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div [hidden]="outType.value !== 'MultiOutlets'" class="form-group">
+                  <label>Applicable for Outlets
+                    <span>*</span>
+                  </label>
+                  <ng-select [items]="outletList" bindLabel="name" bindValue="id" name="multioutlet" [ngModel]="coupon?.condition?.applyOutlet?.multioutlet"
+                             [required]="outType.value === 'MultiOutlets'" #multioutlet="ngModel" [multiple]="true"
+                             [closeOnSelect]="false">
+                  </ng-select>
+                  <div *ngIf="multioutlet.invalid && (multioutlet.dirty || multioutlet.touched)" class="alert alert-danger">
+                    <div *ngIf="multioutlet.errors.required">Applicable for Outlets is required.</div>
+                  </div>
+                </div>
+                <div ngModelGroup="singleOutlet" [hidden]="!(outType.value === 'SingleOutlet')">
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label>Outlets
+                            <span>*</span>
+                          </label>
+                          <select class="custom-select col-12" [required]="(outType.value === 'SingleOutlet')" name="id"
+                                  [ngModel]="coupon?.condition?.applyOutlet?.singleOutlet?.id" #singleOut="ngModel"
+                                  (change)="changeOutlet(singleOut.value)">
+                            <option *ngFor="let option of outletList" [value]="option.id">{{option.name}}</option>
+                          </select>
+                          <div *ngIf="singleOut.invalid && (singleOut.dirty || singleOut.touched)" class="alert alert-danger">
+                            <div *ngIf="singleOut.errors.required">Outlets is required.</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4" [hidden]="!(outType.value === 'SingleOutlet' && singleOut.value)">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="category" [required]="outType.value === 'SingleOutlet'"
+                                 name="applyOn" [ngModel]="coupon?.condition?.applyOutlet?.singleOutlet?.applyOn" value="Category"
+                                 #ApplyOn="ngModel">
+                          <label class="custom-control-label" for="category">Category</label>
+                        </div>
+                      </div>
+                    <div class="col-sm-4" [hidden]="!(outType.value === 'SingleOutlet' && singleOut.value)">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="items" [required]="outType.value === 'SingleOutlet'"
+                                 name="applyOn" [ngModel]="coupon?.condition?.applyOutlet?.singleOutlet?.applyOn" value="Items"
+                                 #ApplyOn="ngModel">
+                          <label class="custom-control-label" for="items">Items</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div [hidden]="!(ApplyOn.value === 'Category' && outType.value === 'SingleOutlet')" class="form-group">
+                    <label>Category Chooser
+                      <span>*</span>
+                    </label>
+                    <ng-select [items]="catList" bindLabel="name" bindValue="id" name="category" [required]="(ApplyOn.value === 'Category' && outType.value === 'SingleOutlet')"
+                               [ngModel]="coupon?.condition?.applyOutlet?.singleOutlet?.category" #category="ngModel"
+                               [multiple]="true" [closeOnSelect]="false">
+                    </ng-select>
+                    <div *ngIf="category.invalid && (category.dirty || category.touched)" class="alert alert-danger">
+                      <div *ngIf="category.errors.required">Category Chooser is required.</div>
+                    </div>
+                  </div>
+                  <div [hidden]="!(ApplyOn.value === 'Items' && outType.value === 'SingleOutlet')" class="form-group">
+                    <label>Category
+                      <span>*</span>
+                    </label>
+                    <select class="custom-select" [required]="(ApplyOn.value === 'Items' && outType.value === 'SingleOutlet')" name="catID"
+                            [ngModel]="coupon?.condition?.applyOutlet?.singleOutlet?.catID" #catID="ngModel"
+                            (change)="changeCategory(catID.value)">
+                      <option value="">Select Category</option>
+                      <option *ngFor="let option of catList" [value]="option.id">{{option.name}}</option>
+                    </select>
+                  </div>
+                  <div [hidden]="!(ApplyOn.value === 'Items' && outType.value === 'SingleOutlet')" class="form-group">
+                    <label>Item Chooser
+                      <span>*</span>
+                    </label>
+                    <div *ngIf="catID.invalid && (catID.dirty || catID.touched)" class="alert alert-danger">
+                      <div *ngIf="catID.errors.required">Category is required.</div>
+                    </div>
+                    <ng-select [items]="itemList" bindLabel="name" bindValue="id" name="item" [required]="(ApplyOn.value === 'Items' && outType.value === 'SingleOutlet')"
+                               [ngModel]="coupon?.condition?.applyOutlet?.singleOutlet?.item" #item="ngModel"
+                               [multiple]="true" [closeOnSelect]="false">
+                    </ng-select>
+                    <div *ngIf="item.invalid && (item.dirty || item.touched)" class="alert alert-danger">
+                      <div *ngIf="item.errors.required">Item Chooser is required.</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="form-group">
+                <label>Coupon Application
+                </label>
+
+                <br />
+                <div class="row m-0">
+                  <div class="custom-control custom-radio col-4">
+                    <input type="radio" class="custom-control-input" id="autoApply" name="application" [ngModel]="coupon?.condition?.application"
+                           #application="ngModel" value="autoApply">
+                    <label class="custom-control-label" for="autoApply">Auto Apply</label>
+                  </div>
+                  <!-- <div class="custom-control custom-radio col-4">
+                    <input type="radio" class="custom-control-input" id="autoSuggest" name="application" [ngModel]="coupon?.condition?.application"
+                           #application="ngModel" value="autoSuggest">
+                    <label class="custom-control-label" for="autoSuggest">Auto Suggest</label>
+                  </div> -->
+                  <div class="custom-control custom-radio col-4">
+                    <input type="radio" class="custom-control-input" id="dontDisplay" name="application" [ngModel]="coupon?.condition?.application"
+                           #application="ngModel" value="dontDisplay">
+                    <label class="custom-control-label" for="dontDisplay">Don't auto apply</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ngModelGroup="applyType">
+                <label>Applicable On</label>
+                <div class="row">
+                  <!-- <div class="col-sm-4">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isTableRes" name="isTableRes" [ngModel]="coupon?.condition?.applyType?.isTableRes">
+                      <label class="custom-control-label" for="isTableRes">Reservations</label>
+                    </div>
+                  </div> -->
+                  <div class="col-sm-4">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isDelivery" name="isDelivery" [ngModel]="coupon?.condition?.applyType?.isDelivery">
+                      <label class="custom-control-label" for="isDelivery">Delivery</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isPickup" name="isPickup" [ngModel]="coupon?.condition?.applyType?.isPickup">
+                      <label class="custom-control-label" for="isPickup">Take Away</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ngModelGroup="couponFor">
+                <label>Apply Coupons only for</label>
+                <div class="row">
+                  <!-- <div class="col-sm-3">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="app" name="app" [ngModel]="coupon?.condition?.couponFor?.app">
+                      <label class="custom-control-label" for="app">App</label>
+                    </div>
+                  </div> -->
+                  <div class="col-sm-3">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="web" name="web" [ngModel]="coupon?.condition?.couponFor?.web">
+                      <label class="custom-control-label" for="web">Web</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="iOS" name="iOS" [ngModel]="coupon?.condition?.couponFor?.iOS">
+                      <label class="custom-control-label" for="iOS">iOS</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="android" name="android" [ngModel]="coupon?.condition?.couponFor?.android">
+                      <label class="custom-control-label" for="android">Android</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <label>Date Range</label>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Valid From
+                    </label>
+                    <div class="input-group">
+                      <input class="form-control" name="dateFrom" [ngModel]="coupon?.condition?.dateFrom" ngbDatepicker
+                             #dateFrom="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="dateFrom.toggle()" type="button">
+                          <i class="ti-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Valid Upto
+                    </label>
+                    <div class="input-group">
+                      <input class="form-control" name="dateTo" [ngModel]="coupon?.condition?.dateTo" ngbDatepicker
+                             #dateTo="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="dateTo.toggle()" type="button">
+                          <i class="ti-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">
+                Happy Hours</h4>
+              <hr>
+              <div class="form-grouping-wrapper my-3" ngModelGroup="happyHrs">
+                <div class="row" *ngFor="let happyHr of coupon?.happyHrs; let i = index" [ngModelGroup]="i">
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label>Day
+                      </label>
+                      <select class="custom-select col-12" name="day" [ngModel]="happyHr?.day" #day="ngModel">
+                        <option *ngFor="let option of dayList" [value]="option.value">{{option.label}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>From</label>
+                      <select class="form-control" name="fromTime" [ngModel]="happyHr?.fromTime" #fromTime="ngModel">
+                        <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">{{option.label}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>To</label>
+                      <select class="form-control" name="toTime" [ngModel]="happyHr?.toTime" #toTime="ngModel">
+                        <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">{{option.label}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-1 mt-1">
+                    <br>
+                    <button type="button" class="btn btn-sm btn-danger" (click)="deleteHappyHour(i)">
+                      <i class="ti-close"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="button" class="btn btn-sm btn-success" (click)="addMoreHappyHours()">
+                    <i class="ti-plus"></i> &nbsp; Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" *ngIf="coupon?.lang">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Language</h4>
+              <hr>
+              <div class="row" ngModelGroup="lang">
+                <div class="col-md-12" *ngFor="let langField of coupon?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                  <h5>{{langField?.value?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                  <div class="row" ngModelGroup="lList">
+                    <div class="col-md-4" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                      <div class="form-group row">
+                        <label class="col-2 text-right">{{row?.id}}</label>
+                        <input type="hidden" name="id" [ngModel]="row?.id">
+                        <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="couponID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="!couponID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light" [routerLink]="['/settings/coupons/list']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

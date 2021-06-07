@@ -1,0 +1,214 @@
+ <div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!adBannerID">Add Ad Banner</h1>
+    <h1 class="text-center title" *ngIf="adBannerID">Edit Ad Banner</h1>
+    <form class="form-horizontal" id="adBannerForm" #AdBanner="ngForm" (ngSubmit)="addAdBannerForm(AdBanner)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Title
+                      <!-- <span>*</span> -->
+                    </label>
+                    <input class="form-control" type="text" name="title" [ngModel]="adBanner?.title" #title="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Sort Weight
+                    </label>
+                    <input class="form-control" type="number" name="sort" [ngModel]="adBanner?.sort" #sort="ngModel">
+                    <span class="help-block">
+                      <small> Enter higher value to list this item at the top of the category. (Ex. 100) </small>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Mobile Banner </label> &nbsp;&nbsp;
+                    <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                    <input type="hidden" name="image" [ngModel]="adBanner?.image">
+                    <br>
+                    <br>
+                    <span class="help-block">
+                      <small> Max File Size: 300kb. Max Image Size : 640px by 480px. Format: jpg only. </small>
+                    </span>
+                    <div *ngIf="adBanner?.image">
+                      <img [src]="adBanner?.image" class="img-upload-disp-wrapper">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Web Banner </label> &nbsp;&nbsp;
+                    <input type="file" (change)="uploadFile1($event, 'image')" accept=".jpg" />
+                    <input type="hidden" name="webBanner" [ngModel]="adBanner?.webBanner">
+                    <br>
+                    <br>
+                    <span class="help-block">
+                      <small> Max File Size: 300kb. Max Image Size : 1024px by 480px. Format: jpg only. </small>
+                    </span>
+                    <div *ngIf="adBanner?.webBanner">
+                      <img [src]="adBanner?.webBanner" class="img-upload-disp-wrapper">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile1('image')">Delete</button>
+                    </div>
+
+                  </div>
+                </div>
+                <br/>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Outlet Category
+                    </label>
+                    <ng-select [items]="outletCatList"  bindLabel="title" bindValue="id" name="outletCat" [ngModel]="adBanner?.outletCat" [multiple]="true" [closeOnSelect]="false">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Zone
+                    </label>
+                    <ng-select [items]="zoneList" bindLabel="name" bindValue="id" name="zone" [ngModel]="adBanner?.zone" [multiple]="true" [closeOnSelect]="false">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Outlet
+                    </label>
+                    <ng-select [items]="outletList" bindLabel="name" bindValue="id" name="outletList" [ngModel]="adBanner?.outletList" [multiple]="true" [closeOnSelect]="false">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="my-2 col-md-12">
+                  <h4>Link</h4>
+                </div>
+                <div class="my-3 col-md-12">
+                  <div class="form-group">
+                    <label>Link Type<span>*</span> </label>
+                    <div class="row">
+                      <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="type_none" name="linkType" [ngModel]="adBanner?.linkType"
+                                 #linkType="ngModel" value="none" required>
+                          <label class="custom-control-label" for="type_none">None</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="type_url" name="linkType" [ngModel]="adBanner?.linkType"
+                                 #linkType="ngModel" value="url" required>
+                          <label class="custom-control-label" for="type_url">URL</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="type_outlet" name="linkType" [ngModel]="adBanner?.linkType"
+                                 #linkType="ngModel" value="outlet" required>
+                          <label class="custom-control-label" for="type_outlet">Outlet</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="type_category" name="linkType" [ngModel]="adBanner?.linkType"
+                                 #linkType="ngModel" value="category" required>
+                          <label class="custom-control-label" for="type_category">Category</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="type_item" name="linkType" [ngModel]="adBanner?.linkType"
+                                 #linkType="ngModel" value="item" required>
+                          <label class="custom-control-label" for="type_item">Item</label>
+                        </div>
+                      </div>
+                      <div *ngIf="linkType.errors && (linkType.dirty || linkType.touched)" class="col-sm-12">
+                        <div class="alert alert-danger">
+                          Choose the link type.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6" *ngIf="linkType.value == 'url'">
+                  <div class="form-group">
+                    <label>URL</label>
+                    <span>*</span>
+                    <input class="form-control"
+                           pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                           type="text" name="url" [ngModel]="adBanner?.url" #url="ngModel">
+                    <div *ngIf="url.errors && (url.dirty || url.touched)" class="alert alert-danger">
+                      <div [hidden]="!url.errors.pattern">
+                        Enter a valid URL!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4" *ngIf="(linkType.value == 'outlet') || (linkType.value == 'category') || (linkType.value == 'item')">
+                  <div class="form-group">
+                    <label>Outlets
+                      <span>*</span>
+                    </label>
+                    <select class="custom-select col-12" [required]="(linkType.value == 'outlet') || (linkType.value == 'category') || (linkType.value == 'item')" name="outlet"
+                            [ngModel]="adBanner?.outlet" #outlet="ngModel"
+                            (change)="changeOutlet(outlet.value)">
+                      <option *ngFor="let option of outletList" [value]="option.id">{{option.name}}</option>
+                    </select>
+                    <div *ngIf="outlet.invalid && (outlet.dirty || outlet.touched)" class="alert alert-danger">
+                      <div *ngIf="outlet.errors.required">Outlets is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4" *ngIf="(linkType.value == 'category') || (linkType.value == 'item')">
+                  <div class="form-group">
+                    <label>Category
+                      <span>*</span>
+                    </label>
+                    <select class="custom-select col-12" [required]="(linkType.value == 'category') || (linkType.value == 'item')" name="category"
+                            [ngModel]="adBanner?.category" #category="ngModel"
+                            (change)="changeCategory(category.value)">
+                      <option *ngFor="let option of catList" [value]="option.name">{{option.name}}</option>
+                    </select>
+                    <div *ngIf="category.invalid && (category.dirty || category.touched)" class="alert alert-danger">
+                      <div *ngIf="category.errors.required">Category is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4" *ngIf="(linkType.value == 'item')">
+                  <div class="form-group">
+                    <label>Item
+                      <span>*</span>
+                    </label>
+                    <select class="custom-select col-12" [required]="(linkType.value == 'item')" name="item"
+                            [ngModel]="adBanner?.item" #item="ngModel">
+                      <option *ngFor="let option of itemList" [value]="option.id">{{option.name}}</option>
+                    </select>
+                    <div *ngIf="item.invalid && (item.dirty || item.touched)" class="alert alert-danger">
+                      <div *ngIf="item.errors.required">Item is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                *ngIf="adBannerID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                *ngIf="!adBannerID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light"
+                [routerLink]="['/design/ad-banner/list']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

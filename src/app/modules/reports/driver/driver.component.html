@@ -1,0 +1,98 @@
+<div class="row outlet">
+  <div class="col-lg-12">
+    <h1 class="text-center">Driver Report</h1>
+    <div class="card p-2 doNotPrint">
+      <div class="row m-0 p-3">
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label>Order Date Range</label>
+            <input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event, daterange)"
+                   class="form-control" />
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="form-group">
+            <label>Payment</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.payment">
+              <option value="">All</option>
+              <option *ngFor="let item of listPaymentType" [value]="item.value">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="form-group">
+            <label>Status</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.status">
+              <option value="">All</option>
+              <option value="PICKED_UP">PICKED UP</option>
+              <option value="DELIVERED">DELIVERED</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 pt-btn">
+          <div class="row m-0">
+            <div class="col-6 text-right p-0">
+              <button class="btn btn-primary" (click)="printDriverReport()">
+                <span>Print</span>
+              </button>
+            </div>
+            <div class="col-6 text-right p-0">
+              <button class="btn btn-success" (click)="loadDriverReport()">
+                <app-wave [hidden]="!loading"></app-wave>
+                <span [hidden]="loading">Refresh</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-12" id="daterangepicker-panel"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <br>
+        <div class="row">
+          <!-- <div class="col-sm-0 col-md-2 col-lg-3"></div> -->
+          <div class="col-sm-12">
+            <table class="table table-bordered pt-4">
+              <thead>
+                <tr>
+                  <th>S.NO</th>
+                  <th>Name</th>
+                  <th colspan="2" class="text-center">Order Count</th>
+                  <th class="text-center">Order Value</th>
+                  <th class="text-center">Delivery Fee</th>
+                  <th class="text-center">Tips</th>
+                  <th colspan="2" class="text-center">Distance</th>
+                  <th colspan="2" class="text-center">Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr [hidden]="!loading">
+                  <td colspan="13">
+                    <app-wave></app-wave>
+                  </td>
+                </tr>
+                <tr [hidden]="driverReport.length != 0 || loading">
+                  <td class="text-center" colspan="7">No Data.</td>
+                </tr>
+                <tr [hidden]="driverReport.length == 0" *ngFor="let item of driverReport; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{item?.name}}</td>
+                  <td class="text-right">{{item.count}} orders </td>
+                  <td class="text-right"><span *ngIf="driverFee?.isOrder"> {{item.count * driverFee?.order | number : '1.2-2'}}</span></td>
+                  <td class="text-right">{{item.finalAmnt | number : '1.2-2'}}</td>
+                  <td class="text-right">{{item.pre_deliFee | number : '1.2-2'}}</td>
+                  <td class="text-right">{{item.pre_tips | number : '1.2-2'}}</td>
+                  <td class="text-right">{{(item.distance / 1000) | number : '1.0-0' }} km </td>
+                  <td class="text-right"><span *ngIf="driverFee?.isDistance"> {{driverFee.distance * (item.distance / 1000) | number : '1.2-2'}}</span></td>
+                  <td class="text-right">{{(item.time / 60) | number : '1.0-0' }} mins </td> <td><span *ngIf="driverFee?.isTime"> {{driverFee.time * (item.time / 60) | number : '1.2-2'}}</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-sm-0 col-md-2 col-lg-3"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>

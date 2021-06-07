@@ -1,0 +1,281 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="col-12">
+      <h1 class="text-dark m-b-0 text-center">App Store</h1>
+    </div>
+    <form class="form-horizontal" id="appStoreSettings" #AppStoreSettings="ngForm" (ngSubmit)="addAppStoreSettings(AppStoreSettings)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-md-8 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="form-group col-md-6 col-xs-12">
+                  <label>App Name
+                    <span>*</span>
+                  </label>
+                  <input class="form-control" type="text" name="name" [ngModel]="appStoreSettings?.name" #name="ngModel" required>
+                  <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                    <div *ngIf="name.errors.required">App Name is required.</div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6 col-xs-12">
+                  <label> App Keywords</label>
+                  <ng-select name="keywords" [ngModel]="appStoreSettings?.keywords" [addTag]="addTag" #keywords="ngModel" [multiple]="true">
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" ngModelGroup="desc">
+              <div class="row">
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                  <label>Short Description
+                    <span>*</span>
+                  </label>
+                  <textarea class="form-control" rows="3" name="short" #short="ngModel" [ngModel]="appStoreSettings?.desc?.short" required></textarea>
+                  <div *ngIf="short.invalid && (short.dirty || short.touched)" class="alert alert-danger">
+                    <div *ngIf="short.errors.required">Short Description is required.</div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                  <label>Long Description
+                    <span>*</span>
+                  </label>
+                  <textarea class="form-control" rows="3" name="long" #long="ngModel" [ngModel]="appStoreSettings?.desc?.long" required></textarea>
+                  <div *ngIf="long.invalid && (long.dirty || long.touched)" class="alert alert-danger">
+                    <div *ngIf="long.errors.required">Long Description is required.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <div ngModelGroup="screen">
+                    <h4 class="cart-title">App Screenshot For Andorid</h4>
+                    <hr>
+                    <div class="row" ngModelGroup="android">
+                      <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                        <input type="file" (change)="uploadFile($event, 'image','android','android-img1')" accept=".jpg" />
+                        <input type="hidden" name="img1" [ngModel]="appStoreSettings?.screen?.android?.img1">
+                        <br>
+                        <div *ngIf="appStoreSettings?.screen?.android?.img1">
+                          <img [src]="appStoreSettings?.screen?.android?.img1" class="img-upload-disp-wrapper">
+                          <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image','android','android-img1')">Delete</button>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                        <input type="file" (change)="uploadFile($event, 'image','android','android-img2')" accept=".jpg" />
+                        <input type="hidden" name="img2" [ngModel]="appStoreSettings?.screen?.android?.img2">
+                        <br>
+                        <div *ngIf="appStoreSettings?.screen?.android?.img2">
+                          <img [src]="appStoreSettings?.screen?.android?.img2" class="img-upload-disp-wrapper">
+                          <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image','android','android-img2')">Delete</button>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                        <input type="file" (change)="uploadFile($event, 'image','android','android-img3')" accept=".jpg" />
+                        <input type="hidden" name="img3" [ngModel]="appStoreSettings?.screen?.android?.img3">
+                        <br>
+                        <div *ngIf="appStoreSettings?.screen?.android?.img3">
+                          <img [src]="appStoreSettings?.screen?.android?.img3" class="img-upload-disp-wrapper">
+                          <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image','android','android-img3')">Delete</button>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                        <input type="file" (change)="uploadFile($event, 'image','android','android-img4')" accept=".jpg" />
+                        <input type="hidden" name="img4" [ngModel]="appStoreSettings?.screen?.android?.img4">
+                        <br>
+                        <div *ngIf="appStoreSettings?.screen?.android?.img4">
+                          <img [src]="appStoreSettings?.screen?.android?.img4" class="img-upload-disp-wrapper">
+                          <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image', 'android','android-img4')">Delete</button>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                        <input type="file" (change)="uploadFile($event, 'image','android','android-img5')" accept=".jpg" />
+                        <input type="hidden" name="img5" [ngModel]="appStoreSettings?.screen?.android?.img5">
+                        <br>
+                        <div *ngIf="appStoreSettings?.screen?.android?.img5">
+                          <img [src]="appStoreSettings?.screen?.android?.img5" class="img-upload-disp-wrapper">
+                          <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image', 'android','android-img5')">Delete</button>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <div ngModelGroup="screen">
+                    <h4 class="cart-title">App Screenshot For IOS</h4>
+                    <hr>
+                    <div class="row" ngModelGroup="ios">
+                      <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <input type="file" (change)="uploadFile($event, 'image','ios','ios-img1')" accept=".jpg" />
+                          <input type="hidden" name="img1" [ngModel]="appStoreSettings?.screen?.ios?.img1">
+                          <br>
+                          <div *ngIf="appStoreSettings?.screen?.ios?.img1">
+                            <img [src]="appStoreSettings?.screen?.ios?.img1" class="img-upload-disp-wrapper">
+                            <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image','ios','ios-img1')">Delete</button>
+                          </div>
+
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <input type="file" (change)="uploadFile($event, 'image','ios','ios-img2')" accept=".jpg" />
+                          <input type="hidden" name="img2" [ngModel]="appStoreSettings?.screen?.ios?.img2">
+                          <br>
+                          <div *ngIf="appStoreSettings?.screen?.ios?.img2">
+                            <img [src]="appStoreSettings?.screen?.ios?.img2" class="img-upload-disp-wrapper">
+                            <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image','ios','ios-img2')">Delete</button>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <input type="file" (change)="uploadFile($event, 'image','ios','ios-img3')" accept=".jpg" />
+                          <input type="hidden" name="img3" [ngModel]="appStoreSettings?.screen?.ios?.img3">
+                          <br>
+                          <div *ngIf="appStoreSettings?.screen?.ios?.img3">
+                            <img [src]="appStoreSettings?.screen?.ios?.img3" class="img-upload-disp-wrapper">
+                            <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image','ios','ios-img3')">Delete</button>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <input type="file" (change)="uploadFile($event, 'image','ios','ios-img4')" accept=".jpg" />
+                          <input type="hidden" name="img4" [ngModel]="appStoreSettings?.screen?.ios?.img4">
+                          <br>
+                          <div *ngIf="appStoreSettings?.screen?.ios?.img4">
+                            <img [src]="appStoreSettings?.screen?.ios?.img4" class="img-upload-disp-wrapper">
+                            <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image','ios','ios-img4')">Delete</button>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <input type="file" (change)="uploadFile($event, 'image','ios','ios-img5')" accept=".jpg" />
+                          <input type="hidden" name="img5" [ngModel]="appStoreSettings?.screen?.ios?.img5">
+                          <br>
+                          <div *ngIf="appStoreSettings?.screen?.ios?.img4">
+                            <img [src]="appStoreSettings?.screen?.ios?.img5" class="img-upload-disp-wrapper">
+                            <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image','ios','ios-img5')">Delete</button>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" ngModelGroup="url">
+              <div class="row">
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                  <label>App Support URL
+                  </label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">http://</div>
+                    </div>
+                    <input class="form-control" type="text" name="support" pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                      [ngModel]="appStoreSettings?.url?.support" #support="ngModel">
+                  </div>
+                  <div *ngIf="support.errors && (support.dirty || support.touched)" class="alert alert-danger">
+                    <div [hidden]="!support.errors.pattern">
+                      Enter a valid URL!
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                  <label>App Privacy Policy URL
+                  </label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">http://</div>
+                    </div>
+                    <input class="form-control" type="text" name="privacy" pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                      [ngModel]="appStoreSettings?.url?.privacy" #privacy="ngModel">
+                  </div>
+                  <div *ngIf="privacy.errors && (privacy.dirty || privacy.touched)" class="alert alert-danger">
+                    <div [hidden]="!privacy.errors.pattern">
+                      Enter a valid URL!
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <div ngModelGroup="login">
+                    <h4 class="cart-title">Play Store Credential</h4>
+                    <hr>
+                    <div ngModelGroup="android">
+                      <div class="form-group">
+                        <label>Email
+                          <span>*</span>
+                        </label>
+                        <input class="form-control" type="email" name="gemail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [ngModel]="appStoreSettings?.login?.android?.gemail"
+                          #gemail="ngModel" required>
+                        <div *ngIf="gemail.invalid && (gemail.dirty || gemail.touched)" class="alert alert-danger">
+                          <div *ngIf="gemail.errors.required">E-mail is required.</div>
+                          <div *ngIf="gemail.errors.pattern && gemail.value != ''">Email should be in proper format.</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label>Password
+                        </label>
+                        <input class="form-control" type="password" name="gpass" [ngModel]="appStoreSettings?.login?.android?.gpass" #gpass="ngModel">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <div ngModelGroup="login">
+                    <h4 class="cart-title">App Store Credential</h4>
+                    <hr>
+                    <div ngModelGroup="ios">
+                      <div class="form-group">
+                        <label>Email
+                          <span>*</span>
+                        </label>
+                        <input class="form-control" type="email" name="aemail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [ngModel]="appStoreSettings?.login?.ios?.aemail"
+                          #aemail="ngModel" required>
+                        <div *ngIf="aemail.invalid && (aemail.dirty || aemail.touched)" class="alert alert-danger">
+                          <div *ngIf="aemail.errors.required">E-mail is required.</div>
+                          <div *ngIf="aemail.errors.pattern && aemail.value != ''">Email should be in proper format.</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label>Password
+                        </label>
+                        <input class="form-control" type="password" name="apass" [ngModel]="appStoreSettings?.login?.ios?.apass" #apass="ngModel">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

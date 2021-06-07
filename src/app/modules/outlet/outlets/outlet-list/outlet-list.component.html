@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col-lg-1"></div>
+  <div class="col-lg-10">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button *ngIf="hideAddOutlet" class="btn btn-success" type="button" [routerLink]="['/tutorial/payment']">
+            <i class="ti-plus"></i> &nbsp; Add Outlet</button>
+          <button *ngIf="!hideAddOutlet" class="btn btn-success" type="button" [routerLink]="['add', 'new']">
+            <i class="ti-plus"></i> &nbsp; Add Outlet</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>S.NO</th>
+                <th>Outlet Name</th>
+                <th>City</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let outlet of outletList; let i = index" [ngClass]="{'table-warning': outlet.isDisabled,'table-danger': outlet.isHidden}">
+                <td>{{ i + 1 }}</td>
+                <td>{{ outlet.name }}</td>
+                <td>{{ outlet.address.city }}</td>
+                <td class="actionList">
+                  <button class="btn btn-sm btn-gray btn-manage" type="button" [routerLink]="['/outlet/dash', outlet.id, 'menu-builder']">
+                    Manage
+                  </button>
+                  <!-- <button *ngIf="hideAddOutlet" class="btn btn-sm btn-gray btn-copy" type="button" [routerLink]="['/tutorial/payment']">
+                    Duplicate
+                  </button> -->
+                  <button *ngIf="!hideAddOutlet && showOutletDuplicate" class="btn btn-sm btn-gray btn-copy" type="button" (click)="copyOutlets(outlet.name, i, outlet)">
+                    Duplicate
+                  </button>
+                  <button class="btn btn-sm btn-gray btn-edit" type="button" [routerLink]="['edit', outlet.id]">
+                    <!-- <i class="ti-pencil"></i> -->Edit
+                  </button>
+                  <button class="btn btn-sm btn-gray btn-delete" type="button" (click)="deleteOutlet($event, outlet.id)">
+                    <!-- <i class="ti-trash"></i> -->Delete
+                  </button>
+                  <button class="btn btn-sm btn-gray btn-disable" type="button" (click)="disableOutlet($event, outlet)">
+                    <!-- <i class="ti-trash"></i> -->{{ outlet.isDisabled ? 'Enable' : 'Disable'}}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-2"></div>
+</div>

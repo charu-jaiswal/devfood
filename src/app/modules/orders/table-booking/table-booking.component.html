@@ -1,0 +1,56 @@
+<div class="row customer-report h-100">
+  <!-- <div class="col-lg-2"></div> -->
+  <div class="col-lg-12">
+    <h1 class="text-center">Table Reservation</h1>
+    <div class="row m-3 p-3">
+      <div class="col-md-4"></div>
+      <div class="col-md-4 text-center">
+        <div class="card px-4 pb-4 pt-2">
+          <div class="form-group">
+            <label>Order Date Range</label>
+            <input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event, daterange)"
+                   class="form-control" />
+          </div>
+        </div>
+      </div>
+      <div class="col-12" id="daterangepicker-panel"></div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4" *ngFor="let orderGrp of orders | keyvalue">
+    <h3 class="mx-3">{{ orderGrp.key | orderStatus: 'table' }} ({{ orderGrp.value.length }})</h3>
+    <br>
+    <div class="card border-dark" *ngFor="let order of orderGrp.value">
+      <div class="card-header">
+        <h4>{{order?.info?.count}} guest - {{order?.outlet?.name}}</h4>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          Time: {{order?.info?.timeslot.seconds * 1000 | date:'medium'}}<br>
+          <span *ngIf="order?.info?.notes">
+            Notes: {{order?.info?.notes}}<br>
+          </span>
+          Name: {{order?.user?.name}}<br>
+          Phone: {{order?.user?.uid}}<br>
+          <span *ngIf="order?.total?.finalPay">Amount: {{order?.total?.finalPay | number:'1.1-2'}}</span>
+        </p>
+      </div>
+      <div class="card-footer" *ngIf="order?.info?.status === 'ORD_PLACED'">
+        <div class="row text-center">
+          <div class="col-md-6 no-padding-left">
+            <button class="btn btn-success btn-block" (click)="orderService.changeTableOrderStatus(order.id, 'DELIVERED')">
+              Accept
+            </button>
+          </div>
+          <div class="col-md-6 no-padding-right">
+            <button class="btn btn-danger btn-block" (click)="orderService.changeTableOrderStatus(order.id, 'CANCELLED')">
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

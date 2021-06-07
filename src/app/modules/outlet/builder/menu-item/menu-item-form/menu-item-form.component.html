@@ -1,0 +1,428 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!menuItemID">Add Menu Item</h1>
+    <h1 class="text-center title" *ngIf="menuItemID">Edit Menu Item</h1>
+    <form class="form-horizontal" id="menuItemForm" #MenuItemForm="ngForm" (ngSubmit)="addMenuItem(MenuItemForm)">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isDisabled" name="isDisabled" [ngModel]="menuItem?.isDisabled"
+                           #isDisabled="ngModel">
+                    <label class="custom-control-label" for="isDisabled">Disable</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Item Name
+                        <span>*</span>
+                      </label>
+                      <input class="form-control" type="text" name="name" required [ngModel]="menuItem?.name" #name="ngModel">
+                      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                        <div *ngIf="name.errors.required">Item Name is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Category
+                        <span>*</span>
+                      </label>
+                      <select class="custom-select col-12" required name="category" [ngModel]="menuItem?.category"
+                              #category="ngModel">
+                        <option *ngFor="let option of categoryList" [value]="option.id">{{option.name}}</option>
+                      </select>
+                      <div *ngIf="category.invalid && (category.dirty || category.touched)" class="alert alert-danger">
+                        <div *ngIf="category.errors.required">Category is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>UOM</label>
+                      <select class="custom-select col-12" name="uom" [ngModel]="menuItem?.uom" #uom="ngModel">
+                        <option *ngFor="let option of uomList" [value]="option.value">{{option.label}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="card" ngModelGroup="display">
+              <div class="card-body">
+                <div class="form-group">
+                  <label>Description
+                  </label>
+                  <textarea class="form-control" rows="3" name="desc" #desc="ngModel" [ngModel]="menuItem?.display?.desc"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Long Description</label>
+                  <quill-editor name="longDesc" [ngModel]="menuItem?.display?.longDesc" #desc="ngModel" placeholder="Enter item description.." [style]="{height: '150px'}" [modules]="quillToolbar"></quill-editor>
+                </div>
+                <div class="form-group">
+                  <label>Product Image </label>
+                  <br />
+                  <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                  <input type="hidden" name="image" [ngModel]="menuItem?.display?.image">
+                  <br>
+                  <span class="help-block">
+                    <small> Max File Size: 300kb. Max Image Size : 640px by 480px. Format: jpg only. </small>
+                  </span>
+                  <br>
+                  <div *ngIf="menuItem?.display?.image">
+                    <img [src]="menuItem?.display?.image" class="img-upload-disp-wrapper">
+                    <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Product Video URL
+                  </label>
+                  <div class="input-group">
+                    <input class="form-control" type="text" name="video" pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                      [ngModel]="menuItem?.display?.video" #videoURL="ngModel">
+                  </div>
+                  <div *ngIf="videoURL.errors && (videoURL.dirty || videoURL.touched)" class="alert alert-danger">
+                    <div [hidden]="!videoURL.errors.pattern">
+                      Enter a valid URL!
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Item Icons</label>
+                  <ng-select [items]="itemIconsList" name="itemIcons" bindLabel="title" [ngModel]="menuItem?.display?.itemIcons" [multiple]="true" [closeOnSelect]="false">
+                  </ng-select>
+                </div>
+                <!-- <div class="form-group">
+                  <label>Type </label>
+                  <br />
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="vegetarian" name="serve" [ngModel]="menuItem?.display?.serve"
+                               #serve="ngModel" value="Veg">
+                        <label class="custom-control-label" for="vegetarian">Vegetarian</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="nonveg" name="serve" [ngModel]="menuItem?.display?.serve"
+                               #serve="ngModel" value="NonVeg">
+                        <label class="custom-control-label" for="nonveg">Non Veg</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="vegan" name="serve" [ngModel]="menuItem?.display?.serve"
+                               #serve="ngModel" value="Vegan">
+                        <label class="custom-control-label" for="vegan">Vegan</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="none" name="serve" [ngModel]="menuItem?.display?.serve"
+                               #serve="ngModel" value="None">
+                        <label class="custom-control-label" for="none">None</label>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+
+                <!-- <div class="row mb-3 px-3">
+                  <table class="w-100">
+                    <tr>
+                      <td class="form-group" width="32%">
+                        <label>Display Ribbon
+                        </label>
+                        <input type="text" class="form-control" id="ribbon" name="ribbon" [ngModel]="menuItem?.display?.ribbon"
+                          #ribbon="ngModel">
+                      </td>
+                      <td class="form-group px-2-percent" width="32%">
+                        <label>Ribbon bg Color</label>
+                        <input class="form-control" [hidden]="true" type="text" name="ribbonBgColor" [ngModel]="menuItem?.display?.ribbonBgColor">
+                        <input class="form-control text-center" [value]="ribbonBgColor" [style.background]="ribbonBgColor"
+                          [cpAlphaChannel]="'always'" [cpOutputFormat]="'hex'" [cpPresetColors]="['#fff', '#2889e9']"
+                          [cpAddColorButton]="true" [(colorPicker)]="ribbonBgColor" name="bColor" (colorPickerChange)="onChangeColor($event, MenuItemForm, 'bgColor')" />
+                      </td>
+                      <td class="form-group" width="32%">
+                        <label>Ribbon Text Color</label>
+                        <input class="form-control" [hidden]="true" type="text" name="ribbonColor" [ngModel]="menuItem?.display?.ribbonColor">
+                        <input class="form-control text-center" [value]="ribbonColor" [style.background]="ribbonColor"
+                          [cpAlphaChannel]="'always'" [cpOutputFormat]="'hex'" [cpPresetColors]="['#fff', '#2889e9']"
+                          [cpAddColorButton]="true" [(colorPicker)]="ribbonColor" name="tColor" (colorPickerChange)="onChangeColor($event, MenuItemForm, 'textColor')" />
+                      </td>
+                    </tr>
+                  </table>
+                </div>-->
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Sort Weight
+                      </label>
+                      <input class="form-control" type="number" name="sort" [ngModel]="menuItem?.display?.sort" #sort="ngModel">
+                      <span class="help-block">
+                        <small> Enter higher value to list this item at the top of the category. (Ex. 100) </small>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Cashback
+                      </label>
+                      <input class="form-control" type="number" name="cashback" [ngModel]="menuItem?.display?.cashback"
+                             #cashback="ngModel">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body" ngModelGroup="price">
+                <h4 class="card-title">Pricing</h4>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <!-- <div class="form-group">
+                      <label>Cost Price
+                      </label>
+                      <input class="form-control" type="number" name="cost" [ngModel]="menuItem?.price?.cost" #cost="ngModel">
+                    </div> -->
+                    <div class="form-group">
+                      <label>Display Price
+                        <span>*</span>
+                      </label>
+                      <input class="form-control" type="number" name="price" required [ngModel]="menuItem?.price?.price"
+                             #price="ngModel">
+                      <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert alert-danger">
+                        <div *ngIf="price.errors.required">Display Price is required.</div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>Retail Price 
+                      </label>
+                      <input class="form-control" type="number" name="retail" [ngModel]="menuItem?.price?.retail"
+                             #retail="ngModel">
+                      <span class="help-block">
+                      <small>(If a price is given here it will be striked out and shown like a discount)</small>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Packing Charge
+                      </label>
+                      <input class="form-control" type="number" name="packing" [ngModel]="menuItem?.price?.packing"
+                             #packing="ngModel">
+                    </div>
+                    <div class="form-group">
+                      <label>UOM
+                      </label>
+                      <select class="custom-select col-12" name="uom" [ngModel]="menuItem?.price?.uom" #uom="ngModel">
+                        <option value="">None</option>
+                        <option *ngFor="let option of uomList" [value]="option.value">{{option.label}}</option>
+                      </select>
+                      <span class="help-block">
+                        <small> Add UOM list from "Global Settings" first.</small>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+   <!--**********Stoct Card Start*************-->
+          <div class="col-12">
+             <div class="card">
+              <div class="card-body" ngModelGroup="stock">
+                <h4 class="card-title">Stock</h4>
+                <hr>
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isAdjust" name="isAdjust" [ngModel]="menuItem?.stock?.isAdjust"
+                      #isAdjust="ngModel">
+                    <label class="custom-control-label" for="isAdjust">Enable Stock Adjustment based on sales</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Opening Stock
+                      </label>
+                      <input class="form-control" type="number" name="current" [ngModel]="menuItem?.stock?.current"
+                        #current="ngModel">
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Max Quantity
+                      </label>
+                      <input class="form-control" type="number" name="maxQty" [ngModel]="menuItem?.stock?.maxQty"
+                        #maxQty="ngModel">
+                      <span class="help-block">
+                        <small> Maximum quantity allowed to be ordered in a order. </small>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+        <!--**********Stoct Card End*************-->
+            <div class="card">
+              <div class="card-body" ngModelGroup="addon">
+                <h4 class="card-title">Addons</h4>
+                <hr>
+                <div class="form-group">
+                  <label>Global Addons
+                  </label>
+                  <ng-select [items]="addonList" bindLabel="machine" bindValue="id" name="addons" [ngModel]="menuItem?.addon?.addons"
+                             #addons="ngModel" [multiple]="true" [closeOnSelect]="false">
+                  </ng-select>
+                </div>
+                <label>Add Add-On Size</label>
+                <div class="form-grouping-wrapper my-3" ngModelGroup="size">
+                  <div class="row" *ngFor="let row of menuItem?.addon?.size; let i = index" [ngModelGroup]="i">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Name </label>
+                        <input class="form-control" type="text" name="name" required [ngModel]="row?.name" #name="ngModel">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Price </label>
+                        <input class="form-control" type="number" name="price" required [ngModel]="row?.price" #price="ngModel">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Size based Add-on</label>
+                        <ng-select [items]="addonList" bindLabel="machine" required bindValue="id" name="addons" [ngModel]="row?.addons"
+                                   #addons="ngModel" [multiple]="true" [closeOnSelect]="false">
+                        </ng-select>
+                      </div>
+                    </div>
+                    <div class="col-md-1">
+                      <br>
+                      <button type="button" class="btn btn-sm btn-danger" (click)="deleteAddonSize(i)">x</button>
+                    </div>
+                    <div class="col-md-12 row" *ngIf="row?.lList?.length" ngModelGroup="lList">
+                      <div class="col-md-12 mb-2">
+                        Language
+                      </div>
+                      <div class="col-md-6" *ngFor="let rowLang of row?.lList; let i = index" [ngModelGroup]="i">
+                        <div class="form-group row">
+                          <label class="col-3 text-right">{{rowLang?.id}}</label>
+                          <input type="hidden" name="id" [ngModel]="rowLang?.id">
+                          <input class="col-9 form-control" type="text" name="val" [ngModel]="rowLang?.val">
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <hr><br>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-center">
+                    <button type="button" class="btn btn-sm btn-success" (click)="addMoreAddonSizes()">+ Add Size</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="card">
+              <div class="card-body" ngModelGroup="upsell">
+                <h4 class="card-title">Upsells</h4>
+                <hr>
+                <div class="form-group">
+                  <label>Menu Item
+                  </label>
+                   <select class="form-control" name="upsells" [ngModel]="menuItem?.upsells" #upsells="ngModel">
+                    <option *ngFor="let item of allMenuItem;let i = index" value="item.id" [hidden]="item.id === menuItemID">{{item.name}}</option>
+                  </select>
+                  <ng-select [items]="allMenuItem" bindLabel="name" bindValue="id" name="upsell" [ngModel]="menuItem?.upsell"
+                             #upsell="ngModel" [multiple]="true" [closeOnSelect]="false">
+                  </ng-select>
+                </div>
+              </div>
+            </div> -->
+<!--             <div class="card">
+              <div class="card-body" ngModelGroup="tax">
+                <h4 class="card-title">Tax</h4>
+                <hr>
+                <div class="form-group">
+                  <label>Choose All Applicable Taxes
+                  </label>
+                  <ng-select [items]="taxList" bindLabel="name" bindValue="id" name="tax" [ngModel]="menuItem?.tax?.tax"
+                             #tax="ngModel" [multiple]="true" [closeOnSelect]="false">
+                  </ng-select>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="isNonTax" name="isNonTax" [ngModel]="menuItem?.tax?.isNonTax"
+                               #isNonTax="ngModel">
+                        <label class="custom-control-label" for="isNonTax">Non-Taxable Item</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="isNonDisc" name="isNonDisc" [ngModel]="menuItem?.tax?.isNonDisc"
+                               #isNonDisc="ngModel">
+                        <label class="custom-control-label" for="isNonDisc">Non-Discountable Item</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+          </div>
+        </div>
+      
+        <div class="col-md-12" *ngIf="menuItem?.lang">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Language</h4>
+              <hr>
+              <div class="row" ngModelGroup="lang">
+                <div class="col-md-12" *ngFor="let langField of menuItem?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                  <h5>{{langField?.value?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                  <div class="row" ngModelGroup="lList">
+                    <div class="col-md-4" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                      <div class="form-group row">
+                        <label class="col-2 text-right">{{row?.id}}</label>
+                        <input type="hidden" name="id" [ngModel]="row?.id">
+                        <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="menuItemID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="!menuItemID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light" [routerLink]="['../../../menu-builder']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

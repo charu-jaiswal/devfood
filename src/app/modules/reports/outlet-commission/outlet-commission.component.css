@@ -1,0 +1,15 @@
+
+.table thead th,
+.table th {
+  border: 1px solid #dee2e6 !important;
+}
+
+.outlet {
+  min-width: 560px;
+  overflow: auto;
+}
+
+.pt-btn {
+  padding-top: 30px;
+}
+

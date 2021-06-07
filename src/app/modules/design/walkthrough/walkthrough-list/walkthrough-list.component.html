@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button class="btn btn-success" type="button" [routerLink]="['/design/walk-through/add/new']">
+            <i class="ti-plus"></i> &nbsp; Add Walk through</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <!-- <th>Type</th> -->
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let walkthrough of walkThroughList | async">
+                <td>{{ walkthrough.title }}</td>
+                <!-- <td>{{ walkthrough.type }}</td> -->
+                <td class="actionList">
+                  <button class="btn btn-sm btn-info" type="button" [routerLink]="['/design/walk-through', 'edit', walkthrough.id]">
+                    <!-- <i class="ti-pencil"></i> -->Edit
+                  </button>
+                  <button class="btn btn-sm btn-danger" type="button" (click)="deleteWalkThrough($event, walkthrough.id)">
+                    <!-- <i class="ti-trash"></i> -->Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

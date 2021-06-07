@@ -1,0 +1,176 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!chargeID">Add Charge / Tax</h1>
+    <h1 class="text-center title" *ngIf="chargeID">Edit Charge / Tax</h1>
+    <form class="form-horizontal" id="chargeForm" #ChargeForm="ngForm" (ngSubmit)="addCharge(ChargeForm)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>Charge Name
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="name" required [ngModel]="charge?.name" #name="ngModel">
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                      <div *ngIf="name.errors.required">Charge Name is required.</div>
+                    </div>
+                    <span class="help-block">
+                      <small>Ex. Convenience Fee for Delivery Orders. (Not Displayed to Customers)</small>
+                    </span>
+                  </div>
+                  <div class="form-group">
+                    <label>Display Name
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="dispName" required [ngModel]="charge?.dispName" #dispName="ngModel">
+                    <div *ngIf="dispName.invalid && (dispName.dirty || dispName.touched)" class="alert alert-danger">
+                      <div *ngIf="dispName.errors.required">Display Name is required.</div>
+                    </div>
+                    <span class="help-block">
+                      <small>This is the name displayed in invoice & order summary as a Line Item.</small>
+                    </span>
+                  </div>
+                  <!-- <div class="form-group">
+                    <label>Description
+                    </label>
+                    <textarea class="form-control" rows="3" name="desc" #desc="ngModel" [ngModel]="charge?.desc"></textarea>
+                  </div> -->
+<!-- 
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="enableTax" name="enableTax" [ngModel]="charge?.enableTax" #enableTax="ngModel">
+                    <label class="custom-control-label" for="enableTax"> Enable Tax </label>
+                  </div>
+
+                  <div class="form-group" [hidden]="!enableTax.value">
+                    <label>Tax<span>*</span></label>
+                    <div class="row m-0">
+                      <ng-select [required]="enableTax.value" [items]="taxList" bindLabel="name" bindValue="id" name="tax" [ngModel]="charge?.tax" #tax="ngModel" [multiple]="true"
+                        [closeOnSelect]="false">
+                      </ng-select>
+                    </div>
+                    <div *ngIf="tax.invalid && (tax.dirty || tax.touched)" class="alert alert-danger">
+                      <div *ngIf="tax.errors.required">Tax is required.</div>
+                    </div>
+                  </div> -->
+
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body" ngModelGroup="logic">
+                  <h4 class="card-title">Logic</h4>
+                  <hr>
+                  <div class="form-group">
+                    <label>Type
+                      <span class="red">*</span>
+                    </label>
+                    <br />
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="percentage" required name="type" [ngModel]="charge?.logic?.type" #type="ngModel"
+                            value="Percent">
+                          <label class="custom-control-label" for="percentage">Percentage</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="fixed" required name="type" [ngModel]="charge?.logic?.type" #type="ngModel"
+                            value="Fixed">
+                          <label class="custom-control-label" for="fixed">Fixed</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group" [hidden]="!(type.value === 'Percent')">
+                    <label>Charge Percentage
+                      <span>*</span>
+                    </label>
+                    <div class="input-group">
+                      <input class="form-control" type="number" min="0" max="100" name="percAmnt" [required]="type.value === 'Percent'" [ngModel]="charge?.logic?.percAmnt"
+                        #percAmnt="ngModel">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">%</div>
+                      </div>
+                    </div>
+                    <div *ngIf="percAmnt.invalid && (percAmnt.dirty || percAmnt.touched)" class="alert alert-danger">
+                      <div *ngIf="percAmnt.errors.required">Percentage Value is required.</div>
+                    </div>
+                  </div>
+                  <div class="form-group" [hidden]="!(type.value === 'Fixed')">
+                    <label>Fixed Amount
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="fixedAmnt" [required]="type.value === 'Fixed'" [ngModel]="charge?.logic?.fixedAmnt"
+                      #fixedAmnt="ngModel">
+                    <div *ngIf="fixedAmnt.invalid && (fixedAmnt.dirty || fixedAmnt.touched)" class="alert alert-danger">
+                      <div *ngIf="fixedAmnt.errors.required"> Enter a Fixed Charge Value.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body" ngModelGroup="condition">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" [checked]="apply" class="custom-control-input" id="isAllOutlets" name="isAllOutlets" [ngModel]="charge?.condition?.isAllOutlets"
+                      #applyOutlets="ngModel">
+                    <label class="custom-control-label" for="isAllOutlets"> Apply for all outlets </label>
+                  </div>
+                  <br/>
+                  <div [hidden]="applyOutlets.value" class="form-group">
+                    <label>Apply on Specific Outlets
+                      <span>*</span>
+                    </label>
+                    <ng-select [items]="outletList" [required]="!applyOutlets.value" bindLabel="name" bindValue="id" name="outlets" [ngModel]="charge?.condition?.outlets"
+                      #outlets="ngModel" [multiple]="true" [closeOnSelect]="false">
+                    </ng-select>
+                    <div *ngIf="outlets.invalid && (outlets.dirty || outlets.touched)" class="alert alert-danger">
+                      <div *ngIf="outlets.errors.required">Choose atleast one outlet</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+        <div class="col-md-1"></div>
+        <div class="col-md-9" *ngIf="charge?.lang">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Language</h4>
+              <hr>
+              <div class="row" ngModelGroup="lang">
+                <div class="col-md-12" *ngFor="let langField of charge?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                  <h5>{{langField?.value?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                  <div class="row" ngModelGroup="lList">
+                    <div class="col-md-4" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                      <div class="form-group row">
+                        <label class="col-2 text-right">{{row?.id}}</label>
+                        <input type="hidden" name="id" [ngModel]="row?.id">
+                        <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="chargeID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="!chargeID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light" [routerLink]="['/settings/charge/list']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

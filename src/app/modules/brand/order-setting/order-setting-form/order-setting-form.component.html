@@ -1,0 +1,77 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="col-12">
+      <h1 class="text-dark m-b-0 text-center">Order Setting</h1>
+    </div>
+    <form class="form-horizontal" id="orderSettingForm" #OrderSetting="ngForm" (ngSubmit)="addOrderSetting(OrderSetting)">
+      <div class="row">
+        <div class="col-md-3 hidden-xs hidden-sm"></div>
+        <div class="col-sm-12 col-xs-12 col-md-6 col-md-push-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Void Reason
+                    </label>
+                    <ng-select name="void" [ngModel]="orderSetting?.void" [addTag]="addVoid" #void="ngModel" [multiple]="true">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Complimentary Reason
+                    </label>
+                    <ng-select name="comp" [ngModel]="orderSetting?.comp" [addTag]="addComp" #comp="ngModel" [multiple]="true">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Refund Reason
+                    </label>
+                    <ng-select name="refund" [ngModel]="orderSetting?.refund" [addTag]="addRefund" #refund="ngModel" [multiple]="true">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="row" ngModelGroup="invSequence">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Invoice Prefix
+                    </label>
+                    <input type="text" class="form-control" name="prefix" [ngModel]="orderSetting?.invSequence?.prefix" #prefix="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Invoice Suffix
+                    </label>
+                    <input type="text" class="form-control" name="suffix" [ngModel]="orderSetting?.invSequence?.suffix" #suffix="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Invoice Reset Cycle
+                    </label>
+                    <select class="custom-select col-12" name="reset" [ngModel]="orderSetting?.invSequence?.reset" #reset="ngModel">
+                      <option *ngFor="let option of refundList" [value]="option.value">{{option.label}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="col-12">
+      <h1 class="text-dark m-b-0 text-center">Request App Setting </h1>
+    </div>
+    <br>
+    <form class="form-horizontal" id="requestAppForm" #RequestAppForm="ngForm" (ngSubmit)="addRequestApp(RequestAppForm)">
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>App Name</label>
+                    <span>*</span>
+                    <input class="form-control" type="text" name="appName" [ngModel]="requestApp?.appName" #appName="ngModel" required>
+                    <div *ngIf="appName.errors && (appName.dirty || appName.touched)" class="alert alert-danger">
+                        App Name is Required
+                      </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <table class="w-100">
+                    <tr>
+                      <td class="form-group" width="32%">
+                        <label>Color</label>
+                        <span>*</span>
+                        <input class="form-control" [hidden]="true" type="text" name="color" [ngModel]="requestApp?.color" required>
+                        <input class="form-control text-center" [value]="color" [style.background]="color"
+                               [cpAlphaChannel]="'always'" [cpOutputFormat]="'hex'" [cpPresetColors]="['#fff', '#2889e9']"
+                               [cpAddColorButton]="true" [(colorPicker)]="color" name="tColor" (colorPickerChange)="onChangeColor($event, RequestAppForm, 'primaryColor')" />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Icon</label>
+                    <span>*</span>
+                    <br>
+                    <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                    <input type="hidden" name="icon" [ngModel]="requestApp?.icon" #icon="ngModel" required >
+                    <br>
+                    <br>
+                    <div *ngIf="requestApp?.icon">
+                      <img [src]="requestApp?.icon" class="img-upload-disp-wrapper">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+                    </div>
+                    <div *ngIf="icon.errors && (icon.dirty || icon.touched)" class="alert alert-danger">
+                        Icon is Required
+                      </div>
+                      <span class="help-block">
+                          <small> Max Image Size : 1024px by 1024px. Format: jpg only. </small>
+                        </span>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Splash Screen
+                    </label>
+                    <span>*</span>
+                    <br>
+                    <input type="file" (change)="uploadFile1($event, 'image')" accept=".jpg" />
+                    <input type="hidden" name="splashScreen" [ngModel]="requestApp?.splashScreen" #splashScreen="ngModel" required>
+                    <br>
+                    <br>
+                    <div *ngIf="requestApp?.splashScreen">
+                      <img [src]="requestApp?.splashScreen" class="img-upload-disp-wrapper">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile1('image')">Delete</button>
+                    </div>
+                    <div *ngIf="splashScreen.errors && (splashScreen.dirty || splashScreen.touched)" class="alert alert-danger">
+                        Splash Screen is Required
+                      </div>
+                      <span class="help-block">
+                          <small> Max Image Size : 2732px by 2732px. Format: jpg only. </small>
+                        </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

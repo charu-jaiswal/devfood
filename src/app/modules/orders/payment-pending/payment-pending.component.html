@@ -1,0 +1,140 @@
+<div class="row customer-report">
+  <!-- <div class="col-lg-2"></div> -->
+  <div class="col-lg-12">
+    <h1 class="text-center">Payment Pending</h1>
+    <div class="row m-3 p-3">
+      <div class="col-md-4"></div>
+      <div class="col-md-4 text-center">
+        <div class="card px-4 pb-4 pt-2">
+          <div class="form-group">
+            <label>Order Date Range</label>
+            <input type="text" name="daterangeInput" daterangepicker [options]="options"
+                   (selected)="selectedDate($event, daterange)" class="form-control" />
+          </div>
+        </div>
+      </div>
+      <div class="col-12" id="daterangepicker-panel"></div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="orders">
+  <!-- <h3 class="text-center">{{ 'ORD_PLACED' | orderStatus }}</h3> -->
+  <br>
+  <div class="col-md-4"  *ngFor="let order of orders">
+  <div class="card border-dark">
+    <div class="card-header">
+      <h4>{{order?.outlet?.name}}</h4>
+    </div>
+    <div class="card-body">
+      <p class="card-text">
+        ID: {{order?.orderID}}<br>
+        Time: {{order?.info?.timeslot.seconds * 1000 | date:'medium'}}<br>
+        Name: {{order?.user?.name}}<br>
+        Phone: {{order?.user?.uid}}<br>
+        <span *ngIf="order?.total?.finalPay">Amount: {{order?.total?.finalPay | number:'1.1-2'}}</span>
+      </p>
+      <ul *ngIf="order?.cartItems">
+        <li *ngFor="let cartItem of order?.cartItems">
+          {{cartItem.quantity}}x {{cartItem.name}}
+        </li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <div class="row">
+        <div class="col-md-4 no-padding-left">
+          <button class="btn btn-success btn-block" (click)="processOrder(order)">
+            Process
+          </button>
+        </div>
+        <div class="col-md-4 no-padding-center">
+          <button class="btn btn-danger btn-block" (click)="deleteOrder(order.id)">
+            Delete
+          </button>
+        </div>
+        <div class="col-md-4 no-padding-right">
+          <button class="btn btn-primary btn-block" (click)="viewDetails(order)">
+            View
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="col-md-4">
+    <h3 class="mx-3">{{ 'PROCESSING' | orderStatus }}</h3>
+    <br>
+    <div class="card border-dark" *ngFor="let order of orders['PROCESSING']">
+      <div class="card-header">
+        <h4>{{order?.outlet?.name}}</h4>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          Time: {{order?.info?.timeslot.seconds * 1000 | date:'medium'}}<br>
+          Name: {{order?.user?.name}}<br>
+          Phone: {{order?.user?.uid}}<br>
+          <span *ngIf="order?.total?.finalPay">Amount: {{order?.total?.finalPay | number:'1.1-2'}}</span>
+        </p>
+        <ul *ngIf="order?.cartItems">
+          <li *ngFor="let cartItem of order?.cartItems">
+            {{cartItem.quan}}x {{cartItem.name}}
+          </li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <div class="row">
+          <div class="col-md-6 no-padding-left">
+            <button class="btn btn-success btn-block" *ngIf="order?.info?.ordType === 'DELIVERY'" (click)="orderService.changeOrderStatus(order.id, 'RDY_DELIVERY')">
+              Out For Delivery
+            </button>
+            <button class="btn btn-success btn-block" *ngIf="order?.info?.ordType === 'TAKEAWAY'" (click)="orderService.changeOrderStatus(order.id, 'RDY_PICKUP')">
+              Ready For Take Away
+            </button>
+          </div>
+          <div class="col-md-6 no-padding-right">
+            <button class="btn btn-primary btn-block" (click)="viewDetails(order)">
+              View
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4" *ngIf="orders['RDY_PICKUP'] || orders['RDY_DELIVERY'] || orders['PICKED_UP']">
+    <h3 class="mx-3">{{ 'RDY_DELIVERY' | orderStatus }}</h3>
+    <br>
+    <div *ngFor="let order of [].concat(orders['RDY_PICKUP'], orders['RDY_DELIVERY'], orders['PICKED_UP'])">
+      <div class="card border-dark" *ngIf="order">
+        <div class="card-header">
+          <h4>{{order?.outlet?.name}}</h4>
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            Time: {{order?.info?.timeslot.seconds * 1000 | date:'medium'}}<br>
+            Name: {{order?.user?.name}}<br>
+            Phone: {{order?.user?.uid}}<br>
+            <span *ngIf="order?.total?.finalPay">Amount: {{order?.total?.finalPay | number:'1.1-2'}}</span>
+          </p>
+          <ul *ngIf="order?.cartItems">
+            <li *ngFor="let cartItem of order?.cartItems">
+              {{cartItem.quan}}x {{cartItem.name}}
+            </li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <div class="row">
+            <div class="col-md-6 no-padding-left">
+              <button class="btn btn-success btn-block" (click)="orderService.changeOrderStatus(order.id, 'DELIVERED', order?.other?.driver)">
+                Delivered
+              </button>
+            </div>
+            <div class="col-md-6 no-padding-right">
+              <button class="btn btn-primary btn-block" (click)="viewDetails(order)">
+                View
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+</div>

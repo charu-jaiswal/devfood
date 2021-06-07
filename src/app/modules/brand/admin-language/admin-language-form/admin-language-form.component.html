@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title">Admin Language</h1>
+    <br />
+    <form class="form-horizontal" id="languageForm" #LanguageForm="ngForm" (ngSubmit)="addLanguage(LanguageForm)">
+      <div class="row" ngModelGroup="lang">
+        <div class="col-sm-12">
+          <ngb-tabset #t="ngbTabset" [destroyOnHide]="false">
+            <ngb-tab *ngFor="let category of language?.lang; let i = index" [id]="'cat-'+category?.id"
+                     [ngModelGroup]="i">
+              <input type="hidden" name="name" [ngModel]="category?.name">
+              <input type="hidden" name="id" [ngModel]="category?.id">
+              <ng-template ngbTabTitle>{{ category?.name }}</ng-template>
+              <ng-template ngbTabContent>
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title text-center">{{ category?.name }}</h4>
+                    <hr>
+                    <div class="row" ngModelGroup="words">
+                      <div class="col-md-6" *ngFor="let word of category?.words; let j = index" [ngModelGroup]="j">
+                        <input type="hidden" name="id" [ngModel]="word?.id">
+                        <input type="hidden" name="key" [ngModel]="word?.key">
+                        <div class="form-group row">
+                          <label class="col-sm-5 col-form-label">{{ word?.key }}</label>
+                          <div class="col-sm-6">
+                            <input class="form-control" type="text" name="val" required [ngModel]="word?.val"
+                                   #val="ngModel">
+                          </div>
+                          <div class="col-sm-1"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

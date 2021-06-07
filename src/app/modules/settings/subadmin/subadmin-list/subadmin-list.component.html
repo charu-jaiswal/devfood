@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button class="btn btn-success" type="button" [routerLink]="['/settings/subadmin/add/new']">
+            <i class="ti-plus"></i> &nbsp; Add sub Admin</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>S.NO</th>
+                <th>UserName</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr [ngClass]="{'table-warning': admin.isDisabled,'table-danger': admin.isHidden}"
+                *ngFor="let admin of subAdminList; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ admin.username }}</td>
+
+                <td class="actionList">
+                  <button class="btn btn-sm btn-info" type="button"
+                    [routerLink]="['/settings/subadmin', 'edit', admin.id]">Edit</button>
+                  <button class="btn btn-sm btn-danger" type="button"
+                    (click)="deleteSubAdmin($event, admin.id)">Delete</button>
+                  <button class="btn btn-sm btn-info  btn-disable" type="button"
+                    (click)="disableSubAdmin($event, admin)">
+                    {{ admin.isDisabled ? 'Enable' : 'Disable'}}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

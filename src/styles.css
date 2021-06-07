@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+
+.ps .ps__scrollbar-y-rail {
+  left: 3px;
+  right: auto;
+}
+
+button.btn.btn-lg.btn-inverse.waves-effect.waves-light:hover {
+  color: white !important;
+  background: red;
+  border:none;
+}
+button.btn.btn-lg.btn-inverse.waves-effect.waves-light {
+    background: black;
+    color: white;
+    border:none;
+}
+.collapse.in {
+  display: block!important;
+}
+
+#toast-container > div {
+  opacity: 1;
+}
+.toast {
+  font-size: initial !important;
+  border: initial !important;
+  backdrop-filter: blur(0) !important;
+}
+.toast-success {
+  background-color: #51A351 !important;
+}
+.toast-error {
+  background-color: #BD362F !important;
+}
+.toast-info {
+  background-color: #2F96B4 !important;
+}
+.toast-warning {
+  background-color: #F89406 !important;
+}

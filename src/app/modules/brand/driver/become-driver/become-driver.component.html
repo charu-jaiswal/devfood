@@ -1,0 +1,42 @@
+<br/><h1 class="text-center"> Driver Approval</h1><br/><br/>
+<div class="row">
+  <div class="col-lg-1"></div>
+  <div class="col-lg-10">
+    <div class="card">
+      <div class="card-body">
+        <br/>
+        <div>
+          <p class="text-center" *ngIf="!driverList.length">No Drivers Pending Approval</p>
+          <table class="table table-bordered" *ngIf="driverList.length">
+            <thead>
+              <tr>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>MobileNo</th>
+                <th>Vehicle No</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let driver of driverList">
+                <td>{{ driver.name }}</td>
+                <td>{{ driver.email }}</td>
+                <td>{{ driver.mobileNo }}</td>
+                <td>{{ driver.vehicleNo }}</td>
+                <td class="actionList">
+                  <button class="btn btn-sm btn-info" type="button" [routerLink]="['../becomeDriver', driver.id]">
+                    <!-- <i class="ti-pencil"></i> -->Approve
+                  </button>
+                  <button class="btn btn-sm btn-danger" type="button" (click)="deleteDriver($event, driver.id)">Delete
+                    <!-- <i class="ti-trash"></i> -->
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

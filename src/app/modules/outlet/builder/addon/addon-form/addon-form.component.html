@@ -1,0 +1,179 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!addonID">Add Addon</h1>
+    <h1 class="text-center title" *ngIf="addonID">Edit Addon</h1>
+    <form class="form-horizontal" id="addonForm" #AddonForm="ngForm" (ngSubmit)="addAddon(AddonForm)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-12">
+               <!--    <div class="custom-control custom-checkbox mb-2">
+                    <input type="checkbox" class="custom-control-input" id="isDisable" name="isDisable" [ngModel]="addon?.isDisable"
+                           #disable="ngModel">
+                    <label class="custom-control-label" for="isDisable">Disable Addon</label>
+                  </div> -->
+                  <div class="form-group">
+                    <label>Addon Group - Display Name
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="name" required [ngModel]="addon?.name" #name="ngModel">
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                      <div *ngIf="name.errors.required">Addon Group - Display Name is required.</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Addon Group - Internal Name
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="machine" required [ngModel]="addon?.machine" #machine="ngModel">
+                    <div *ngIf="machine.invalid && (machine.dirty || machine.touched)" class="alert alert-danger">
+                      <div *ngIf="machine.errors.required">Addon Group - Internal Name is required.</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Description
+                    </label>
+                    <input class="form-control" type="text" name="desc" #desc="ngModel" [ngModel]="addon?.desc">
+                  </div>
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isMultiChoice" name="isMultiChoice"
+                             [ngModel]="addon?.isMultiChoice" #multiChoice="ngModel">
+                      <label class="custom-control-label" for="isMultiChoice">Allow Multiple Choice</label>
+                    </div>
+                  </div>
+                  <div class="row" [hidden]="!multiChoice.value">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label>Minimum Choice
+                          <span>*</span>
+                        </label>
+                        <input class="form-control" type="number" name="minChoice" [required]="multiChoice.value"
+                               [ngModel]="addon?.minChoice" #minChoice="ngModel">
+                        <div *ngIf="minChoice.invalid && (minChoice.dirty || minChoice.touched)" class="alert alert-danger">
+                          <div *ngIf="minChoice.errors.required">Minimum Choice is required.</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label>Maximum Choice
+                          <span>*</span>
+                        </label>
+                        <input class="form-control" type="number" name="maxChoice" [required]="multiChoice.value"
+                               [ngModel]="addon?.maxChoice" #maxChoice="ngModel">
+                        <div *ngIf="maxChoice.invalid && (maxChoice.dirty || maxChoice.touched)" class="alert alert-danger">
+                          <div *ngIf="maxChoice.errors.required">Maximum Choice is required.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h4 class="text-center m-4">Add Add-On Items</h4>
+              <div class="form-grouping-wrapper my-3" ngModelGroup="item">
+                <div class="row " *ngFor="let row of addon?.item; let i = index" [ngModelGroup]="i">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Add-On Item <span>*</span></label>
+                      <input class="form-control" type="text" name="name" required [ngModel]="row?.name" #name="ngModel">
+                      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                        <div *ngIf="name.errors.required">Name is required.</div>
+                      </div>
+                    </div>
+                    <!-- <div class="form-group">
+                      <label>Description
+                      </label>
+                      <input class="form-control" type="text" name="desc" #desc="ngModel" [ngModel]="row?.desc">
+                    </div> -->
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label>Price <span>*</span></label>
+                      <input class="form-control" type="number" name="price" required [ngModel]="row?.price" #price="ngModel">
+                      <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert alert-danger">
+                        <div *ngIf="price.errors.required">Maximum Choice is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label>Sort</label>
+                      <input class="form-control" type="number" name="sort" [ngModel]="row?.sort">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <br>
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="disable_{{i}}" name="isDisable"
+                               [ngModel]="row?.isDisable" #multiChoice="ngModel">
+                        <label class="custom-control-label" for="disable_{{i}}">Disable</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                    <br>
+                    <button type="button" class="btn btn-sm btn-danger" (click)="deleteRow(i)">x</button>
+                  </div>
+
+                  <div class="col-md-12 row" *ngIf="row?.lList?.length" ngModelGroup="lList">
+                    <div class="col-md-12 mb-2">
+                      Language
+                    </div>
+                    <div class="col-md-4" *ngFor="let rowLang of row?.lList; let i = index" [ngModelGroup]="i">
+                      <div class="form-group row">
+                        <label class="col-3 text-right">{{rowLang?.id}}</label>
+                        <input type="hidden" name="id" [ngModel]="rowLang?.id">
+                        <input class="col-9 form-control" type="text" name="val" [ngModel]="rowLang?.val">
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <hr><br>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="button" class="btn btn-sm btn-success" (click)="addMoreRows()">+ Add Addon Item</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+        <div class="col-md-12" *ngIf="addon?.lang">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Language</h4>
+              <hr>
+              <div class="row" ngModelGroup="lang">
+                <div class="col-md-12" *ngFor="let langField of addon?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                  <h5>{{langField?.value?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                  <div class="row" ngModelGroup="lList">
+                    <div class="col-md-4" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                      <div class="form-group row">
+                        <label class="col-2 text-right">{{row?.id}}</label>
+                        <input type="hidden" name="id" [ngModel]="row?.id">
+                        <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="addonID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="!addonID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light" [routerLink]="['../../../menu-builder']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

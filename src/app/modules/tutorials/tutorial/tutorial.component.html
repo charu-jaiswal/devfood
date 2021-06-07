@@ -1,0 +1,19 @@
+<div class="text-center m-4">
+  <a class="btn btn-sm btn-info mr-2" href="https://s3.amazonaws.com/v2.devfood.com/assets/download/dist.zip" target="_blank">Download Dashboard</a>
+</div><hr><br>
+<div class="row" *ngFor="let category of tutorials">
+  <div class="col-sm-12">
+    <h2 class="text-center">{{category?.title}}</h2>
+    <p class="text-center">{{category?.desc}}</p>
+  <br>
+  </div>
+  <div class="col-sm-4" *ngFor="let video of category.videos">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"> {{video?.title}} </h5>
+        <img src="{{video.imageUrl}}" alt="videoImage" height="100%" width="100%" (click)="open(video)">
+        <p>{{video.desc}}</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<br/><h1 class="text-center">New Location Request</h1><br/><br/>
+<div class="row">
+  <div class="col-lg-1"></div>
+  <div class="col-lg-10">
+    <div class="card">
+      <div class="card-body">
+        <br/>
+        <div>
+          <agm-map [latitude]="brandLat" [longitude]="brandLong" (mapReady)="onMapLoad($event)"
+                   [zoom]="9" [scrollwheel]="false" [clickableIcons]="false" [streetViewControl]="false"
+                   [disableDefaultUI]="false" id="AgmMap" #AgmMap>
+          </agm-map>
+          <br>
+        </div>
+        <div>
+          <p class="text-center" *ngIf="!locRequestList.length">No New Location Request</p>
+          <table class="table table-bordered" *ngIf="locRequestList.length">
+            <thead>
+              <tr>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Mobile No</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let locRequest of locRequestList">
+                <td>{{ locRequest?.address[0]?.fullAddress }}</td>
+                <td>{{ locRequest.email }}</td>
+                <td>{{ locRequest.userUID }}</td>
+                <td class="actionList text-center">
+                  <a class="btn btn-sm btn-info mr-2" href="http://www.google.com/maps/place/{{ locRequest?.address[0]?.position?.lat }},{{ locRequest?.address[0]?.position?.lng }}" target="_blank">Map</a>
+                  <button class="btn btn-sm btn-danger" type="button" (click)="deleteLocRequest($event, locRequest.id)">Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

@@ -1,0 +1,95 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!categoryID">Add Category</h1>
+    <h1 class="text-center title" *ngIf="categoryID">Edit Category</h1>
+    <br>
+    <form class="form-horizontal" id="categoryForm" #CategoryForm="ngForm" (ngSubmit)="addCategory(CategoryForm)">
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Category Name
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="name" required [ngModel]="category?.name"
+                           #name="ngModel">
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                      <div *ngIf="name.errors.required">Category Name is required.</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Category Subtitle </label>
+                    <input class="form-control" type="text" name="desc" #desc="ngModel" [ngModel]="category?.desc">
+                    <span class="help-block">
+                      <small>Will be displayed only if Category Layout is Enabled </small>
+                    </span>
+                  </div>
+                  <!-- <div class="form-group">
+                    <label>Sort Weight
+                    </label>
+                    <input class="form-control" type="number" name="sort" [ngModel]="category?.sort" #sort="ngModel">
+                    <span class="help-block">
+                      <small> Enter higher value to list this item at the top of the category. (Ex. 100) </small>
+                    </span>
+                  </div> -->
+                  <div class="form-group">
+                    <label>Image </label>
+                    <br />
+                    <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                    <input type="hidden" name="image" [ngModel]="category?.image">
+                    <br>
+                    <span class="help-block">
+                      <small><b>Image Height</b> Size: <b>160px</b>. Max File Size: 300kb. Format: jpg only. </small>
+                    </span>
+                    <br>
+                    <div *ngIf="category?.image">
+                      <img [src]="category?.image" class="img-upload-disp-wrapper">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4"></div>
+        <div class="col-md-12" *ngIf="category?.lang">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Language</h4>
+              <hr>
+              <div class="row" ngModelGroup="lang">
+                <div class="col-md-12" *ngFor="let langField of category?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                  <h5>{{langField?.value?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                  <div class="row" ngModelGroup="lList">
+                    <div class="col-md-4" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                      <div class="form-group row">
+                        <label class="col-2 text-right">{{row?.id}}</label>
+                        <input type="hidden" name="id" [ngModel]="row?.id">
+                        <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                *ngIf="categoryID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                *ngIf="!categoryID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light"
+                [routerLink]="['../../../menu-builder']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

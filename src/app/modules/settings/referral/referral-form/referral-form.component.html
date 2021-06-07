@@ -1,0 +1,205 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title">Referral</h1>
+    <form class="form-horizontal" id="referralForm" #ReferralForm="ngForm" (ngSubmit)="addReferral(ReferralForm)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+              <div>
+                <div class="form-group">
+                  <label>Referral Page
+                    <span>*</span>
+                  </label>
+                  <input class="form-control" type="text" name="name" [ngModel]="referral?.name" required #name="ngModel">
+                  <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                    <div *ngIf="name.errors.required">Referral Name is required.</div>
+                  </div>
+                  <span class="help-block">
+                    <small>Ex. Share the love</small>
+                  </span>
+                </div>
+                <div ngModelGroup="desc">
+                  <!-- <div class="form-group">
+                    <label>Terms & Conditions
+                    </label>
+                    <textarea class="form-control" rows="3" name="terms" [ngModel]="referral?.desc?.terms" #terms="ngModel"></textarea>
+                  </div> -->
+                  <div class="form-group">
+                    <label>Share Title
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="shareTitle" required [ngModel]="referral?.desc?.shareTitle"
+                           #shareTitle="ngModel">
+                    <div *ngIf="shareTitle.invalid && (shareTitle.dirty || shareTitle.touched)" class="alert alert-danger">
+                      <div *ngIf="shareTitle.errors.required">Share Title is required.</div>
+                    </div>
+                    <span class="help-block">
+                      <small>Title will be used as Title for posts shared on Social Media Platforms.</small>
+                    </span>
+                  </div>
+                  <div class="form-group">
+                    <label>Share Body Text
+                      <span>*</span>
+                    </label>
+                    <textarea class="form-control" rows="3" name="shareBody" required [ngModel]="referral?.desc?.shareBody"
+                              #shareBody="ngModel"></textarea>
+                    <div *ngIf="shareBody.invalid && (shareBody.dirty || shareBody.touched)" class="alert alert-danger">
+                      <div *ngIf="shareBody.errors.required">Share Body is required.</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Share App URL
+                    </label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">http://</div>
+                      </div>
+                      <input class="form-control" type="text" name="shareURL" required pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                        [ngModel]="referral?.desc?.shareURL" #shareAppURL="ngModel">
+                    </div>
+                    <div *ngIf="shareAppURL.errors && (shareAppURL.dirty || shareAppURL.touched)" class="alert alert-danger">
+                      <div [hidden]="!shareAppURL.errors.pattern">
+                        Enter a valid URL!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <fieldset>
+            <div class="card">
+              <div class="card-body">
+                <div class="form-group">
+                  <label>Coupon for Referee
+                    <span>*</span>
+                  </label>
+                  <select class="form-control" name="forReferee" required [ngModel]="referral?.forReferee" #forReferee="ngModel">
+                    <option *ngFor="let option of couponList" [value]="option.id">{{option.name}}</option>
+                  </select>
+                  <div *ngIf="forReferee.invalid && (forReferee.dirty || forReferee.touched)" class="alert alert-danger">
+                    <div *ngIf="forReferee.errors.required">Coupon for Referee is required.</div>
+                  </div>
+                  <span class="help-block">
+                    <small>Add a Coupon from "Promo" section for the referree to use on their first order</small>
+                  </span>
+                </div>
+                <div ngModelGroup="forReferrer">
+                  <div class="form-group">
+                    <label>Incentive for Referrer
+                      <span>*</span>
+                    </label>
+                    <br />
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="percentage" required name="type"
+                                 [ngModel]="referral?.forReferrer?.type" #type="ngModel" value="CashPerc">
+                          <label class="custom-control-label" for="percentage">Cashback Percentage</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" id="fixed" required name="type" [ngModel]="referral?.forReferrer?.type"
+                                 #type="ngModel" value="CashAmnt">
+                          <label class="custom-control-label" for="fixed">Cashback Fixed Amount</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" [hidden]="!(type.value === 'CashPerc')">
+                    <div class="col-sm-6">
+                      <div class="form-group" [hidden]="!(type.value === 'CashPerc')">
+                        <label>Cashback Percentage
+                          <span>*</span>
+                        </label>
+                        <div class="input-group">
+                          <input class="form-control" type="number" min="0" max="100" name="percAmnt" [required]="type.value === 'CashPerc'"
+                                 [ngModel]="referral?.forReferrer?.percAmnt" #percAmnt="ngModel">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text">%</div>
+                          </div>
+                        </div>
+                        <div *ngIf="percAmnt.invalid && (percAmnt.dirty || percAmnt.touched)" class="alert alert-danger">
+                          <div *ngIf="percAmnt.errors.required">Cashback Percentage is required.</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group" [hidden]="!(type.value === 'CashPerc')">
+                        <label>Maximum Cashback Amount
+                          <span>*</span>
+                        </label>
+                        <input class="form-control" type="number" name="maxPercAmnt" [required]="type.value === 'CashPerc'"
+                               [ngModel]="referral?.forReferrer?.maxPercAmnt" #maxPercAmnt="ngModel">
+                        <div *ngIf="maxPercAmnt.invalid && (maxPercAmnt.dirty || maxPercAmnt.touched)" class="alert alert-danger">
+                          <div *ngIf="maxPercAmnt.errors.required">Maximum Cashback Amount is required.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6" [hidden]="!(type.value === 'CashAmnt')">
+                    <div class="form-group" >
+                      <label>Cashback Amount
+                        <span>*</span>
+                      </label>
+                      <input class="form-control" type="number" name="fixedAmnt" [required]="type.value === 'CashAmnt'"
+                             [ngModel]="referral?.forReferrer?.fixedAmnt" #fixedAmnt="ngModel">
+                      <div *ngIf="fixedAmnt.invalid && (fixedAmnt.dirty || fixedAmnt.touched)" class="alert alert-danger">
+                        <div *ngIf="fixedAmnt.errors.required">Cashback Amount is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Maximum Number of Refferals per Referrer
+                        <span>*</span>
+                      </label>
+                      <input class="form-control" type="number" name="maxReferral" required [ngModel]="referral?.forReferrer?.maxReferral"
+                             #maxReferral="ngModel">
+                      <div *ngIf="maxReferral.invalid && (maxReferral.dirty || maxReferral.touched)" class="alert alert-danger">
+                        <div *ngIf="maxReferral.errors.required">Max Number of Refferals per Referrer is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset> -->
+        </div>
+        <div class="col-sm-2"></div>
+        <div class="col-md-12" *ngIf="referral?.lang">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Language</h4>
+              <hr>
+              <div class="row" ngModelGroup="lang">
+                <div class="col-md-12" *ngFor="let langField of referral?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                  <h5>{{langField?.value?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                  <div class="row" ngModelGroup="lList">
+                    <div class="col-md-4" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                      <div class="form-group row">
+                        <label class="col-2 text-right">{{row?.id}}</label>
+                        <input type="hidden" name="id" [ngModel]="row?.id">
+                        <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

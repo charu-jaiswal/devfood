@@ -1,0 +1,137 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!outletCategoryID">Add Outlet Category</h1>
+    <h1 class="text-center title" *ngIf="outletCategoryID">Edit Outlet Category</h1>
+    <form class="form-horizontal" id="outletCategoryForm" #OutletCategory="ngForm" (ngSubmit)="addOutletCategoryForm(OutletCategory)">
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Title
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="title" required [ngModel]="outletCategory?.title" #title="ngModel">
+                    <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+                      <div *ngIf="title.errors.required">Title is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isDisabled" name="isDisabled"
+                             [ngModel]="outletCategory?.isDisabled">
+                      <label class="custom-control-label" for="isDisabled">Disable Outlet Category</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="hideCusineFilter" name="hideCusineFilter"
+                             [ngModel]="outletCategory?.hideCusineFilter">
+                      <label class="custom-control-label" for="hideCusineFilter">Hide Cusine Filter</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Sub Title
+                      <!-- <span>*</span> -->
+                    </label>
+                    <input class="form-control" type="text" name="subTitle" [ngModel]="outletCategory?.subTitle" #subTitle="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Sort Weight
+                    </label>
+                    <input class="form-control" type="number" name="sort" [ngModel]="outletCategory?.sort" #sort="ngModel">
+                    <span class="help-block">
+                      <small> Enter higher value to list this item at the top of the category. (Ex. 100) </small>
+                    </span>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Image </label> &nbsp;&nbsp;
+                    <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                    <input type="hidden" name="image" [ngModel]="outletCategory?.image">
+                    <br>
+                    <br>
+                    <span class="help-block">
+                      <small> Max File Size: 300kb. Max Image Size : 640px by 480px. Format: jpg only. </small>
+                    </span>
+                    <div *ngIf="outletCategory?.image">
+                      <img [src]="outletCategory?.image" class="img-upload-disp-wrapper">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Outlets to List</label>
+                    <ng-select [items]="outletList" bindLabel="name" bindValue="id" name="outlets"
+                               [ngModel]="outletCategory?.outlets" #tags="ngModel" [multiple]="true" [closeOnSelect]="false">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Outlet Filter to Show</label>
+                    <ng-select [items]="filterList" bindLabel="label" bindValue="value" name="filters"
+                               [ngModel]="outletCategory?.filters" #tags="ngModel" [multiple]="true" [closeOnSelect]="false">
+                    </ng-select>
+                    <span class="help-block">
+                      <small> Add Filter Master from "Global Settings" first.</small>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3"></div>
+        <div class="col-md-6" *ngIf="outletCategory?.lang">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Language</h4>
+              <hr>
+              <div class="row" ngModelGroup="lang">
+                <div class="col-md-12" *ngFor="let langField of outletCategory?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                  <h5>{{langField?.value?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                  <div class="row" ngModelGroup="lList">
+                    <div class="col-md-6" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                      <div class="form-group row">
+                        <label class="col-2 text-right">{{row?.id}}</label>
+                        <input type="hidden" name="id" [ngModel]="row?.id">
+                        <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3"></div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                *ngIf="outletCategoryID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                *ngIf="!outletCategoryID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light"
+                [routerLink]="['/design/outlet-category/list']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

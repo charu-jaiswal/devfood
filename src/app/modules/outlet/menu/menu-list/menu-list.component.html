@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button class="btn btn-success" type="button" [routerLink]="['add/new']">
+            <i class="ti-plus"></i> &nbsp; Add Menu</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Menu Name</th>
+                <th>Available For</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let menu of menuList; let i = index">
+                <td>
+                  {{ menu.name }}
+                </td>
+                <td>
+                  <span *ngIf="menu.available.isDelivery">Delivery</span>
+                  <span *ngIf="(menu.available.isPickup && menu.available.isDelivery) || (menu.available.isTableRes && menu.available.isDelivery)">, </span>
+                  <span *ngIf="menu.available.isPickup"> Take Away</span>
+                  <span *ngIf="menu.available.isTableRes && menu.available.isPickup">, </span>
+                  <span *ngIf="menu.available.isTableRes"> Table Reservation</span>
+                </td>
+                <td class="actionList">
+                  <button class="btn btn-sm btn-info" type="button" [routerLink]="['edit', menu.id]">Edit
+                    <!-- <i class="ti-pencil"></i> -->
+                  </button>
+                  <button class="btn btn-sm btn-danger" type="button" (click)="deleteMenu($event, menu.id)">Delete
+                    <!-- <i class="ti-trash"></i> -->
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

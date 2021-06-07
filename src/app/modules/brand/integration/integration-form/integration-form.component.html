@@ -1,0 +1,236 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!integrationID">Integration</h1>
+    <h1 class="text-center title" *ngIf="integrationID">Edit Integration</h1>
+    <form class="form-horizontal" id="integrationForm" #IntegrationForm="ngForm" (ngSubmit)="addIntegration(IntegrationForm)">
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4" ngModelGroup="integration">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <!-- <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="fChatCheck" name="freshChat" #fChatCheck="ngModel"
+                             [ngModel]="integration?.integration?.freshChat">
+                      <label class="custom-control-label" for="fChatCheck">Fresh Chat</label>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="msg91Check" name="msg91" #msg91Check="ngModel"
+                             [ngModel]="integration?.integration?.msg91">
+                      <label class="custom-control-label" for="msg91Check">Msg91</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="twilioCheck" name="twilio" #twilioCheck="ngModel"
+                             [ngModel]="integration?.integration?.twilio">
+                      <label class="custom-control-label" for="twilioCheck">Twilio</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ngModelGroup="inteDetail">
+        <!-- <div class="row" [hidden]="!fChatCheck.value">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4" ngModelGroup="freshChat">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="text-dark m-b-0 text-center">Fresh Chat Settings</h3>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>API</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="api" #fChatApi="ngModel" [ngModel]="integration?.inteDetail?.freshChat?.api"
+                             [required]="fChatCheck.value">
+                      <div *ngIf="fChatApi.invalid && (fChatApi.dirty || fChatApi.touched)" class="alert alert-danger">
+                        API is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Key</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="key" #fChatKey="ngModel" [ngModel]="integration?.inteDetail?.freshChat?.key"
+                             [required]="fChatCheck.value">
+                      <div *ngIf="fChatKey.invalid && (fChatKey.dirty || fChatKey.touched)" class="alert alert-danger">
+                        Key is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Country Code</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="country" #FChatCCode="ngModel" maxlength="5"
+                             [ngModel]="integration?.inteDetail?.freshChat?.country" [required]="fChatCheck.value">
+                      <div *ngIf="FChatCCode.invalid && (FChatCCode.dirty || FChatCCode.touched)" class="alert alert-danger">
+                        Country Code is requried.</div>
+                      <div *ngIf="fChatCheck.errors?.maxlength">Country Code must be at Maximum 3 characters long.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4"></div>
+        </div> -->
+        <div class="row" [hidden]="!msg91Check.value">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4" ngModelGroup="msg91">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="text-dark m-b-0 text-center">Msg91 Settings</h3>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>API</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="api" #msg91Api="ngModel" [ngModel]="integration?.inteDetail?.msg91?.api"
+                             [required]="msg91Check.value">
+                      <div *ngIf="msg91Api.invalid && (msg91Api.dirty || msg91Api.touched)" class="alert alert-danger">
+                        API is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Sender ID</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="senderId" #msg91SenderId="ngModel" [ngModel]="integration?.inteDetail?.msg91?.senderId"
+                             minlength="6" maxlength="6" [required]="msg91Check.value">
+                      <div *ngIf="msg91SenderId.invalid && (msg91SenderId.dirty || msg91SenderId.touched)" class="alert alert-danger">
+                        Sender ID is requried & Length should be 6.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+        <div class="row" [hidden]="!twilioCheck.value">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4" ngModelGroup="twilio">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="text-dark m-b-0 text-center">Twilio Settings</h3>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>AccountSid</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="accountSid" #twilioAccountSid="ngModel" [ngModel]="integration?.inteDetail?.twilio?.accountSid"
+                             [required]="twilioCheck.value">
+                      <div *ngIf="twilioAccountSid.invalid && (twilioAccountSid.dirty || twilioAccountSid.touched)"
+                           class="alert alert-danger">
+                        AccountSid is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Auth Token</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="authToken" #twilioAuthToken="ngModel" [ngModel]="integration?.inteDetail?.twilio?.authToken"
+                             [required]="twilioCheck.value">
+                      <div *ngIf="twilioAuthToken.invalid && (twilioAuthToken.dirty || twilioAuthToken.touched)" class="alert alert-danger">
+                        Auth Token is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>From</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="from" #twilioFrom="ngModel" [ngModel]="integration?.inteDetail?.twilio?.from"
+                             [required]="twilioCheck.value">
+                      <div *ngIf="twilioFrom.invalid && (twilioFrom.dirty || twilioFrom.touched)" class="alert alert-danger">
+                        From is requried.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="whatsAppCheck" name="whatsApp"
+                               #whatsAppCheck="ngModel" [ngModel]="integration?.inteDetail?.twilio?.whatsApp">
+                        <label class="custom-control-label" for="whatsAppCheck">WhatsApp</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="smsCheck" name="sms" #smsCheck="ngModel"
+                               [ngModel]="integration?.inteDetail?.twilio?.sms">
+                        <label class="custom-control-label" for="smsCheck">SMS</label>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="col-sm-4">
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="callCheck" name="call" #callCheck="ngModel"
+                               [ngModel]="integration?.inteDetail?.twilio?.call">
+                        <label class="custom-control-label" for="callCheck">Call</label>
+                      </div>
+                    </div>
+                  </div> -->
+                </div>
+                <!-- <div class="row" [hidden]="!callCheck.value">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Automated Call in
+                        <span>*</span>
+                      </label>
+                      <div class="input-group">
+                        <input class="form-control" type="number" name="autoCall" [ngModel]="integration?.inteDetail?.twilio?.autoCall"
+                               [required]="callCheck.value" #autoCall="ngModel">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">Minutes</div>
+                        </div>
+                      </div>
+                      <div *ngIf="autoCall.invalid && (autoCall.dirty || autoCall.touched)" class="alert alert-danger">
+                        <div *ngIf="autoCall.errors.required">Automated call is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>URL</label>
+                      <span>*</span>
+                      <input class="form-control" pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                             type="text" name="url" [ngModel]="integration?.inteDetail?.twilio?.url" #url="ngModel"
+                             [required]="callCheck.value">
+                      <div *ngIf="url.errors && (url.dirty || url.touched)" class="alert alert-danger">
+                        Enter a valid URL!
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+      </div>
+      <div class="col-sm-4"></div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

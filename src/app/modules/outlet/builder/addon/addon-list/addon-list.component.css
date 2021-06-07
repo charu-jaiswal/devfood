@@ -1,0 +1,36 @@
+/* table td {
+  vertical-align: middle;
+}
+
+table td:nth-child(2) {
+  min-width: 205px;
+  ;
+} */
+.w-25px {
+  width: 25px;
+}
+
+.color-555555 {
+  color: #555555;
+  font-weight: bold;
+}
+
+.color-b3b3b3{
+  color: #b3b3b3;
+}
+
+.bg-initial {
+  background-color: initial;
+}
+
+.pd-015rem {
+  padding-right: 0.15rem;
+}
+
+.w-20px {
+  width: 20px;
+}
+h5, .h5 {
+  font-size: 1.1rem;
+  font-weight: 350;
+}

@@ -1,0 +1,135 @@
+<ng-template #wallet let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title text-center">Add to Wallet</h4>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal" id="walletForm" #WalletForm="ngForm" (ngSubmit)="addWalletForm(WalletForm)">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <div class="form-group">
+            <label>Amount</label>
+            <input class="form-control" type="number" name="amount" [ngModel]="amount" #amount="ngModel" required>
+          </div>
+        </div>
+        <div class="col-md-12 text-center">
+          <div class="form-group">
+            <label>Description</label>
+            <input class="form-control" type="text" name="desc" [ngModel]="desc" #amount="ngModel" required>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <!-- <div class="modal-footer doNotPrint text-center">
+    
+  </div> -->
+</ng-template>
+
+<h1 class="text-center"><button class="btn btn-info" routerLink="/reports/order-user">Leader board</button> &nbsp; <button class="btn btn-info" routerLink="/reports/customer-list">User list</button> &nbsp;  Customer Details
+</h1>
+<div class="row m-t-30">
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6 text-center">
+            <button class="btn btn-success m-r-10" (click)="addWallet(wallet)">Add to Wallet</button>
+            <!-- <button class="btn btn-warning m-r-10" (click)="addPush(push)">Push Notification</button> -->
+            <button [ngClass]="customer?.isBan ? 'btn-success btn m-r-10' : 'btn-danger btn m-r-10'" type="button"
+                    (click)="banUser()">
+              {{customer?.isBan ? 'Unban' : 'Ban'}}
+            </button>
+          </div>
+          <div class="col-md-3"></div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 text-center">
+            <h4 class="card-title ">Customer</h4>
+            <b>User Name:</b> {{customer.name}}<br>
+            <b>Email:</b> {{customer.email}}<br>
+            <b>UID:</b> {{customer.uid}}<br>
+          </div>
+          <div class="col-md-6 text-center">
+            <h4 class="card-title">Wallet</h4>
+            <b>Cashback</b>: {{customer?.wallet?.cashback || 0}}<br>
+            <b>Reload</b>: {{customer?.wallet?.reload || 0}}<br>
+            <span *ngIf="customer?.reward"><b>Reward</b>: {{customer?.reward | number : '1.2-2'}}<br></span>
+          </div>
+        </div>
+        <br><br>
+        <h4 class="card-title">Address</h4>
+        <div class="row">
+          <div class="col-md-4 border bg-light" *ngFor="let address of (addressRef | async)">
+            <b>{{address?.customerName}}</b><br>
+            <b>Address:</b> {{address?.fullAddress}}<br>
+            <b>Door no:</b> {{address?.doorNumber}}<br>
+            <b>Notes:</b> {{address?.deliveryNote}}<br>
+            <button class="btn btn-success m-2" (click)="openMap(address)">Map</button>
+          </div>
+        </div>
+
+        <div class="row m-t-30">
+          <div class="col-md-12 m-t-10">
+            <table class="table table-bordered" *ngIf="walletTrans.length">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th class="text-center">Type</th>
+                  <th class="text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let tran of walletTrans">
+                  <td *ngIf="tran?.time?.seconds">{{ (tran?.time?.seconds*1000) | date }} - {{ (tran?.time?.seconds*1000) |
+                          date:'shortTime' }}</td>
+                  <td class="text-center"><span *ngIf="tran?.type == 'admin_wallet_reload'">Admin Reload</span> <span
+                          *ngIf="tran?.type == 'item_cashback'">Item Cashback</span></td>
+                  <td class="text-right">{{ tran?.amount}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row m-t-30">
+          <div class="col-md-12">
+            <h4 class="card-title text-center ">Orders</h4>
+            <table class="table table-bordered m-t-10">
+              <thead>
+                <tr>
+                  <th>Outlet</th>
+                  <th>Type</th>
+                  <th>Payment</th>
+                  <th>Order Time</th>
+                  <th>Order ID</th>
+                  <th>Status</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let orders of orderList">
+                  <td>{{ orders?.outlet?.name }}</td>
+                  <td *ngIf="orders?.info?.ordType">{{ orders?.info?.ordType }}</td>
+                  <td *ngIf="orders?.info?.payment">{{ orders?.info?.payment }}</td>
+                  <td *ngIf="orders?.info?.timeslot">{{ (orders?.info?.timeslot.seconds*1000) | date }}</td>
+                  <td *ngIf="orders?.orderID">{{ orders?.orderID }}</td>
+                  <td *ngIf="orders?.info?.status">{{ orders?.info?.status }}</td>
+                  <td class="text-center">
+                    <button class="btn btn-sm btn-primary m-b-10" (click)="viewDetails(orders)">Details</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-1"></div>
+</div>

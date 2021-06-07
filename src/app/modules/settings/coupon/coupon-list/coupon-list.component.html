@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button class="btn btn-success" type="button" [routerLink]="['/settings/coupons/add/new']">
+            <i class="ti-plus"></i> &nbsp; Add Coupons &amp; Cashbacks</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Coupon Name</th>
+                <th>Coupon Code</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let coupon of couponsList | async">
+                <td>{{ coupon.name }}</td>
+                <!-- <td>{{ coupon.code}}</td> -->
+                <td>{{ coupon.code}} &emsp; <button class="btn btn-sm btn-secondary" (click)="callServiceToCopy(coupon.code)"><i class="ti-files"></i></button></td>
+                <td class="actionList">
+                  <button class="btn btn-sm btn-info" type="button" [routerLink]="['/settings/coupons', 'edit', coupon.id]">
+                    <!-- <i class="ti-pencil"></i> -->Edit
+                  </button>
+                  <button class="btn btn-sm btn-danger" type="button" (click)="deleteCoupon($event, coupon.id)">
+                    <!-- <i class="ti-trash"></i> -->Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

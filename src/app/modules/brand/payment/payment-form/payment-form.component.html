@@ -1,0 +1,732 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="col-12">
+      <h1 class="text-dark m-b-0 text-center">Payment</h1>
+    </div>
+    <br>
+    <form class="form-horizontal" id="paymentForm" #PaymentForm="ngForm" (ngSubmit)="addPaymentForm(PaymentForm)">
+      <div class="row">
+        <div class="col-sm-4" ngModelGroup="payment">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center">
+                Payment Methods</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="cashCheck" name="cash"
+                             #cashCheck="ngModel" [ngModel]="payment?.payment?.cash"
+                             (change)="resetDefaultGateway(PaymentForm)">
+                      <label class="custom-control-label" for="cashCheck">Cash</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="codCheck" name="cod"
+                             #codCheck="ngModel" [ngModel]="payment?.payment?.cod"
+                             (change)="resetDefaultGateway(PaymentForm)">
+                      <label class="custom-control-label" for="codCheck">Card on Delivery</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="razorpayCheck" name="razorpay"
+                             #razorpayCheck="ngModel" [ngModel]="payment?.payment?.razorpay"
+                             (change)="resetDefaultGateway(PaymentForm)">
+                      <label class="custom-control-label" for="razorpayCheck">Razorpay</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="stripeCheck" name="stripe"
+                             #stripeCheck="ngModel" [ngModel]="payment?.payment?.stripe"
+                             (change)="resetDefaultGateway(PaymentForm)">
+                      <label class="custom-control-label" for="stripeCheck">Stripe</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="paypalCheck" name="paypal" #paypalCheck="ngModel"
+                             [ngModel]="payment?.payment?.paypal" (change)="resetDefaultGateway(PaymentForm)">
+                      <label class="custom-control-label" for="paypalCheck">Paypal</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="form-group">
+                <h4 class="card-title text-center">
+                  Set Default Gateway</h4>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="gateNone" name="defaultGateway"
+                             [ngModel]="payment?.defaultGateway" #gateNone="ngModel" value="none">
+                      <label class="custom-control-label" for="gateNone">None</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-3" [hidden]="!cashCheck.value">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="gateCash" name="defaultGateway"
+                             [ngModel]="payment?.defaultGateway" #gateCash="ngModel" value="cash">
+                      <label class="custom-control-label" for="gateCash">Cash</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-3" [hidden]="!codCheck.value">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="gatecod" name="defaultGateway"
+                             [ngModel]="payment?.defaultGateway" #gateCod="ngModel" value="cod">
+                      <label class="custom-control-label" for="gatecod">Card on Delivery</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-3" [hidden]="!razorpayCheck.value">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="gateRazorpay" name="defaultGateway"
+                             [ngModel]="payment?.defaultGateway" #gateRazorpay="ngModel" value="razorpay">
+                      <label class="custom-control-label" for="gateRazorpay">Razorpay</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-3" [hidden]="!stripeCheck.value">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="gateStripe" name="defaultGateway"
+                             [ngModel]="payment?.defaultGateway" #gateStripe="ngModel" value="stripe">
+                      <label class="custom-control-label" for="gateStripe">Stripe</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-3" [hidden]="!paypalCheck.value">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="gatePaypal" name="defaultGateway" [ngModel]="payment?.defaultGateway"
+                             #gatePaypal="ngModel" value="paypal">
+                      <label class="custom-control-label" for="gatePaypal">Paypal</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4" ngModelGroup="features">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center">
+                Other Features</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="cardFeeCheck" name="cardFee"
+                             #cardFeeCheck="ngModel" [ngModel]="payment?.features?.cardFee">
+                      <label class="custom-control-label" for="cardFeeCheck">CardFee</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="tipsCheck" name="tips"
+                             #tipsCheck="ngModel" [ngModel]="payment?.features?.tips">
+                      <label class="custom-control-label" for="tipsCheck">Tips</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ngModelGroup="pymtDetail">
+        <div class="row" [hidden]="!cashCheck.value">
+          <div class="col-sm-12" ngModelGroup="cash">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="text-dark m-b-0 text-center">Cash Settings</h3>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Name</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="name" #cashName="ngModel"
+                             [ngModel]="payment?.pymtDetail?.cash?.name" [required]="cashCheck.value">
+                      <div *ngIf="cashName.invalid && (cashName.dirty || cashName.touched)" class="alert alert-danger">
+                        Cash Name is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Description</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="desc" [ngModel]="payment?.pymtDetail?.cash?.desc">
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Minimum Amount</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="minAmnt" #cashMinAmount="ngModel" min="0"
+                             [ngModel]="payment?.pymtDetail?.cash?.minAmnt" [required]="cashCheck.value">
+                      <div *ngIf="cashMinAmount.invalid && (cashMinAmount.dirty || cashMinAmount.touched)"
+                           class="alert alert-danger">
+                        Minimum Amount is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Maximum Amount</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="maxAmnt" #cashMaxAmount="ngModel" min="0"
+                             [ngModel]="payment?.pymtDetail?.cash?.maxAmnt" [required]="cashCheck.value">
+                      <div *ngIf="cashMaxAmount.invalid && (cashMaxAmount.dirty || cashMaxAmount.touched)"
+                           class="alert alert-danger">
+                        Maximum Amount is requried.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" [hidden]="!codCheck.value">
+          <div class="col-sm-12" ngModelGroup="cod">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="text-dark m-b-0 text-center">Card on Delivery Settings</h3>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Name</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="name" #codName="ngModel"
+                             [ngModel]="payment?.pymtDetail?.cod?.name" [required]="codCheck.value">
+                      <div *ngIf="codName.invalid && (codName.dirty || codName.touched)" class="alert alert-danger">
+                        Card on Delivery Name is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Description</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="desc" [ngModel]="payment?.pymtDetail?.cod?.desc">
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Minimum Amount</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="minAmnt" #codMinAmount="ngModel" min="0"
+                             [ngModel]="payment?.pymtDetail?.cod?.minAmnt" [required]="codCheck.value">
+                      <div *ngIf="codMinAmount.invalid && (codMinAmount.dirty || codMinAmount.touched)"
+                           class="alert alert-danger">
+                        Minimum Amount is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Maximum Amount</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="maxAmnt" #codMaxAmount="ngModel" min="0"
+                             [ngModel]="payment?.pymtDetail?.cod?.maxAmnt" [required]="codCheck.value">
+                      <div *ngIf="codMaxAmount.invalid && (codMaxAmount.dirty || codMaxAmount.touched)"
+                           class="alert alert-danger">
+                        Maximum Amount is requried.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" [hidden]="!razorpayCheck.value">
+          <div class="col-sm-12" ngModelGroup="razorpay">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="text-dark m-b-0 text-center">Razorpay Settings</h3>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Name</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="name" #razorpayName="ngModel"
+                             [ngModel]="payment?.pymtDetail?.razorpay?.name" [required]="razorpayCheck.value">
+                      <div *ngIf="razorpayName.invalid && (razorpayName.dirty || razorpayName.touched)"
+                           class="alert alert-danger">
+                        Razorpay Name is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Description</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="desc" [ngModel]="payment?.pymtDetail?.razorpay?.desc">
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Key</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="key" #razorpayKey="ngModel"
+                             [ngModel]="payment?.pymtDetail?.razorpay?.key" [required]="razorpayCheck.value">
+                      <div *ngIf="razorpayKey.invalid && (razorpayKey.dirty || razorpayKey.touched)"
+                           class="alert alert-danger">
+                        Razorpay Key is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label>Minimum Amount</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="minAmnt" #razorpayMinAmount="ngModel" min="0"
+                             [ngModel]="payment?.pymtDetail?.razorpay?.minAmnt" [required]="razorpayCheck.value">
+                      <div *ngIf="razorpayMinAmount.invalid && (razorpayMinAmount.dirty || razorpayMinAmount.touched)"
+                           class="alert alert-danger">
+                        Minimum Amount is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label>Maximum Amount</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="maxAmnt" #razorpayMaxAmount="ngModel" min="0"
+                             [ngModel]="payment?.pymtDetail?.razorpay?.maxAmnt" [required]="razorpayCheck.value">
+                      <div *ngIf="razorpayMaxAmount.invalid && (razorpayMaxAmount.dirty || razorpayMaxAmount.touched)"
+                           class="alert alert-danger">
+                        Maximum Amount is requried.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" ngModelGroup="config">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Business Name</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="bizName" #razorpayBizName="ngModel"
+                             [ngModel]="payment?.pymtDetail?.razorpay?.config?.bizName"
+                             [required]="razorpayCheck.value">
+                      <div *ngIf="razorpayBizName.invalid && (razorpayBizName.dirty || razorpayBizName.touched)"
+                           class="alert alert-danger">
+                        Business Name is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Description</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="desc" #razorpayDesc="ngModel"
+                             [ngModel]="payment?.pymtDetail?.razorpay?.config?.desc" [required]="razorpayCheck.value">
+                      <div *ngIf="razorpayDesc.invalid && (razorpayDesc.dirty || razorpayDesc.touched)"
+                           class="alert alert-danger">
+                        Description is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <table class="w-100">
+                      <tr>
+                        <td class="form-group" width="32%">
+                          <label>Color</label>
+                          <input class="form-control" [hidden]="true" type="text" name="color"
+                                 [ngModel]="payment?.pymtDetail?.razorpay?.config?.color">
+                          <input class="form-control text-center" [value]="color" [style.background]="color"
+                                 [cpAlphaChannel]="'always'" [cpOutputFormat]="'hex'"
+                                 [cpPresetColors]="['#fff', '#2889e9']" [cpAddColorButton]="true"
+                                 [(colorPicker)]="color" name="tColor"
+                                 (colorPickerChange)="onChangeColor($event, PaymentForm, 'razorpayColor')" />
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label>Currency</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="currency" #razorpayCurrency="ngModel"
+                             [ngModel]="payment?.pymtDetail?.razorpay?.config?.currency">
+                      <div *ngIf="razorpayCurrency.invalid && (razorpayCurrency.dirty || razorpayCurrency.touched)"
+                           class="alert alert-danger">
+                        Description is requried.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Image
+                        <span>*</span>
+                      </label>
+                      <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                      <input type="hidden" name="image" [ngModel]="payment?.pymtDetail?.razorpay?.image" #rezorImage
+                             [required]="razorpayCheck.value">
+                      <br>
+                      <br>
+                      <div *ngIf="payment?.pymtDetail?.razorpay?.image">
+                        <img [src]="payment?.pymtDetail?.razorpay?.image" class="img-upload-disp-wrapper">
+                        <button type="button" class="btn btn-sm btn-danger"
+                                (click)="deleteFile('image')">Delete</button>
+                      </div>
+                      <div *ngIf="rezorImage.invalid && (rezorImage.dirty || rezorImage.touched)"
+                           class="alert alert-danger">
+                        Image is requried.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" [hidden]="!stripeCheck.value">
+          <div class="col-sm-12" ngModelGroup="stripe">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="text-dark m-b-0 text-center">Stripe Settings</h3>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label>Name</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="name" #stripeName="ngModel"
+                             [ngModel]="payment?.pymtDetail?.stripe?.name" [required]="stripeCheck.value">
+                      <div *ngIf="stripeName.invalid && (stripeName.dirty || stripeName.touched)"
+                           class="alert alert-danger">
+                        Name is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Description</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="desc" [ngModel]="payment?.pymtDetail?.stripe?.desc">
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label>Currency</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="currency" #stripeCurrency="ngModel"
+                             [ngModel]="payment?.pymtDetail?.stripe?.currency" [required]="stripeCheck.value">
+                      <div *ngIf="stripeCurrency.invalid && (stripeCurrency.dirty || stripeCurrency.touched)"
+                           class="alert alert-danger">
+                        Currency is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label>Minimum Amount</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="minAmnt" #stripeMinAmount="ngModel" min="0"
+                             [ngModel]="payment?.pymtDetail?.stripe?.minAmnt" [required]="stripeCheck.value">
+                      <div *ngIf="stripeMinAmount.invalid && (stripeMinAmount.dirty || stripeMinAmount.touched)"
+                           class="alert alert-danger">
+                        Minimum Amount is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label>Maximum Amount</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="maxAmnt" #stripeMaxAmount="ngModel" min="0"
+                             [ngModel]="payment?.pymtDetail?.stripe?.maxAmnt" [required]="stripeCheck.value">
+                      <div *ngIf="stripeMaxAmount.invalid && (stripeMaxAmount.dirty || stripeMaxAmount.touched)"
+                           class="alert alert-danger">
+                        Maximum Amount is requried.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Key</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="key" #stripeKey="ngModel"
+                             [ngModel]="payment?.pymtDetail?.stripe?.key" [required]="stripeCheck.value">
+                      <div *ngIf="stripeKey.invalid && (stripeKey.dirty || stripeKey.touched)"
+                           class="alert alert-danger">
+                        Key is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>API</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="api" #stripeApi="ngModel"
+                             [ngModel]="payment?.pymtDetail?.stripe?.api" [required]="stripeCheck.value">
+                      <div *ngIf="stripeApi.invalid && (stripeApi.dirty || stripeApi.touched)"
+                           class="alert alert-danger">
+                        API is requried.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" [hidden]="!paypalCheck.value">
+          <div class="col-sm-12" ngModelGroup="paypal">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="text-dark m-b-0 text-center">Paypal Settings</h3>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label>Name</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="name" #paypalName="ngModel" [ngModel]="payment?.pymtDetail?.paypal?.name"
+                             [required]="paypalCheck.value">
+                      <div *ngIf="paypalName.invalid && (paypalName.dirty || paypalName.touched)" class="alert alert-danger">
+                        Name is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Description</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="desc" [ngModel]="payment?.pymtDetail?.paypal?.desc">
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Key</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="key" #paypalKey="ngModel" [ngModel]="payment?.pymtDetail?.paypal?.key"
+                             [required]="paypalCheck.value">
+                      <div *ngIf="paypalKey.invalid && (paypalKey.dirty || paypalKey.touched)" class="alert alert-danger">
+                        Key is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label>Currency</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="currency" #paypalCurrency="ngModel" [ngModel]="payment?.pymtDetail?.paypal?.currency"
+                             [required]="paypalCheck.value">
+                      <div *ngIf="paypalCurrency.invalid && (paypalCurrency.dirty || paypalCurrency.touched)" class="alert alert-danger">
+                        Currency is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label>Conversion Rate</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="convRate"
+                             [ngModel]="payment?.pymtDetail?.paypal?.convRate">
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label>Minimum Amount</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="minAmnt" #paypalMinAmount="ngModel" min="0"
+                             [ngModel]="payment?.pymtDetail?.paypal?.minAmnt" [required]="paypalCheck.value">
+                      <div *ngIf="paypalMinAmount.invalid && (paypalMinAmount.dirty || paypalMinAmount.touched)" class="alert alert-danger">
+                        Minimum is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label>Maximum Amount</label>
+                      <span>*</span>
+                      <input class="form-control" type="number" name="maxAmnt" #paypalMaxAmount="ngModel" min="0"
+                             [ngModel]="payment?.pymtDetail?.paypal?.maxAmnt" [required]="paypalCheck.value">
+                      <div *ngIf="paypalMaxAmount.invalid && (paypalMaxAmount.dirty || paypalMaxAmount.touched)" class="alert alert-danger">
+                        Maximum is requried.</div>
+                    </div>
+                  </div>
+                </div>
+               <!--  <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Merchant Id</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="merchantId" #paypalMerchantId="ngModel" [ngModel]="payment?.pymtDetail?.paypal?.merchantId"
+                             [required]="paypalCheck.value">
+                      <div *ngIf="paypalMerchantId.invalid && (paypalMerchantId.dirty || paypalMerchantId.touched)"
+                           class="alert alert-danger">
+                        Merchant Id is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Public Key</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="publicKey" #paypalPublicKey="ngModel" [ngModel]="payment?.pymtDetail?.paypal?.publicKey"
+                             [required]="paypalCheck.value">
+                      <div *ngIf="paypalPublicKey.invalid && (paypalPublicKey.dirty || paypalPublicKey.touched)" class="alert alert-danger">
+                        Public Key is requried.</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Private Key</label>
+                      <span>*</span>
+                      <input class="form-control" type="text" name="privateKey" #paypalPrivateKey="ngModel" [ngModel]="payment?.pymtDetail?.paypal?.privateKey"
+                             [required]="paypalCheck.value">
+                      <div *ngIf="paypalPrivateKey.invalid && (paypalPrivateKey.dirty || paypalPrivateKey.touched)"
+                           class="alert alert-danger">
+                        Private Key is requried.</div>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" [hidden]="!cardFeeCheck.value">
+        <div class="col-sm-12" ngModelGroup="cardFee">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="text-dark m-b-0 text-center">Card Fee Settings</h3>
+              <hr>
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Name</label>
+                    <span>*</span>
+                    <input class="form-control" type="text" name="name" #cardFeeName="ngModel"
+                           [ngModel]="payment?.cardFee?.name" [required]="cardFeeCheck.value">
+                    <div *ngIf="cardFeeName.invalid && (cardFeeName.dirty || cardFeeName.touched)"
+                         class="alert alert-danger">
+                      Name is requried.</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Percentage on Total Payable</label>
+                    <span>*</span>
+                    <input class="form-control" type="number" name="perc" #cardFeePerc="ngModel" min="0"
+                           [ngModel]="payment?.cardFee?.perc" [required]="cardFeeCheck.value">
+                    <div *ngIf="cardFeePerc.invalid && (cardFeePerc.dirty || cardFeePerc.touched)"
+                         class="alert alert-danger">
+                      Percentage is requried.</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Flat Fee</label>
+                    <span>*</span>
+                    <input class="form-control" type="number" name="flat" #cardFeeFlat="ngModel" min="0"
+                           [ngModel]="payment?.cardFee?.flat" [required]="cardFeeCheck.value">
+                    <div *ngIf="cardFeeFlat.invalid && (cardFeeFlat.dirty || cardFeeFlat.touched)"
+                         class="alert alert-danger">
+                      Falt Fee is requried.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" [hidden]="!tipsCheck.value">
+        <div class="col-sm-12" ngModelGroup="tips">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="text-dark m-b-0 text-center">Tips Settings</h3>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Type
+                      <span>*</span>
+                    </label>
+                    <select class="form-control" name="type" [ngModel]='payment?.tips?.type' #tipsType="ngModel"
+                            [required]="tipsCheck.value">
+                      <option value='perc'>Percentage</option>
+                      <option value='flat'>Flat</option>
+                    </select>
+                    <div *ngIf="tipsType.invalid && (tipsType.dirty || tipsType.touched)" class="alert alert-danger">
+                      <div *ngIf="tipsType.errors.required">Type is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Value</label>
+                    <ng-select name="tipList" [ngModel]="payment?.tips?.tipList" [addTag]="addTips" #tipsList="ngModel"
+                               [multiple]="true">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Default</label>
+                    <span>*</span>
+                    <input class="form-control" type="number" name="default" #tipsDef="ngModel" min="0"
+                           [ngModel]="payment?.tips?.default" [required]="tipsCheck.value">
+                    <div *ngIf="tipsDef.invalid && (tipsDef.dirty || tipsDef.touched)" class="alert alert-danger">
+                      Default Value is requried.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="payment?.lang">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Language</h4>
+            <hr>
+            <div class="row" ngModelGroup="lang">
+              <div class="col-md-12" *ngFor="let langField of payment?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                <h5>{{langField?.value?.name}}</h5>
+                <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                <div class="row" ngModelGroup="lList">
+                  <div class="col-md-3" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                    <div class="form-group row">
+                      <label class="col-2 text-right">{{row?.id}}</label>
+                      <input type="hidden" name="id" [ngModel]="row?.id">
+                      <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                    </div>
+                  </div>
+                </div>
+                <br>
+              </div>
+            </div>
+            <br>
+            <h4 class="card-title">Description Language</h4>
+            <hr>
+            <div class="row" ngModelGroup="langDesc">
+              <div class="col-md-12" *ngFor="let langField of payment?.langDesc | keyvalue" [ngModelGroup]="langField?.key">
+                <h5>{{langField?.value?.name}}</h5>
+                <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                <div class="row" ngModelGroup="lList">
+                  <div class="col-md-3" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                    <div class="form-group row">
+                      <label class="col-2 text-right">{{row?.id}}</label>
+                      <input type="hidden" name="id" [ngModel]="row?.id">
+                      <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                    </div>
+                  </div>
+                </div>
+                <br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3"></div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

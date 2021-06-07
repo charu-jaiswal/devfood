@@ -1,0 +1,113 @@
+<br />
+<h1 class="text-center">Billing</h1><br /><br />
+<div class="row">
+  <div class="col-lg-1"></div>
+  <div class="col-lg-10">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title text-center">Profile</h4>
+        <hr>
+        <!-- <div *ngIf="adminConfData?.isReward" class="text-center">
+          <button class="btn btn-info mr-2" [routerLink]="['/settings/reward/list']">Reward List</button>
+          <button class="btn btn-info mr-2" [routerLink]="['/reports/reward']">Reward Reporting</button>
+          <button class="btn btn-info mr-2" [routerLink]="['/reports/reward-tran']">Reward Transactions</button>
+        </div> -->
+        <div class="row">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-4">
+            <br />
+            <p><b>Name</b>: {{adminConfData?.billing?.cusName}}</p>
+            <p><b>Phone</b>: {{adminConfData?.billing?.cusPhone}}</p>
+            <p><b>Email</b>: {{adminConfData?.billing?.cusEmail}}</p>
+          </div>
+          <div class="col-sm-6">
+            <br />
+            <p *ngIf="adminConfData?.billing?.validTill">Plan valid till <b>{{adminConfData?.billing?.validTill}}</b>.
+            </p>
+            <p *ngIf="adminConfData?.billing?.subLink">Auto Renewal is <b *ngIf="adminConfData?.billing?.isAutoRenewal"
+                class="text-success">enabled</b><b *ngIf="!adminConfData?.billing?.isAutoRenewal"
+                class="text-danger">not enabled</b>. &nbsp; <a class="btn btn-sm btn-info mr-2"
+                href="{{ adminConfData?.billing?.subLink }}" target="_blank"><span
+                  *ngIf="adminConfData?.billing?.isAutoRenewal">Manage Card</span><span
+                  *ngIf="!adminConfData?.billing?.isAutoRenewal">Pay now</span></a></p>
+            <p>Multi-language feature is <span *ngIf="!adminConfData?.billing?.isMultiLangPurch"><b
+                  class="text-danger">not activated</b>. &nbsp; <a class="btn btn-sm btn-success mr-2"
+                  href="https://pages.razorpay.com/multilang-payment/?{{getCustomerURLComp()}}"
+                  target="_blank">Activate</a></span><span *ngIf="adminConfData?.billing?.isMultiLangPurch"><b
+                  class="text-success">activated</b>.</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--*******Charu Start***********-->
+
+
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title text-center">Other Feature</h4>
+
+        <div class="text-center">
+          <button class="btn btn-info mr-2"  *ngIf="adminConfData?.isEcommerce" [routerLink]="['/settings/subadmin/list']">Sub Admin</button>
+          <button class="btn btn-info mr-2"  *ngIf="adminConfData?.isEcommerce" [routerLink]="['/settings/zonemanager/list']">Zone Manager</button>
+          <button class="btn btn-info mr-2"  *ngIf="adminConfData?.isEcommerce" [routerLink]="['/settings/ecommerce/list']">Ecommerce</button>
+          <button class="btn btn-info mr-2" *ngIf="adminConfData?.isReward"
+            [routerLink]="['/settings/reward/list']">Reward List</button>
+          <button class="btn btn-info mr-2" *ngIf="adminConfData?.isReward" [routerLink]="['/reports/reward']">Reward
+            Reporting</button>
+          <button class="btn btn-info mr-2" *ngIf="adminConfData?.isReward"
+            [routerLink]="['/reports/reward-tran']">Reward Transactions</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!--*******Charu End***********-->
+    <div class="card" *ngIf="computeUsageList">
+      <div class="card-body">
+        <h4 class="card-title text-center">Monthly Usage</h4>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th class="text-right">Orders</th>
+                <th class="text-right">Twilio Verify</th>
+                <th class="text-right">Charges</th>
+                <th class="text-right">Paid</th>
+                <th class="text-right">Balance</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let billUsage of computeUsageList">
+                <td>{{ billUsage?.monthName }}</td>
+                <td class="text-right">{{ billUsage?.orderCount }}</td>
+                <td class="text-right">{{ billUsage?.userCount }}</td>
+                <td class="text-right">${{ billUsage?.usageAmount | number:'1.1-2' }}</td>
+                <td class="text-right">${{ billUsage?.paidAmount | number:'1.1-2' }}</td>
+                <td class="text-right">
+                  <span *ngIf="!billUsage?.done">
+                    <b *ngIf="billUsage?.remainAmount > 0" class="text-danger">-
+                      ${{ billUsage?.remainAmount | number:'1.1-2' }}</b> <b *ngIf="billUsage?.remainAmount <= 0"
+                      class="text-success">${{ billUsage?.remainAmountPlus | number:'1.1-2' }}</b>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span *ngIf="!billUsage?.done">
+                    <a class="btn btn-sm btn-info mr-2"
+                      href="https://pages.razorpay.com/authentication-payment/?{{getCustomerURLComp()}}"
+                      target="_blank"><span *ngIf="billUsage?.remainAmount > 0">Pay Balance</span><span
+                        *ngIf="billUsage?.remainAmount <= 0">Add Topup</span></a>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

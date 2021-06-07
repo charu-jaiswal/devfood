@@ -1,0 +1,280 @@
+<div class="modal-header">
+  <h4 class="modal-title text-center">ORDER STATUS : {{ reportsItem?.info?.status}}</h4> &nbsp; <button class="btn btn-danger"
+          (click)="closeModal()"><i class="ti-close"></i></button>
+</div>
+<div class="modal-body">
+  <!-- <pre> {{reportsItem |json}}</pre> -->
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-4">
+          <ul>
+            <li><b>Outlet : </b> {{ reportsItem?.outlet?.name }}</li>
+            <li><b>Order Type :</b> {{ reportsItem?.info?.ordType }} </li>
+            <li><b>Payment :</b> {{ reportsItem?.info?.payment }}</li>
+            <li *ngIf="reportsItem?.info?.ifSoldOut"><b>If Sold out :</b>
+              <span [ngSwitch]="reportsItem?.info?.ifSoldOut">
+                <span *ngSwitchCase="'merchant'">Go with Merchant Recommendation</span>
+                <span *ngSwitchCase="'refund'">Refund</span>
+                <span *ngSwitchCase="'contact'">Contact Customer</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-8">
+          <ul>
+            <li *ngIf="!reportsItem?.info?.created_at?.seconds"><b>Ordered Time : </b> {{ reportsItem?.info?.created_at  | date:'medium' }}</li>
+            <li *ngIf="reportsItem?.info?.created_at?.seconds"><b>Ordered Time : </b> {{ (reportsItem?.info?.created_at?.seconds * 1000) | date:'medium' }}</li>
+            <li *ngIf="reportsItem?.info?.isASAP"><b>{{ reportsItem?.info?.ordType | titlecase }} Time :</b> As soon as possible</li>
+            <li *ngIf="!reportsItem?.info?.isASAP && !reportsItem?.info?.timeslot?.seconds"><b>{{ reportsItem?.info?.ordType | titlecase }} Time:</b> {{ reportsItem?.info?.timeslot | date:'MMM d, y. h:mm a' }} <span *ngIf="reportsItem?.info?.endTimeslot"> - {{ reportsItem?.info?.endTimeslot | date:'shortTime' }}.</span></li>
+            <li *ngIf="!reportsItem?.info?.isASAP && reportsItem?.info?.timeslot?.seconds"><b>{{ reportsItem?.info?.ordType | titlecase }} Time:</b> {{ reportsItem?.info?.timeslot.seconds * 1000 | date:'MMM d, y. h:mm a' }} <span *ngIf="reportsItem?.info?.endTimeslot"> to {{ reportsItem?.info?.endTimeslot.seconds * 1000 | date:'shortTime' }}.</span></li>
+            <li><b>Order ID :</b> {{ reportsItem.orderID }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><b>Name</b></th>
+            <th class="text-center"><b>Quantity</b></th>
+            <th class="text-right"><b>Price</b></th>
+          </tr>
+        </thead>
+        <tbody *ngIf="reportsItem?.carts">
+          <tr *ngFor="let cartItem of reportsItem?.carts">
+            <th><b>{{cartItem.name}} <span *ngIf="cartItem?.price">({{cartItem?.price}})</span></b>
+              <ul>
+                <li *ngIf="cartItem?.size">Size: {{cartItem.size}}</li>
+                <li *ngFor="let addon of cartItem?.addons">
+                  {{addon?.name}}:
+                  <span *ngFor="let item of addon?.item">
+                    <i> {{item?.name}} <span *ngIf="item?.price > 0">({{item?.price}})</span>,</i>
+                  </span>
+                </li>
+              </ul>
+              <div *ngIf="cartItem?.notes"><b>Notes:</b> {{cartItem?.notes}}</div>
+            </th>
+            <th class="text-center">{{cartItem?.quan}}</th>
+            <th class="text-right">{{cartItem?.total | number: digitNum}}</th>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr *ngIf="reportsItem?.other?.notes">
+            <th>Notes: {{reportsItem?.other?.notes}}</th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th class="dark-line"><b>Subtotal</b></th>
+            <th class="dark-line"></th>
+            <th class="dark-line text-right"><b>{{reportsItem?.total?.subtotal | number: digitNum}}</b></th>
+          </tr>
+          <tr *ngIf="reportsItem?.total?.discount && reportsItem?.total?.discountOnSubtotal">
+            <th>Discount Amount</th>
+            <th></th>
+            <th class="text-right minas">({{reportsItem?.total?.discount | number: digitNum}})</th>
+          </tr>
+          <tr *ngFor="let tax of reportsItem?.other?.tax">
+            <th>{{tax?.name}}</th>
+            <th></th>
+            <th class="text-right">{{tax?.taxAmnt | number: digitNum}}</th>
+          </tr>
+          <tr *ngFor="let charge of reportsItem?.other?.charge">
+            <th>{{charge?.name}}</th>
+            <th></th>
+            <th class="text-right">{{charge?.chrgAmnt | number: digitNum}}</th>
+          </tr>
+          <tr *ngIf="reportsItem?.total?.pretotal?.packFee">
+            <th>Packing Fee</th>
+            <th></th>
+            <th class="text-right">{{reportsItem?.total?.pretotal?.packFee | number: digitNum}}</th>
+          </tr>
+          <tr *ngIf="reportsItem?.total?.pretotal?.deliFee">
+            <th>Delivery Fee</th>
+            <th></th>
+            <th class="text-right">{{reportsItem?.total?.pretotal?.deliFee | number: digitNum}}</th>
+          </tr>
+          <tr *ngIf="reportsItem?.total?.pretotal?.expDeliFee">
+            <th>Express Delivery Fee</th>
+            <th></th>
+            <th class="text-right">{{reportsItem?.total?.pretotal?.expDeliFee | number: digitNum}}</th>
+          </tr>
+          <tr *ngIf="reportsItem?.total?.pretotal?.roundOff">
+            <th>Round Off</th>
+            <th></th>
+            <th class="text-right">{{reportsItem?.total?.pretotal?.roundOff}}</th>
+          </tr>
+          <tr>
+            <th class="dark-line">Total</th>
+            <th class="dark-line"></th>
+            <th class="dark-line text-right">{{reportsItem?.total?.amount | number:
+              digitNum}}</th>
+          </tr>
+          <tr *ngIf="reportsItem?.total?.discount && !reportsItem?.total?.discountOnSubtotal">
+            <th>Discount Amount</th>
+            <th></th>
+            <th class="text-right minas">({{reportsItem?.total?.discount | number: digitNum}})</th>
+          </tr>
+          <tr *ngIf="reportsItem?.total?.walletUse">
+            <th>Wallet Use</th>
+            <th></th>
+            <th class="text-right minas">({{reportsItem?.total?.walletUse | number: digitNum}})</th>
+          </tr>
+          <tr *ngIf="reportsItem?.total?.tip">
+            <th>Tips</th>
+            <th></th>
+            <th class="text-right">{{reportsItem?.total?.tip}}</th>
+          </tr>
+          <tr>
+            <th class="dark-line"><b>Final Amount</b></th>
+            <th class="dark-line"></th>
+            <th class="dark-line text-right"><b>{{reportsItem?.total?.finalAmnt | number: digitNum}}</b></th>
+          </tr>
+          <tr *ngIf="reportsItem?.total?.cardFee">
+            <th>Card Fee</th>
+            <th></th>
+            <th class="text-right">{{reportsItem?.total?.cardFee | number: digitNum }}</th>
+          </tr>
+          <tr *ngIf="reportsItem?.total?.cardFee">
+            <th class="dark-line"><b>Final Payable</b></th>
+            <th class="dark-line"></th>
+            <th class="dark-line text-right"><b>{{reportsItem?.total?.finalPay | number: digitNum}}</b></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- <pre>{{reportsItem | json}}</pre> -->
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-8">
+          <h5 class="card-title">Customer Details</h5>
+          <ul>
+            <li><b>Name :</b> {{reportsItem?.user?.name}}</li>
+            <li *ngIf="reportsItem.user.address"><b>Address Name :</b> {{reportsItem?.user?.address?.name}}<br>
+              {{reportsItem?.user?.address?.street}}</li>
+            <li *ngIf="reportsItem?.user?.address?.doorno"><b>Landmark :</b> {{reportsItem?.user?.address?.doorno}}</li>
+            <li *ngIf="reportsItem?.user?.address?.notes"><b>Notes :</b> {{reportsItem?.user?.address?.notes}} </li>
+            <li><b>Phone :</b> +{{reportsItem.user.uid}}</li>
+          </ul>
+          <br>
+          <h5 class="card-title" *ngIf="reportsItem?.other?.driver?.name">Driver Details</h5>
+          <ul>
+            <li *ngIf="reportsItem?.other?.driver?.name"><b>Driver :</b> {{reportsItem?.other?.driver?.name}}</li>
+            <li *ngIf="reportsItem?.other?.driver?.phone"><b>Phone :</b> {{ reportsItem?.other?.driver?.phone}}</li>
+          </ul>
+          <br>
+          <h5 class="card-title" *ngIf="reportsItem?.coupon?.referral || reportsItem?.total?.cashback?.item || reportsItem?.coupon?.code || reportsItem?.total?.cashback?.coupon">Cash
+            Back / Coupon</h5>
+          <ul>
+            <li *ngIf="reportsItem?.total?.cashback?.item"> Item Cashback : {{reportsItem?.total?.cashback?.item }}</li>
+            <li *ngIf="reportsItem?.total?.cashback?.coupon"> Coupon Cashback:
+              {{reportsItem?.total?.cashback?.coupon}}</li>
+            <li *ngIf="reportsItem?.coupon?.referral">Referral : {{reportsItem?.coupon?.referral}}</li>
+            <li *ngIf="reportsItem?.coupon?.code">Coupon : {{reportsItem?.coupon?.code}}</li>
+          </ul>
+        </div>
+        <div class="col-sm-4">
+          <h5 class="card-title" *ngIf="reportsItem?.feedback?.rating?.overall">Rating</h5>
+          <table class="table table-bordered">
+            <tr *ngIf="reportsItem?.feedback?.rating?.overall">
+              <td>Overall</td>
+              <td>{{reportsItem?.feedback?.rating?.overall}}</td>
+            </tr>
+            <tr *ngIf="reportsItem?.feedback?.rating?.taste">
+              <td>Taste</td>
+              <td>{{reportsItem?.feedback?.rating?.taste}}</td>
+            </tr>
+            <tr *ngIf="reportsItem?.feedback?.rating?.quantity">
+              <td>Quantity</td>
+              <td>{{reportsItem?.feedback?.rating?.quantity}}</td>
+            </tr>
+            <tr *ngIf="reportsItem?.feedback?.rating?.packing">
+              <td>Packing</td>
+              <td>{{reportsItem?.feedback?.rating?.packing}}</td>
+            </tr>
+            <tr *ngIf="reportsItem?.feedback?.rating?.delivery">
+              <td>Delivery</td>
+              <td>{{reportsItem?.feedback?.rating?.delivery}}</td>
+            </tr>
+          </table>
+          <br>
+          <h5 class="card-title" *ngIf="reportsItem?.feedback?.review">FeedBack</h5>
+          <ul>
+            <li *ngIf="reportsItem?.feedback?.review">{{reportsItem?.feedback?.review}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card doNotPrint">
+    <div class="card-body">
+      <div class="row ">
+        <div class="col-sm-12" *ngIf="reportsItem?.user?.address?.coords?.lat && reportsItem?.user?.address?.coords?.lng">
+          <agm-map [latitude]="reportsItem?.user?.address?.coords?.lat" [longitude]="reportsItem?.user?.address?.coords?.lng"
+                   [zoom]="14" [scrollwheel]="true" [clickableIcons]="false" [streetViewControl]="false"
+                   [disableDefaultUI]="true" id="AgmMap" #AgmMap>
+            <agm-marker [latitude]="reportsItem?.outlet?.coords?.lat" [longitude]="reportsItem?.outlet?.coords?.lng"
+                        [markerDraggable]="false" [title]="reportsItem?.outlet?.name">
+            </agm-marker>
+            <agm-marker [latitude]="reportsItem?.user?.address?.coords?.lat" [longitude]="reportsItem?.user?.address?.coords?.lng"
+                        [markerDraggable]="false" [title]="reportsItem?.user?.name">
+            </agm-marker>
+            <agm-polyline [visible]="true" [strokeWeight]="3">
+              <agm-polyline-point [latitude]="reportsItem?.outlet?.coords?.lat" [longitude]="reportsItem?.outlet?.coords?.lng">
+              </agm-polyline-point>
+              <agm-polyline-point [latitude]="reportsItem?.user?.address?.coords?.lat" [longitude]="reportsItem?.user?.address?.coords?.lng">
+              </agm-polyline-point>
+            </agm-polyline>
+          </agm-map>
+        </div>
+        <br>
+        <div class="col-sm-12" *ngIf="!reportsItem?._id">
+          <hr>
+          <table class="table">
+            <thead>
+              <tr>
+                <th><b>Status</b></th>
+                <th><b>Time</b></th>
+                <th><b>User</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of reportsItem?.logs">
+                <th *ngIf="log?.status">{{log?.status}}</th>
+                <th *ngIf="log?.time?.seconds">{{ log?.time.toDate() | date:'medium'}}</th>
+                <th *ngIf="log?.time && !log?.time?.seconds">{{ log?.time | date:'medium'}}</th>
+                <th>{{ log?.name || 'Admin' }}</th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ngb-accordion #acc="ngbAccordion">
+    <ngb-panel id="toggle-1" title="Status Change">
+      <ng-template ngbPanelContent>
+          <span *ngFor="let item of statusList">
+            <button class="btn btn-{{item.color}} btn-sm m-2" (click)="orderService.changeOrderStatus(reportsItem?.id, item.value)">
+              {{item.label}}
+            </button>
+          </span>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+  <!-- <div class="card doNotPrint" *ngIf="reportsItem?.logs">
+        <div class="card-body">
+  
+          <h5 class="card-title text-center">Total Time: {{ (reportsItem?.logs?.totalTime/1000) }}</h5>
+        </div>
+      </div> -->
+</div>
+<div class="modal-footer doNotPrint text-center">
+  <!-- <button class="btn btn-success doNotPrint" (click)="printOrder()"><i class="ti-printer"></i></button> -->
+</div>

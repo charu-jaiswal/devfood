@@ -1,0 +1,130 @@
+<div class="row outlet">
+  <div class="col-lg-12">
+    <h1 class="text-center">Date Wise Sales</h1>
+    <div class="card p-2 doNotPrint">
+      <div class="row m-0 p-3">
+        <div class="col-6 col-md-2">
+          <div class="form-group">
+            <label>Order Date Range</label>
+            <input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event, daterange)"
+              class="form-control" />
+          </div>
+        </div>
+        <div class="col-6 col-md-2" [hidden]="outletID !== undefined && outletID !== null">
+          <div class="form-group">
+            <label>Outlet Category</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.outletCat">
+              <option value="">All</option>
+              <option *ngFor="let item of outletCatList" [value]="item.id">{{item.title}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="form-group">
+            <label>Outlet</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.outlet" [disabled]="outletID !== undefined && outletID !== null">
+              <option value="">All</option>
+              <option *ngFor="let item of listOutlets" [value]="item.id">{{item.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="form-group">
+            <label>Payment</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.payment">
+              <option value="">All</option>
+              <option *ngFor="let item of listPaymentType" [value]="item.value">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="form-group">
+            <label>Type</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.type">
+              <option value="">All</option>
+              <option *ngFor="let item of listOrderType" [value]="item.value">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="form-group">
+            <label>Status</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.status">
+              <option value="">All</option>
+              <option *ngFor="let item of listStatus" [value]="item.value">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-2 pt-btn">
+          <div class="row m-0">
+            <div class="col-6 text-right p-0">
+              <button class="btn btn-primary" (click)="printOutletWiseSales()">
+                <span>Print</span>
+              </button>
+            </div>
+            <div class="col-6 text-right p-0">
+              <button class="btn btn-success" (click)="loadOutletWiseSales()">
+                <app-wave [hidden]="!loading"></app-wave>
+                <span [hidden]="loading">Refresh</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-6 col-md-2">
+          <div class="form-group">
+            <label>Grand Total</label>
+            <div class="row m-0">
+              <input class="form-control col-5" type="number" (change)="onChangeGrandTotal()" [(ngModel)]="dataPost.grandTotal.from">
+              <span class="col-2 line-height-38px text-center p-0">to</span>
+              <input class="form-control col-5" type="number" (change)="onChangeGrandTotal()" [(ngModel)]="dataPost.grandTotal.to">
+            </div>
+          </div>
+        </div> -->
+        <div class="col-12" id="daterangepicker-panel"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <!-- <div class="overflow-auto report-table text-right start-spinner">
+          <button class="btn btn-success" (click)="loadOutletWiseSales()">
+            <app-wave [hidden]="!loading"></app-wave>
+            <span [hidden]="loading">Refresh</span>
+          </button>
+        </div> -->
+        <br>
+        <div class="row">
+          <div class="col-sm-0 col-md-2 col-lg-3"></div>
+          <div class="col-sm-12 col-md-8 col-lg-6">
+            <table class="table table-bordered pt-4">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Final amount total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr [hidden]="!loading">
+                  <td colspan="2">
+                    <app-wave></app-wave>
+                  </td>
+                </tr>
+                <tr [hidden]="dateWiseSales.length != 0 || loading">
+                  <td class="text-center" colspan="2">No Data.</td>
+                </tr>
+                <tr [hidden]="dateWiseSales.length == 0" *ngFor="let item of dateWiseSales">
+                  <td>{{item.date}}</td>
+                  <td>{{item.finalAmtTotal | number : '1.2-2'}}</td>
+                </tr>
+                <tr [hidden]="dateWiseSales.length == 0">
+                  <td>Grand Total</td>
+                  <td>{{grandTotal | number : '1.2-2'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-sm-0 col-md-2 col-lg-3"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>

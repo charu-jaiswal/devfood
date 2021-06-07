@@ -1,0 +1,128 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!ReservationID">Add Reservation</h1>
+    <h1 class="text-center title" *ngIf="ReservationID">Edit Reservation</h1>
+    <br>
+    <form class="form-horizontal" id="ReservationForm" #ReservationForm="ngForm" (ngSubmit)="addReservation(ReservationForm)" novalidate>
+      <div class="row">
+        <!-- <div class="col-sm-2"></div> -->
+
+        <div class="col-sm-12" *ngFor="let item of ReservationModel ; let  i= index;trackBy: trackByFn">
+        <ng-container ngModelGroup="item-{{i}}" #item="ngModelGroup">
+
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-12 col-lg-12 col-md-12">
+                
+                  <!-- <h4 class="text-center m-4">Reservation Availability</h4> -->
+                  <div class="form-grouping-wrapper my-3" >
+                                      
+                    <div class="row" *ngFor="let opHr of ReservationModel[i].opHrs; let j = index">
+                      <ng-container ngModelGroup="opHr-{{j}}" #opHr="ngModelGroup">
+                      
+                      <div class="col">
+                        <div class="form-group" *ngIf="j==0">
+                          <label>Day
+                          </label>
+                          <select class="custom-select col-12" name="subForm" [(ngModel)]="opHr.day" required>
+                            <option *ngFor="let option of dayList" [value]="option.value">{{option.label}}</option>
+                          </select>
+                          <!-- <div *ngIf="day.invalid && (day.dirty || day.touched)" class="alert alert-danger">
+                            <div *ngIf="day.errors.required">Day is required.</div>
+                          </div> -->
+                        </div>
+                       
+                      </div>
+  
+                      <div class="col">
+                        <div class="form-group">
+                          <label>From</label>
+                          <select class="form-control" name="fromTime"  [(ngModel)]="opHr.fromTime"
+                                  required>
+                            <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                              {{option.label}}</option>
+                          </select>
+                          <!-- <div *ngIf="fromTime.invalid && (fromTime.dirty || fromTime.touched)"
+                               class="alert alert-danger">
+                            <div *ngIf="fromTime.errors.required">Day is required.</div>
+                          </div> -->
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <label>To</label>
+                          <select class="form-control" name="toTime" [(ngModel)]="opHr.toTime"  
+                                  required>
+                            <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                              {{option.label}}</option>
+                          </select>
+                          <!-- <div *ngIf="toTime.invalid && (toTime.dirty || toTime.touched)" class="alert alert-danger">
+                            <div *ngIf="toTime.errors.required">Day is required.</div>
+                          </div> -->
+                        </div>
+                      </div>
+  
+                      <!--charu-->
+  
+                        <div class="col">
+                        <div class="form-group">
+                          <label>Max Person</label>
+                          
+                          <input type="number" class="form-control" name="maxperson"  [(ngModel)]="opHr.maxperson"  required>
+                              <!-- <div *ngIf="maxperson.invalid && (maxperson.dirty || maxperson.touched)" class="alert alert-danger">
+                            <div *ngIf="maxperson.errors.required">Person is required.</div>
+                          </div> -->
+                        </div>
+                      </div>
+  
+                      <div class="col">
+                        <div class="form-group">
+                          <label>Charges</label>
+                          <input type="number" class="form-control" name="charges"  [(ngModel)]="opHr.charges"  required>
+                         
+                        </div>
+                      </div>
+                      <!---->
+                      <div class="col-md-1 mt-1">
+                        <br>
+                        <button type="button" class="btn btn-sm btn-danger" (click)="deleteOperatingHour(i,j)">
+                          <i class="ti-close"></i>
+                        </button>
+                      </div>
+                    </ng-container>
+                    </div>
+
+              
+                    <div class="text-center">
+                      <button type="button" class="btn btn-sm btn-success" (click)="addMoreOperatingHours(i,'col')">
+                        <i class="ti-plus"></i> &nbsp; Add</button>
+                    </div>
+                    <div class="text-center" *ngIf="(i+1)==ReservationModel.length">
+        
+                      <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                              *ngIf="ReservationID">Update</button>
+                              <button type="button" class="btn btn-lg btn-success waves-effect waves-light m-r-10" (click)="addMoreOperatingHours(i,'row')"
+                             >Add More+</button>
+                      <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                              *ngIf="!ReservationID">Submit</button>
+                      <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light"
+                              [routerLink]="['../..']">Cancel</button>
+                    </div> 
+                  </div> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        
+          
+          
+        </div>
+        <!-- <div class="col-sm-2"></div> -->
+        
+      </div>
+    
+    </form>
+  </div>
+</div>

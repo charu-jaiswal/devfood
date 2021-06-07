@@ -1,0 +1,88 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title"><button class="btn btn-info" [routerLink]="['../setting']">Back</button> &nbsp; Cusines and Filter - Multi Language</h1>
+    <form class="form-horizontal" id="filterLangForm" #FilterLangForm="ngForm" (ngSubmit)="addFilterLang(FilterLangForm)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <br>
+          <div class="card">
+            <div class="card-body" ngModelGroup="cuisines">
+              <h2>Cuisines</h2>
+              <div class="row" *ngFor="let cuisines of filterLang?.cuisines; let i = index" [ngModelGroup]="i">
+                <div class="col-md-12">
+                  <h5>{{cuisines?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="cuisines?.name">
+                </div>
+                <div class="col-md-12 row" *ngIf="cuisines?.lList" ngModelGroup="lList">
+                  <div class="col-md-4" *ngFor="let row of cuisines?.lList; let i = index" [ngModelGroup]="i">
+                    <div class="form-group row">
+                      <label class="col-3 text-right">{{row?.id}}</label>
+                      <input type="hidden" name="id" [ngModel]="row?.id">
+                      <input class="col-9 form-control" type="text" name="val" [ngModel]="row?.val">
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <hr><br>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="card">
+            <div class="card-body" ngModelGroup="outletFilter">
+              <h2>Outlet Filter</h2>
+              <div class="row" *ngFor="let outletFilter of filterLang?.outletFilter; let i = index" [ngModelGroup]="i">
+                <div class="col-md-12">
+                  <h5>{{outletFilter?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="outletFilter?.name">
+                </div>
+                <div class="col-md-12 row" *ngIf="outletFilter?.lList" ngModelGroup="lList">
+                  <div class="col-md-4" *ngFor="let row of outletFilter?.lList; let i = index" [ngModelGroup]="i">
+                    <div class="form-group row">
+                      <label class="col-3 text-right">{{row?.id}}</label>
+                      <input type="hidden" name="id" [ngModel]="row?.id">
+                      <input class="col-9 form-control" type="text" name="val" [ngModel]="row?.val">
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <hr><br>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="card">
+            <div class="card-body" ngModelGroup="uomList">
+              <h2>UOM List</h2>
+              <div class="row" *ngFor="let uomList of filterLang?.uomList; let i = index" [ngModelGroup]="i">
+                <div class="col-md-12">
+                  <h5>{{uomList?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="uomList?.name">
+                </div>
+                <div class="col-md-12 row" *ngIf="uomList?.lList" ngModelGroup="lList">
+                  <div class="col-md-4" *ngFor="let row of uomList?.lList; let i = index" [ngModelGroup]="i">
+                    <div class="form-group row">
+                      <label class="col-3 text-right">{{row?.id}}</label>
+                      <input type="hidden" name="id" [ngModel]="row?.id">
+                      <input class="col-9 form-control" type="text" name="val" [ngModel]="row?.val">
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <hr><br>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="button" class="btn btn-lg btn-info waves-effect waves-ligh m-r-10" [routerLink]="['../setting']">Back</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

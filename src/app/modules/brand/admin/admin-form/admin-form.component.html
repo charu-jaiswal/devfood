@@ -1,0 +1,678 @@
+<div class="row">
+  <div class="col-sm-12">
+
+
+
+
+    <div class="col-12">
+      <h1 class="text-dark m-b-0 text-center">Admin</h1>
+    </div>
+
+
+    <br>
+    <form class="form-horizontal" id="adminForm" #AdminForm="ngForm" (ngSubmit)="addAdminForm(AdminForm)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card" ngModelGroup="googleMap">
+            <div class="card-body">
+              <h3 class="text-dark m-b-0 text-center">Google Maps Settings</h3>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>IOS</label>
+                    <span>*</span>
+                    <input class="form-control" type="text" name="ios" #gMapsIos="ngModel"
+                      [ngModel]="admin?.googleMap?.ios" required>
+                    <div *ngIf="gMapsIos.invalid && (gMapsIos.dirty || gMapsIos.touched)" class="alert alert-danger">
+                      IOS is requried.</div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Android</label>
+                    <span>*</span>
+                    <input class="form-control" type="text" name="android" #gMapsAndroid="ngModel"
+                      [ngModel]="admin?.googleMap?.android" required>
+                    <div *ngIf="gMapsAndroid.invalid && (gMapsAndroid.dirty || gMapsAndroid.touched)"
+                      class="alert alert-danger">
+                      Android is requried.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Web</label>
+                    <span>*</span>
+                    <input class="form-control" type="text" name="web" #gMapsWeb="ngModel"
+                      [ngModel]="admin?.googleMap?.web" required>
+                    <div *ngIf="gMapsWeb.invalid && (gMapsWeb.dirty || gMapsWeb.touched)" class="alert alert-danger">
+                      Web is requried.</div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isMapPremiumCheck" name="isMapPremium"
+                        #isMapPremiumCheck="ngModel" [ngModel]="admin?.googleMap?.isMapPremium">
+                      <label class="custom-control-label" for="isMapPremiumCheck">Enable Map ETA For Customer</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <!--**********CHARU START********************-->
+      <div class="row" *ngIf="computeUsageList">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <!-- <div class="card" > -->
+            <div class="card-body">
+              <h4 class="card-title text-center">Monthly Usage</h4>
+              <br>
+              <div>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Month</th>
+                      <th class="text-right">Orders</th>
+                      <th class="text-right">Twilio Verify</th>
+                      <th class="text-right">Charges</th>
+                      <th class="text-right">Paid</th>
+                      <th class="text-right">Balance</th>
+                      <th class="text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let billUsage of computeUsageList">
+                      <td>{{ billUsage?.monthName }}</td>
+                      <td class="text-right">{{ billUsage?.orderCount }}</td>
+                      <td class="text-right">{{ billUsage?.userCount }}</td>
+                      <td class="text-right">${{ billUsage?.usageAmount | number:'1.1-2' }}</td>
+                      <td class="text-right">${{ billUsage?.paidAmount | number:'1.1-2' }}</td>
+                      <td class="text-right">
+                        <span *ngIf="!billUsage?.done">
+                          <b *ngIf="billUsage?.remainAmount > 0" class="text-danger">-
+                            ${{ billUsage?.remainAmount | number:'1.1-2' }}</b> <b *ngIf="billUsage?.remainAmount <= 0"
+                            class="text-success">${{ billUsage?.remainAmountPlus | number:'1.1-2' }}</b>
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-info mr-2"
+                          (click)="openModal(mymodal,billUsage)">Add Topup</button>
+                        <button type="button" class="btn btn-sm btn-info mr-2"
+                          (click)="setDone(billUsage)">Done</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <!--**********CHARU eND********************-->
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center">
+                Admin</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isNewLoginCheck" name="isNewLogin"
+                        #isNewLoginCheck="ngModel" [ngModel]="admin?.isNewLogin">
+                      <label class="custom-control-label" for="isNewLoginCheck">Firebase SMS Login</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isDisableLoginCheck" name="isDisableLogin"
+                        #isDisableLoginCheck="ngModel" [ngModel]="admin?.isDisableLogin">
+                      <label class="custom-control-label" for="isDisableLoginCheck">Disable SMS Login</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isAppDisabledCheck" name="isAppDisabled"
+                        #isAppDisabledCheck="ngModel" [ngModel]="admin?.isAppDisabled">
+                      <label class="custom-control-label" for="isAppDisabledCheck">App Disable</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isSandwichCheck" name="isSandwich"
+                        #isSandwichCheck="ngModel" [ngModel]="admin?.isSandwich">
+                      <label class="custom-control-label" for="isSandwichCheck">is Sandwich</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isMultiLangCheck" name="isMultiLang"
+                        #isMultiLangCheck="ngModel" [ngModel]="admin?.isMultiLang">
+                      <label class="custom-control-label" for="isMultiLangCheck">Multi Language</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isPostStripe" name="isPostStripe"
+                        [ngModel]="admin?.isPostStripe" #isPostStripeEnable="ngModel">
+                      <label class="custom-control-label" for="isPostStripe">Post Stripe Charges</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isReward" name="isReward"
+                        [ngModel]="admin?.isReward" #isRewardEnable="ngModel">
+                      <label class="custom-control-label" for="isReward">Reward System</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isEcommerce" name="isEcommerce"
+                        [ngModel]="admin?.isEcommerce" #isEcommerceEnable="ngModel">
+                      <label class="custom-control-label" for="isEcommerce">Ecommerce</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isQuiqup" name="isQuiqup"
+                        [ngModel]="admin?.isQuiqup" #isQuiqupEnable="ngModel">
+                      <label class="custom-control-label" for="isQuiqup">Quiqup</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="hideUnavailMenu" name="hideUnavailMenu"
+                        [ngModel]="admin?.hideUnavailMenu" #hideUnavailMenuEnable="ngModel">
+                      <label class="custom-control-label" for="hideUnavailMenu">Hide Unavailable Menu</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="showDeliZone" name="showDeliZone"
+                        [ngModel]="admin?.showDeliZone" #showDeliZoneEnable="ngModel">
+                      <label class="custom-control-label" for="showDeliZone">Show Delivery Zone</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="showOutletAdmin" name="showOutletAdmin"
+                        [ngModel]="admin?.showOutletAdmin" #showOutletAdminEnable="ngModel">
+                      <label class="custom-control-label" for="showOutletAdmin">Show Outlet Admin</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="showOutletDuplicate"
+                        name="showOutletDuplicate" [ngModel]="admin?.showOutletDuplicate"
+                        #showOutletDuplicateEnable="ngModel">
+                      <label class="custom-control-label" for="showOutletDuplicate">Show Outlet Duplicate</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" [hidden]="!isRewardEnable.value">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Reward Point Multiplier - Delivery
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="rewardConv" [required]="isRewardEnable.value"
+                      [ngModel]="admin?.rewardConv">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Reward Point Multiplier - Takeaway
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="takeRewardConv" [required]="isRewardEnable.value"
+                      [ngModel]="admin?.takeRewardConv">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Reward Point Multiplier - POS
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="posRewardConv" [required]="isRewardEnable.value"
+                      [ngModel]="admin?.posRewardConv">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12" [hidden]="!isAppDisabledCheck.value">
+                  <div class="form-group">
+                    <!-- <label>App Shut Text</label> -->
+                    <!-- <input class="form-control" type="text" name="appShutText" #appShutText="ngModel" [ngModel]="admin?.appShutText"> -->
+                    <h4 class="border-bottom pb-2">App Shut Text</h4>
+                    <quill-editor name="appShutText" [ngModel]="admin?.appShutText" #appShutText="ngModel"
+                      [modules]="quillToolbar" [style]="{height: '150px'}"></quill-editor>
+                  </div>
+                </div>
+              </div>
+              <div class="row" ngModelGroup="appVersion">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>IOS Version Logic
+                    </label>
+                    <select class="form-control" name="iosVersionLogic" [ngModel]="admin?.appVersion?.iosVersionLogic"
+                      #iosVersionLogic="ngModel">
+                      <option value='OPTIONAL'>Optional</option>
+                      <option value='NO_CHECK'>Don't Check</option>
+                      <option value='FORCE'>Forced</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Current IOS Version</label>
+                    <input class="form-control" type="text" name="currentIosVersion" #currentIosVersion="ngModel"
+                      [ngModel]="admin?.appVersion?.currentIosVersion">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Android Version Logic </label>
+                    <select class="form-control" name="androidVersionLogic"
+                      [ngModel]="admin?.appVersion?.androidVersionLogic" #androidVersionLogic="ngModel">
+                      <option value='OPTIONAL'>Optional</option>
+                      <option value='NO_CHECK'>Don't Check</option>
+                      <option value='FORCE'>Forced</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Current Android Version </label>
+                    <input class="form-control" type="text" name="currentAndroidVersion"
+                      #currentAndroidVersion="ngModel" [ngModel]="admin?.appVersion?.currentAndroidVersion">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Outlet Limit</label>
+                    <input class="form-control" type="number" name="outletLimit" #outletLimit="ngModel"
+                      [ngModel]="admin?.outletLimit">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Phone Ordering Password</label>
+                    <input class="form-control" type="text" name="adminPass" #adminPass="ngModel"
+                      [ngModel]="admin?.adminPass">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Delete Passcode</label>
+                    <input class="form-control" type="text" name="deletePassCode" #deletePassCode="ngModel"
+                      [ngModel]="admin?.deletePassCode">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card" ngModelGroup="email">
+            <div class="card-body">
+              <h4 class="card-title text-center">
+                Email</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <label class="col-sm-5 align-self-center">Sender Name</label>
+                    <div class="col-sm-7">
+                      <input class="form-control" type="text" name="senderName" #senderName="ngModel"
+                        [ngModel]="admin?.email?.senderName">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <label class="col-sm-5 align-self-center">Sender Email</label>
+                    <div class="col-sm-7">
+                      <input class="form-control" type="text" name="senderID" #senderID="ngModel"
+                        [ngModel]="admin?.email?.senderID">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <div class="row" ngModelGroup="billing">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center">Billing</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <label class="col-sm-5 align-self-center">Customer Name</label>
+                    <div class="col-sm-7">
+                      <input class="form-control" type="text" name="cusName" #cusName="ngModel"
+                        [ngModel]="admin?.billing?.cusName">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <label class="col-sm-5 align-self-center">Customer Email</label>
+                    <div class="col-sm-7">
+                      <input class="form-control" type="text" name="cusEmail" #cusEmail="ngModel"
+                        [ngModel]="admin?.billing?.cusEmail">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <label class="col-sm-5 align-self-center">Customer Phone</label>
+                    <div class="col-sm-7">
+                      <input class="form-control" type="text" name="cusPhone" #cusPhone="ngModel"
+                        [ngModel]="admin?.billing?.cusPhone">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <label class="col-sm-5 align-self-center">Valid Till</label>
+                    <div class="col-sm-7">
+                      <input class="form-control" type="text" name="validTill" #validTill="ngModel"
+                        [ngModel]="admin?.billing?.validTill">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <label class="col-sm-5 align-self-center">SMS Cost in USD</label>
+                    <div class="col-sm-7">
+                      <input class="form-control" type="number" name="smsCost" #smsCost="ngModel"
+                        [ngModel]="admin?.billing?.smsCost">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row">
+                    <label class="col-sm-5 align-self-center">Subscription Link</label>
+                    <div class="col-sm-7">
+                      <input class="form-control"
+                        pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                        type="text" name="subLink" [ngModel]="admin?.billing?.subLink" #subLinkModel="ngModel">
+                      <div *ngIf="subLinkModel.errors && (subLinkModel.dirty || subLinkModel.touched)"
+                        class="alert alert-danger">
+                        Enter a valid URL!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isAutoRenewalCheck" name="isAutoRenewal"
+                        #isAutoRenewalCheck="ngModel" [ngModel]="admin?.billing?.isAutoRenewal">
+                      <label class="custom-control-label" for="isAutoRenewalCheck">Auto Renewal Done</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isMultiLangPurchCheck"
+                        name="isMultiLangPurch" #isMultiLangPurchCheck="ngModel"
+                        [ngModel]="admin?.billing?.isMultiLangPurch">
+                      <label class="custom-control-label" for="isMultiLangPurchCheck">Multi Lang Done</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <div class="row" ngModelGroup="push">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center">
+                Push</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Sender ID</label>
+                    <input class="form-control" type="text" name="googleProjectId" #googleProjectId="ngModel"
+                      [ngModel]="admin?.push?.googleProjectId">
+                  </div>
+                </div>
+              </div>
+              <h5 class="card-title text-center">
+                Admin App</h5>
+              <div class="row" ngModelGroup="adminApp">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>App ID</label>
+                    <input class="form-control" type="text" name="appID" #adminAppID="ngModel"
+                      [ngModel]="admin?.push?.adminApp?.appID">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Key</label>
+                    <input class="form-control" type="text" name="appKey" #adminappKey="ngModel"
+                      [ngModel]="admin?.push?.adminApp?.appKey">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>App Icon
+                    </label>
+                    <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                    <input type="hidden" name="appIcon" [ngModel]="admin?.push?.adminApp?.appIcon">
+                    <br>
+                    <br>
+                    <div *ngIf="admin?.push?.adminApp?.appIcon">
+                      <img [src]="admin?.push?.adminApp?.appIcon" class="img-upload-disp-wrapper">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h5 class="card-title text-center">
+                Order App</h5>
+              <div class="row" ngModelGroup="orderApp">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>App ID</label>
+                    <input class="form-control" type="text" name="appID" #orderAppID="ngModel"
+                      [ngModel]="admin?.push?.orderApp?.appID">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Key</label>
+                    <input class="form-control" type="text" name="appKey" #orderappKey="ngModel"
+                      [ngModel]="admin?.push?.orderApp?.appKey">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>App Icon
+                    </label>
+                    <input type="file" (change)="uploadFile1($event, 'image')" accept=".jpg" />
+                    <input type="hidden" name="appIcon" [ngModel]="admin?.push?.orderApp?.appIcon">
+                    <br>
+                    <br>
+                    <div *ngIf="admin?.push?.orderApp?.appIcon">
+                      <img [src]="admin?.push?.orderApp?.appIcon" class="img-upload-disp-wrapper">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile1('image')">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <div class="row" ngModelGroup="server">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center">
+                Server</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Backend URL</label>
+                    <span>*</span>
+                    <input class="form-control"
+                      pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                      type="text" name="backendURL" [ngModel]="admin?.server?.backendURL" #url="ngModel" required>
+                    <div *ngIf="url.errors && (url.dirty || url.touched)" class="alert alert-danger">
+                      Enter a valid URL!
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" ngModelGroup="adminPopup">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center">
+                Admin Popup</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="adminPopupConfCheck" name="adminPopupConf"
+                        #adminPopupConfCheck="ngModel" [ngModel]="admin?.adminPopup?.adminPopupConf">
+                      <label class="custom-control-label" for="adminPopupConfCheck">Enable Admin Popup</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" [hidden]="!adminPopupConfCheck.value">
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="closeableCheck" name="closeable"
+                        #closeableCheck="ngModel" [ngModel]="admin?.adminPopup?.closeable">
+                      <label class="custom-control-label" for="closeableCheck">Closeable</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-group">
+                    <label>Button Label</label>
+                    <input class="form-control" type="text" name="btnLabel" #label="ngModel"
+                      [ngModel]="admin?.adminPopup?.btnLabel">
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-group">
+                    <label>Link</label>
+                    <input class="form-control"
+                      pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                      type="text" name="link" [ngModel]="admin?.adminPopup?.link" #link="ngModel">
+                  </div>
+                </div>
+              </div>
+              <div class="row" [hidden]="!adminPopupConfCheck.value">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                  <h4 class="border-bottom pb-2">MESSAGE</h4>
+                  <quill-editor name="smsText" [ngModel]="admin?.adminPopup?.smsText" #smsText="ngModel"
+                    [modules]="quillToolbar" [style]="{height: '150px'}"></quill-editor>
+                </div>
+                <div class="col-sm-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Modal CHARU START-->
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Paid</h5>
+    <!-- <button type="button" class="close" (click)="modal.close()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body col-md-12 text-center">
+    <div class="form-group wrapper">
+      <input class="form-control" type="number" placeholder="Enter Amount" [(ngModel)]="amount" required><br>
+     
+    </div>
+  </div>
+  <div class="modal-footer wrapper   ">
+    <button type="button" class="btn btn-info  " (click)="addAmount()">Submit</button>
+  </div>
+</ng-template>
+<!-- Modal CHARU END-->

@@ -1,0 +1,143 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!driverID">Add Driver</h1>
+    <h1 class="text-center title" *ngIf="driverID">Edit Driver</h1>
+    <form class="form-horizontal" id="driverForm" #DriverForm="ngForm" (ngSubmit)="addDriver(DriverForm)">
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="form-group">
+                <label>Driver Name
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="name" required [ngModel]="driver?.name" #name="ngModel">
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                  <div *ngIf="name.errors.required">Driver Name is required.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Email
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                       [ngModel]="driver?.email" #email="ngModel" [disabled]="driverID">
+                <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+                  <div *ngIf="email.errors.required">E-mail is required.</div>
+                  <div *ngIf="email.errors.pattern && email?.value != ''">Email should be in proper format.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Password
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="password" name="pass" required minlength="6" [ngModel]="driver?.pass"
+                       #pass="ngModel" [disabled]="driverID">
+                <div *ngIf="pass.invalid && (pass.dirty || pass.touched)" class="alert alert-danger">
+                  <div *ngIf="pass.errors.required">Password is required.</div>
+                  <div *ngIf="pass.errors.minlength">Must be at least 6 characters long.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Phone Number
+                  <!-- <span>*</span> -->
+                </label>
+                <input class="form-control" type="text" name="mobileNo" [ngModel]="driver?.mobileNo" #mobileNo="ngModel">
+              </div>
+              <div class="form-group">
+                  <label>Vehicle No
+                    <!-- <span>*</span> -->
+                  </label>
+                  <input class="form-control" type="text" name="vehicleNo" [ngModel]="driver?.vehicleNo" #vehicleNo="ngModel">
+                </div>
+              <!-- <div class="form-group">
+                <label>License No
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="licenseNo" [ngModel]="driver?.licenseNo" #licenseNo="ngModel">
+                <div *ngIf="licenseNo.invalid && (licenseNo.dirty || licenseNo.touched)" class="alert alert-danger">
+                  <div *ngIf="licenseNo.errors.required">License No is required.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Vehicle Name
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="vehicleName" [ngModel]="driver?.vehicleName" #vehicleName="ngModel">
+                <div *ngIf="vehicleName.invalid && (vehicleName.dirty || vehicleName.touched)" class="alert alert-danger">
+                  <div *ngIf="vehicleName.errors.required">Vehicle Name is required.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>License Plate
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="licensePlate" [ngModel]="driver?.licensePlate"
+                       #licensePlate="ngModel">
+                <div *ngIf="licensePlate.invalid && (licensePlate.dirty || licensePlate.touched)" class="alert alert-danger">
+                  <div *ngIf="licensePlate.errors.required">License Plate is required.</div>
+                </div>
+              </div> -->
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Conditions</h4>
+              <hr>
+              <div ngModelGroup="condition">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isAllOutlet" name="isAllOutlet" [ngModel]="driver?.condition?.isAllOutlet" #applyOutlets="ngModel">
+                  <label class="custom-control-label" for="isAllOutlet"> Assign for all Outlets and Zone </label>
+                </div>
+                <br>
+                <div class="form-group" [hidden]="applyOutlets.value">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="outlet" name="condType" [ngModel]="driver?.condition?.condType"
+                               value="outlet" #condType="ngModel">
+                        <label class="custom-control-label" for="outlet">Specific Outlet</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="zone" name="condType" [ngModel]="driver?.condition?.condType" value="zone" #condType="ngModel">
+                        <label class="custom-control-label" for="zone">Specific Zone</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div [hidden]="applyOutlets.value || condType.value != 'outlet'" class="form-group">
+                  <label>Assign Specific Outlets</label>
+                  <ng-select [items]="outletList"  bindLabel="name" bindValue="id" name="outlets" [ngModel]="driver?.condition?.outlets" #outlets="ngModel" [multiple]="true" [closeOnSelect]="false">
+                  </ng-select>
+                  <span class="help-block">
+                    <small>If Individual Outlets are Assigned, then this Driver will be visible only to those outlets.</small>
+                  </span>
+                </div>
+                <div [hidden]="applyOutlets.value || condType.value != 'zone'" class="form-group">
+                  <label>Assign Specific Zone</label>
+                  <select class="custom-select col-12" name="zone"
+                          [ngModel]="driver?.condition?.zone" #zone="ngModel">
+                    <option *ngFor="let option of zoneList" [value]="option.id">{{option.name}}</option>
+                  </select>
+                  <span class="help-block">
+                    <small>If Specific zone are Assigned, then this Driver will be visible only to that zone.</small>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="driverID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="!driverID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light" [routerLink]="['/brand/driver/list']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

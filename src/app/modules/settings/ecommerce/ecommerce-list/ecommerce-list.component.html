@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button class="btn btn-success" type="button" [routerLink]="['/settings/ecommerce/add/new']">
+            <i class="ti-plus"></i> &nbsp; Add Product</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>S.NO</th>
+                <th>Product Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr [ngClass]="{'table-warning': ecommerce.isDisabled,'table-danger': ecommerce.isHidden}"
+                *ngFor="let ecommerce of EcommerceList; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ ecommerce.prodTitle }}</td>
+
+                <td class="actionList">
+                  <button class="btn btn-sm btn-info" type="button"
+                    [routerLink]="['/settings/ecommerce', 'edit', ecommerce.id]">Edit</button>
+                  <button class="btn btn-sm btn-danger" type="button"
+                    (click)="deleteCharge($event, ecommerce.id)">Delete</button>
+                  <button class="btn btn-sm btn-info  btn-disable" type="button"
+                    (click)="disableEcommerce($event, ecommerce)">
+                    {{ ecommerce.isDisabled ? 'Enable' : 'Disable'}}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

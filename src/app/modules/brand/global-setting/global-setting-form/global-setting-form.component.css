@@ -1,0 +1,8 @@
+.average-input {
+  width: calc(100% - 35px);
+}
+
+.average-span {
+  line-height: 38px;
+  padding-left: 5px;
+}

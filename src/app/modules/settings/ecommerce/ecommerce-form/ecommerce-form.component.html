@@ -1,0 +1,225 @@
+<div class="row">
+  <div class="col-sm-12 ">
+    <h1 class="text-center title" *ngIf="!EcommerceID">Add Product</h1>
+    <h1 class="text-center title" *ngIf="EcommerceID">Edit Product</h1>
+    <form class="form-horizontal" id="ecommerceForm" #ecommerceForm="ngForm" (ngSubmit)="addEcommerce(ecommerceForm)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="row">
+            <div class="col-sm-12 form-group ">
+              <div class="card ">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>Product Title </label>
+                    <input class="form-control" type="text" name="prodTitle" required
+                      [ngModel]=" EcommerceForm?.prodTitle" #prodTitle="ngModel">
+                    <div *ngIf="prodTitle.invalid && (prodTitle.dirty || prodTitle.touched)" class="alert alert-danger">
+                      <div *ngIf="prodTitle.errors.required">Product Title is required.</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Product Short Description</label>
+                    <input class="form-control" type="text" name="shortDesc" required
+                      [ngModel]="EcommerceForm?.shortDesc" #shortDesc="ngModel">
+                    <div *ngIf="shortDesc.invalid && (shortDesc.dirty || shortDesc.touched)" class="alert alert-danger">
+                      <div *ngIf="shortDesc.errors.required">Product Short Description is required.</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Long Description</label><br>
+                    <quill-editor name="longDesc" required [ngModel]="EcommerceForm?.longDesc" #longDesc="ngModel"
+                      placeholder="Enter item description.." [style]="{height: '150px'}"></quill-editor>
+                    <div *ngIf="longDesc.invalid && (longDesc.dirty || longDesc.touched)" class="alert alert-danger">
+                      <div *ngIf="longDesc.errors.required">Product Long Description is required.</div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="form-grouping-wrapper my-3" ngModelGroup="variant">
+                    <div class="row " *ngFor="let vrow of EcommerceForm?.variant; let i = index" [ngModelGroup]="i">
+                      <div class="col-sm-1"></div>
+                      <div class="col-sm-5 form-group">
+                        <div class="form-group">
+                          <label>Size </label>
+                          <input class="form-control" type="text" name="stdSize" required [ngModel]="vrow.stdSize"
+                            #stdSize="ngModel">
+                          <div *ngIf="stdSize.invalid && (stdSize.dirty || stdSize.touched)" class="alert alert-danger">
+                            <div *ngIf="stdSize.errors.required">Size is required.</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-5 form-group">
+                        <div class="form-group">
+                          <label>Price </label>
+                          <input class="form-control" type="number" name="disPrice" [ngModel]="vrow.disPrice"
+                            #disPrice="ngModel">
+                          <div *ngIf="disPrice.invalid && (disPrice.dirty || disPrice.touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="disPrice.errors.required">Price is required.</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-1 form-group">
+                        <button type="button" class="btn btn-sm btn-danger mbR" (click)="deleteRow(v,'var')">x</button>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 text_center">
+                      <button class="btn btn-success" type="button" (click)=" ()">
+                        <i class="ti-plus"></i> &nbsp; Add Variant</button>
+                    </div>
+                    <br>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-5">
+                      <div class="form-group">
+                        <label>Sku </label>
+                        <input class="form-control" type="text" name="sku" required [ngModel]=" EcommerceForm?.sku"
+                          #sku="ngModel">
+                        <div *ngIf="sku.invalid && (sku.dirty || sku.touched)" class="alert alert-danger">
+                          <div *ngIf="sku.errors.required">Product Short Description is required.</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-5">
+                      <div class="form-group">
+                        <label>Tax </label>
+                        <select name="tax" id="tax" class="form-control" [ngModel]=" EcommerceForm?.tax">
+                          <option value="">--Select Tax--</option>
+                          <option value="{{tax.id}}" *ngFor="let tax of taxList">{{tax.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-1"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 form-group ">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title text_center">Images</h4>
+                  <hr>
+                  <div class="row">
+                    <div class="col-lg-12 ">
+                      <br>
+                      <div class="row" *ngFor="let img of imageRow;let im=index">
+                        <div class="col-sm-6 text_center">
+                          <input type="file" id="file-{{im}}" class="text_center" (change)="uploadFile($event, 'image')"
+                            accept=".jpg" /><br /><br />
+                        </div>
+                        <div class="col-sm-6">
+                          <button *ngIf="imageRow.length>1" id="del-{{im}}" (click)="deleteFile(im,'row')"
+                            class="btn btn-sm btn-danger" type="button"><i _ngcontent-c12=""
+                              class="ti-close"></i></button>
+                        </div>
+                      </div>
+                      <br>
+                      <br>
+                      <br>
+                      <div *ngIf="imageUrl.length>0">
+                        <div *ngFor="let item of imageUrl;let i =index;">
+                          <img [src]="item.url" class="img-upload-disp-wrapper">
+                          <button type="button" class="btn btn-sm btn-danger"
+                            (click)="deleteFile(i,'col')">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br><br>
+                  <div class="text_center">
+                    <div class="col-lg-12 text_center">
+                      <button class="btn btn-success" type="button" (click)="isimageAdd()">
+                        <i class="ti-plus"></i> &nbsp; Add More Image</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title text_center">Add Review</h4>
+                  <hr>
+                  <br>
+                  <div class="form-grouping-wrapper my-3" ngModelGroup="review">
+                    <div *ngFor="let row of EcommerceForm?.review; let i = index" [ngModelGroup]="i">
+                      <div class="row ">
+
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-5">
+                          <div class="form-group">
+                            <label>Reviewer Name </label>
+                            <input class="form-control" type="text" name="revName" required [ngModel]="row?.revName"
+                              #revName="ngModel">
+                            <div *ngIf="revName.invalid && (revName.dirty || revName.touched)"
+                              class="alert alert-danger">
+                              <div *ngIf="revName.errors.required">Reviewer is required.</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-5">
+                          <div class="form-group">
+                            <label>Review </label>
+                            <input class="form-control" type="text" name="review" required [ngModel]="row?.review"
+                              #review="ngModel">
+                            <div *ngIf="review.invalid && (review.dirty || review.touched)" class="alert alert-danger">
+                              <div *ngIf="review.errors.required">Review is required.</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-1">
+                          <div class="form-group">
+                            <button type="button" class="btn btn-sm btn-danger" (click)="deleteRow(i,'rev')">x</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-5">
+                          <div class="form-group">
+                            <label>Review Star</label>
+                            <input class="form-control" type="number" min="0" max="5" [maxlength]="5" name="revRating"
+                              required [ngModel]="row?.revRating" #revRating="ngModel">
+                            <div *ngIf="revRating.invalid && (revRating.dirty || revRating.touched)"
+                              class="alert alert-danger">
+                              <div *ngIf="revRating.errors.required">Review Star is required.</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-5">
+                          <div class="form-group">
+                            <label>Review Date</label>
+                            <input class="form-control" min="{{startDate | date:'yyyy-MM-dd'}}" type="date"
+                              name="revDate" required [ngModel]="row?.revDate" #revDate="ngModel">
+                            <div *ngIf="revDate.invalid && (revDate.dirty || revDate.touched)"
+                              class="alert alert-danger">
+                              <div *ngIf="revDate.errors.required">Review Date is required.</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <br><br>
+                  <div class="text_center">
+                    <button class="btn btn-success" type="button" (click)="isReviewAdd()">
+                      <i class="ti-plus"></i> &nbsp; Add Review</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+
+      </div>
+      <div class="text-center">
+        <button type="submit"
+          class="btn btn-lg btn-success waves-effect waves-light m-r-10">{{EcommerceID !== null  ? "Update" : "Submit"}}</button>
+        <button class="btn btn-lg btn-inverse waves-effect waves-light mlB"
+          [routerLink]="['/settings/ecommerce/list']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,351 @@
+<div class="row">
+  <div class="col-lg-1"></div>
+  <div class="col-lg-10">
+    <form class="form-horizontal" id="notificationForm" #NotificationForm="ngForm">
+      <div class="card" ngModelGroup="aggregator">
+        <div class="card-body">
+          <h3>Notification for Aggregators</h3>
+          <div>
+            <table class="table table-sm table-striped">
+              <thead>
+                <tr>
+                  <th>Triggers</th>
+                  <th>SMS / Whatsapp</th>
+                  <th>Email</th>
+                  <th>Push Notification</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let aggre of notify?.aggregator; let i = index" [ngModelGroup]="i">
+                  <td hidden="true">
+                    <input type="hidden" name="label" [ngModel]="aggre?.label">
+                    <input type="hidden" name="id" [ngModel]="aggre?.id">
+                  </td>
+                  <td>{{aggre.label}}</td>
+                  <td>
+                    <label class="switch">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'aggreSMS'+i"
+                             name="isSMS" #isSMS1="ngModel" [(ngModel)]="aggre.isSMS">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <label class="switch">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'aggreEmail'+i"
+                             name="isEmail" #isEmail1="ngModel" [(ngModel)]="aggre.isEmail">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <label class="switch">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'aggrePush'+i"
+                             name="isPush" #isPush1="ngModel" [(ngModel)]="aggre.isPush">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" (click)="viewDetails(content, aggre, 'Aggregators', 'aggregator')"
+                            [disabled]="!aggre.isSMS&&!aggre.isEmail&&!aggre.isPush">
+                      <i class="ti-pencil"></i>
+                      <!-- View Detail -->
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card" ngModelGroup="owner">
+        <div class="card-body">
+          <h3>Notification for Owners</h3>
+          <div>
+            <table class="table table-sm table-striped">
+              <thead>
+                <tr>
+                  <th>Triggers</th>
+                  <th>SMS / Whatsapp</th>
+                  <th>Email</th>
+                  <th>Push Notification</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ow of notify?.owner; let i = index" [ngModelGroup]="i">
+                  <td hidden="true">
+                    <input type="hidden" name="label" [ngModel]="ow?.label" #label="ngModel">
+                    <input type="hidden" name="id" [ngModel]="ow?.id" #ids="ngModel">
+                  </td>
+                  <td>{{ow.label}}</td>
+                  <td>
+                    <label class="switch">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'ownerSMS'+i"
+                             name="isSMS" #isSMS2="ngModel" [(ngModel)]="ow.isSMS">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <label class="switch">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'ownerEmail'+i"
+                             name="isEmail" #isEmail2="ngModel" [(ngModel)]="ow.isEmail">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <label class="switch">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'ownerPush'+i"
+                             name="isPush" #isPush2="ngModel" [(ngModel)]="ow.isPush">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" (click)="viewDetails(content, ow, 'Owners', 'owner')">
+                      <i class="ti-pencil"></i>
+                      <!-- View Detail -->
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card" ngModelGroup="driver">
+        <div class="card-body">
+          <h3>Notification for Driver</h3>
+          <div>
+            <table class="table table-sm table-striped">
+              <thead>
+                <tr>
+                  <th>Triggers</th>
+                  <th>SMS / Whatsapp</th>
+                  <th>Email</th>
+                  <th>Push Notification</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ow of notify?.driver; let i = index" [ngModelGroup]="i">
+                  <td hidden="true">
+                    <input type="hidden" name="label" [ngModel]="ow?.label" #label="ngModel">
+                    <input type="hidden" name="id" [ngModel]="ow?.id" #ids="ngModel">
+                  </td>
+                  <td>{{ow.label}}</td>
+                  <td>
+                    <label class="switch">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'driverSMS'+i"
+                             name="isSMS" #isSMS2="ngModel" [(ngModel)]="ow.isSMS">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                    <label class="switch">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'driverPush'+i"
+                             name="isPush" #isPush2="ngModel" [(ngModel)]="ow.isPush">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" (click)="viewDetails(content, ow, 'Driver', 'driver')">
+                      <i class="ti-pencil"></i>
+                      <!-- View Detail -->
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card" ngModelGroup="user">
+        <div class="card-body">
+          <h3>Notification for Users</h3>
+          <div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Triggers</th>
+                  <th>SMS / Whatsapp</th>
+                  <th>Email</th>
+                  <th>Push Notification</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let us of notify?.user; let i = index" [ngModelGroup]="i">
+                  <td hidden="true">
+                    <input type="hidden" name="label" [ngModel]="us?.label" #label="ngModel">
+                    <input type="hidden" name="id" [ngModel]="us?.id" #ids="ngModel">
+                  </td>
+                  <td>{{us.label}}</td>
+                  <td>
+                    <label class="switch">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'userSMS'+i"
+                             name="isSMS" #isSMS3="ngModel" [(ngModel)]="us.isSMS">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <label class="switch" [hidden]="us.hideEmail">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'userEmail'+i"
+                             name="isEmail" #isEmail3="ngModel" [(ngModel)]="us.isEmail">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <label class="switch">
+                      <input (click)="updateStatus(NotificationForm)" type="checkbox" class="custom-control-input" [id]="'userPush'+i"
+                             name="isPush" #isPush3="ngModel" [(ngModel)]="us.isPush">
+                      <span class="slider round-s"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" (click)="viewDetails(content, us, 'Users', 'user')">
+                      <i class="ti-pencil"></i>
+                      <!-- View Detail -->
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" (click)="updateNotification(NotificationForm)">Update</button>
+      </div> -->
+    </form>
+  </div>
+  <div class="col-lg-1"></div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <form class="form-horizontal" id="notificationItemForm" #notificationItemForm="ngForm">
+    <div class="modal-header">
+      <h4 class="modal-title">
+        Notification for {{gloTitle}}:
+        <small>{{gloItem.label}}</small>
+      </h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body custom-tabset">
+      <ngb-tabset>
+        <ngb-tab *ngIf="gloItem.isSMS">
+          <ng-template ngbTabTitle>
+            <b>SMS / Whatsapp</b>
+          </ng-template>
+          <ng-template ngbTabContent>
+            <div class="mt-4 row m-0">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <input hidden="true" class="form-control" type="text" name="emailTitle" [required]="gloItem.isEmail"
+                           [ngModel]="gloItem.emailTitle" #emailTitle="ngModel">
+                    <input hidden="true" class="form-control" type="text" name="pushTitle" [required]="gloItem.isPush"
+                           [ngModel]="gloItem.pushTitle" #pushTitle="ngModel">
+                    <h4 class="border-bottom pb-2">MESSAGE</h4>
+                    <textarea class="form-control" rows="6" name="smsText" #smsText="ngModel" [required]="gloItem.isSMS"
+                              [(ngModel)]="gloItem.smsText"></textarea>
+                    <quill-editor hidden="true" name="emailText" [ngModel]="gloItem.emailText" #emailText="ngModel"
+                                  [required]="gloItem.isEmail" [modules]="quillToolbar" [style]="{height: '150px'}"></quill-editor>
+                    <textarea hidden="true" class="form-control" rows="6" name="pushText" #pushText="ngModel"
+                              [required]="gloItem.isPush" [ngModel]="gloItem?.pushText"></textarea>
+                    <div class="help-block pt-2">
+                      <small> List usable TAGS: </small>
+                      <small *ngFor="let item of listTag; let i = index">
+                        <span>{{item.label}}</span>
+                        <span *ngIf="i == listTag.length-1">.</span>
+                        <span *ngIf="i != listTag.length-1">, </span>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab *ngIf="gloItem.isEmail">
+          <ng-template ngbTabTitle>
+            <b>Email</b>
+          </ng-template>
+          <ng-template ngbTabContent>
+            <div class="mt-4 row m-0">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="border-bottom pb-2">Title</h4>
+                    <input class="form-control" type="text" name="emailTitle" [required]="gloItem.isEmail" [(ngModel)]="gloItem.emailTitle"
+                           #emailTitle="ngModel">
+                    <input hidden="true" class="form-control" type="text" name="pushTitle" [required]="gloItem.isPush"
+                           [ngModel]="gloItem.pushTitle" #pushTitle="ngModel">
+                    <br />
+                    <h4 class="border-bottom pb-2">MESSAGE</h4>
+                    <textarea hidden="true" class="form-control" rows="6" name="smsText" #smsText="ngModel" [required]="gloItem.isSMS"
+                              [ngModel]="gloItem?.smsText"></textarea>
+                    <quill-editor name="emailText" [(ngModel)]="gloItem.emailText" #emailText="ngModel" [required]="gloItem.isEmail"
+                                  [modules]="quillToolbar" [style]="{height: '150px'}"></quill-editor>
+                    <textarea hidden="true" class="form-control" rows="6" name="pushText" #pushText="ngModel"
+                              [required]="gloItem.isPush" [ngModel]="gloItem?.pushText"></textarea>
+                    <div class="help-block pt-2">
+                      <small> List usable TAGS: </small>
+                      <small *ngFor="let item of listTag; let i = index">
+                        <span>{{item.label}}</span>
+                        <span *ngIf="i == listTag.length-1">.</span>
+                        <span *ngIf="i != listTag.length-1">, </span>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab *ngIf="gloItem.isPush">
+          <ng-template ngbTabTitle>
+            <b>Push Notification</b>
+          </ng-template>
+          <ng-template ngbTabContent>
+            <div class="mt-4 row m-0">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="border-bottom pb-2">Title</h4>
+                    <input hidden="true" class="form-control" type="text" name="emailTitle" [required]="gloItem.isEmail"
+                           [ngModel]="gloItem.emailTitle" #emailTitle="ngModel">
+                    <input class="form-control" type="text" name="pushTitle" [required]="gloItem.isPush" [(ngModel)]="gloItem.pushTitle"
+                           #pushTitle="ngModel">
+                    <br />
+                    <h4 class="border-bottom pb-2">MESSAGE</h4>
+                    <textarea hidden="true" class="form-control" rows="6" name="smsText" #smsText="ngModel" [required]="gloItem.isSMS"
+                              [ngModel]="gloItem.smsText"></textarea>
+                    <quill-editor hidden="true" name="emailText" [ngModel]="gloItem.emailText" #emailText="ngModel"
+                                  [required]="gloItem.isEmail" [modules]="quillToolbar" [style]="{height: '150px'}"></quill-editor>
+                    <textarea class="form-control" rows="6" name="pushText" #pushText="ngModel" [required]="gloItem.isPush"
+                              [(ngModel)]="gloItem.pushText"></textarea>
+                    <div class="help-block pt-2">
+                      <small> List usable TAGS: </small>
+                      <small *ngFor="let item of listTag; let i = index">
+                        <span>{{item.label}}</span>
+                        <span *ngIf="i == listTag.length-1">.</span>
+                        <span *ngIf="i != listTag.length-1">, </span>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="closeModal()">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="updateItemNotification(notificationItemForm)">Update</button>
+    </div>
+  </form>
+</ng-template>

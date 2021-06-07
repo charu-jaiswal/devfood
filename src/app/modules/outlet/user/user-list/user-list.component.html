@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button class="btn btn-success" type="button" [routerLink]="['add/new']">
+            <i class="ti-plus"></i> &nbsp; Add User</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>User Name</th>
+                <th>Position</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of userList">
+                <td>{{ user.name }}</td>
+                <td>{{ user.role }}</td>
+                <td class="actionList">
+                    <button class="btn btn-sm btn-info" type="button" [routerLink]="['edit', user.id]">
+                      <!-- <i class="ti-pencil"></i> -->Edit
+                    </button>
+                  <button class="btn btn-sm btn-danger" type="button" (click)="deleteUser($event, user.id)">Delete
+                    <!-- <i class="ti-trash"></i> -->
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

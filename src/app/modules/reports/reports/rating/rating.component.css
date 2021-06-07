@@ -1,0 +1,67 @@
+@media (min-width: 992px) {
+  .modal-dialog {
+    max-width: 50%;
+  }
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.table thead th {
+  white-space: nowrap;
+  vertical-align: middle !important;
+}
+
+.report-table .ngx-pagination {
+  padding: 0 !important;
+}
+
+.line-height-40px {
+  line-height: 40px;
+}
+
+.text-align-webkit-right {
+  text-align: -webkit-right;
+}
+
+.customer-report {
+  height: calc(100vh - 250px);
+  min-width: 560px;
+  overflow: auto;
+}
+
+.w-230px {
+  min-width: 230px;
+}
+
+/* table th {
+  text-align: center;
+} */
+li {
+  list-style: none;
+}
+th.dark-line {
+  border-bottom: 2px solid black!important;
+  border-top: 2px solid black!important;
+}
+ul {
+  padding-left: 15px;
+  margin-bottom: 2px;
+}
+h4.modal-title.text-center {
+  padding-left: 26%;
+}
+.card {
+  margin-bottom: 0px;
+}
+agm-map {
+  height: 300px;
+}
+.w-80px[_ngcontent-c3] {
+  width: auto;
+}
+th.text-right.minas {
+  color: red;
+  font-weight: bold;
+}

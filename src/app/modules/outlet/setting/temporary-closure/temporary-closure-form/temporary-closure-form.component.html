@@ -1,0 +1,77 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!temporaryClosureID">Add Temporary Closure</h1>
+    <h1 class="text-center title" *ngIf="temporaryClosureID">Edit Temporary Closure</h1>
+
+    <form class="form-horizontal" id="temporaryClosureForm" #TemporaryClosureForm="ngForm" (ngSubmit)="addTemporaryClosure(TemporaryClosureForm)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Close From
+                    </label>
+                    <div class="input-group">
+                      <input class="form-control" name="dateFrom" [ngModel]="temporaryClosure?.dateFrom" ngbDatepicker #dateFrom="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="dateFrom.toggle()" type="button">
+                          <i class="ti-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Reason for Closure
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="reason" required [ngModel]="temporaryClosure?.reason" #reason="ngModel">
+                    <div *ngIf="reason.invalid && (reason.dirty || reason.touched)" class="alert alert-danger">
+                      <div *ngIf="reason.errors.required">Reason for Closure is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Upto
+                    </label>
+                    <div class="input-group">
+                      <input class="form-control" name="dateTo" [ngModel]="temporaryClosure?.dateTo" ngbDatepicker #dateTo="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="dateTo.toggle()" type="button">
+                          <i class="ti-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group" ngModelGroup="apply">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isDelivery" name="isDelivery" [ngModel]="temporaryClosure?.apply?.isDelivery">
+                      <label class="custom-control-label" for="isDelivery">Delivery</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isPickup" name="isPickup" [ngModel]="temporaryClosure?.apply?.isPickup">
+                      <label class="custom-control-label" for="isPickup">Take Away</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isTableRes" name="isTableRes" [ngModel]="temporaryClosure?.apply?.isTableRes">
+                      <label class="custom-control-label" for="isTableRes">Table Reservation</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="!temporaryClosureID">Submit</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="temporaryClosureID">Update</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light" [routerLink]="['../..']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

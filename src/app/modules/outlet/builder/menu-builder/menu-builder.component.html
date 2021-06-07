@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-md-4">
+      <outlet-category-list (onSelectItem)="onCategorySelection($event)"></outlet-category-list>
+    <!-- <div class="card p-3"> -->
+      <outlet-addon-list></outlet-addon-list>
+    <!-- </div> -->
+    <div class="card">
+      <div class="card-body">
+        <div class="row m-0 pb-2 border-bottom mb-3">
+          <h5 class="m-0 color-555555">CSV Import</h5>
+        </div>
+        <div class="form-group m-2">
+          <label>CSV Import</label>
+          <br />
+          <input type="file" #uploadCSVInput (change)="changeFileUpload($event, 'csvimport')" accept=".csv" />
+        </div>
+        <div>
+          <button class="btn btn-success m-2" type="button" [hidden]="loading" (click)="uploadCSVFile()">Import CSV</button>
+          <br>
+          <button class="btn btn-info m-2" type="button" [hidden]="loading" (click)="downloadCSVFile()">Download CSV</button>
+          <button class="btn btn-success m-2" type="button" [hidden]="!loading">Processing...</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+          <div class="input-group">
+            <input class="form-control" type="text" placeholder="Search Items" name="searchText" [(ngModel)]="searchModalText" #searchText="ngModel">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="button" (click)="doItemSearch(searchText?.value)">
+                <i class="fa fa-search"></i>
+              </button>
+              <button class="btn btn-danger" type="button" (click)="clearItemSearch()" [hidden]="!(searchText?.value && searchResult?.data)">
+                <i class="fa fa-close"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="search-result">
+          <div class="row m-4 p-2 text-center" *ngIf="searchLoading">
+            <app-wave class="m-auto"></app-wave>
+          </div>
+          <div *ngIf="searchResult?.data">
+            <div [ngClass]="menuItem.disabled ? 'cursor-disable': ''" class="row m-0 my-2 p-2 border bg-light" *ngFor="let menuItem of searchResult?.data; let j = index">
+              <table class="w-100">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div>
+                        <h5 class="m-0">{{ menuItem?.name }}</h5>
+                      </div>
+                      <div>
+                        <small class="m-0">{{ menuItem?.display?.desc }}</small>
+                      </div>
+
+                    </td>
+                    <td class="text-right w-25px">
+                      <button class="btn btn-sm btn-secondary" type="button" [routerLink]="['../menu-item/edit', menuItem.id]">
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <outlet-menu-item-list [categorySelected]="categorySelected"></outlet-menu-item-list>
+  </div>
+</div>

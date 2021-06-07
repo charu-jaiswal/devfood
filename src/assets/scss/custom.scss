@@ -1,0 +1,142 @@
+@media print {
+  .doNotPrint {
+    display: none !important;
+  }
+}
+
+.sidebar-nav ul li a:hover {
+  text-decoration: none;
+}
+
+.horizontal-nav .sidebar-nav ul#sidebarnav>li>a {
+  padding: 18px 15px;
+  font-size: 16px;
+}
+
+.img-upload-disp-wrapper {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+$placeholder-color: #bbb;
+
+.form-group {
+  ::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: $placeholder-color;
+  }
+
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: $placeholder-color;
+    opacity: 1;
+  }
+
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: $placeholder-color;
+    opacity: 1;
+  }
+
+  :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: $placeholder-color;
+  }
+
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: $placeholder-color;
+  }
+
+  ::placeholder {
+    /* Most modern browsers support this now. */
+    color: $placeholder-color;
+  }
+}
+
+.ngx-pagination {
+  padding: 0 !important;
+}
+
+.wc-date-container {
+  float: initial !important;
+  margin-bottom: 0px !important;
+  display: block;
+  height: calc(2.25rem + 2px) !important;
+  padding: 0.375rem 0.75rem !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  color: #495057;
+  background-color: #fff !important;
+  background-clip: padding-box !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  min-width: 120px;
+}
+
+.wc-date-container span {
+  color: initial !important;
+}
+
+.flex-wrap-initial {
+  flex-wrap: initial !important;
+}
+
+.start-spinner .spinner>div {
+  background-color: #fff !important;
+}
+
+.pd-015rem {
+  padding: 0.15rem;
+}
+
+.color-b3b3b3 {
+  color: #b3b3b3;
+}
+
+.cursor-poiter {
+  cursor: pointer;
+}
+
+.daterangepicker {
+  margin: 45px 0 0 20px;
+}
+
+.line-height-38px {
+  line-height: 38px;
+}
+
+.custom-tabset .nav-tabs .nav-link.active,
+.custom-tabset .nav-tabs .nav-item.show .nav-link,
+.custom-tabset .nav-tabs .nav-link:hover,
+.custom-tabset .nav-tabs .nav-link:focus {
+  color: #495057;
+  border-bottom: 3px solid #007bff !important;
+  background-color: initial;
+  border: 0;
+}
+
+.custom-tabset a {
+  color: #bbb;
+}
+
+.selected-list .c-angle-down,
+.selected-list .c-angle-up {
+  top: 40% !important;
+}
+
+.customer-report .form-group label span {
+  color: initial !important;
+}
+
+.modal-xxl .modal-dialog {
+  margin: 0px;
+  width: calc(100%);
+  max-width: initial;
+  height: calc(100%);
+}
+
+.modal-xxl .modal-content {
+  height: 100%;
+}

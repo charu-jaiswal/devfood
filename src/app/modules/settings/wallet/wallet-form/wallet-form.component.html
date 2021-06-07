@@ -1,0 +1,146 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title">Wallet</h1>
+    <form class="form-horizontal" id="walletForm" #WalletForm="ngForm" (ngSubmit)="addWallet(WalletForm)">
+      <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+          <div class="card">
+            <div class="card-body">
+              <div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Wallet Name
+                        <span>*</span>
+                      </label>
+                      <input class="form-control" type="text" required name="name" [ngModel]="wallet?.name" #name="ngModel">
+                      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                        <div *ngIf="name.errors.required">Wallet Name is required.</div>
+                      </div>
+                      <span class="help-block">
+                        <small>Ex. McCash</small>
+                      </span>
+                    </div>
+                    <div ngModelGroup="setting">
+                      <!-- <div class="form-group">
+                        <label>Terms & Conditions
+                        </label>
+                        <textarea class="form-control" rows="3" name="termsDesc" #termsDesc="ngModel" [ngModel]="wallet?.setting?.termsDesc"></textarea>
+                      </div> -->
+                      <div class="form-group">
+                        <label>Minimum Order Value to Use Wallet
+                          <span>*</span>
+                        </label>
+                        <input class="form-control" type="number" required name="minOrderAmnt" [ngModel]="wallet?.setting?.minOrderAmnt" #minOrderAmnt="ngModel">
+                        <div *ngIf="minOrderAmnt.invalid && (minOrderAmnt.dirty || minOrderAmnt.touched)" class="alert alert-danger">
+                          <div *ngIf="minOrderAmnt.errors.required">Minimum Order Value to Use Wallet is required.</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label>Maximum Percentage to Utilize from Wallet per Transaction
+                          <span>*</span>
+                        </label>
+                        <div class="input-group">
+                          <input class="form-control" type="number" required name="maxPercOrder" [ngModel]="wallet?.setting?.maxPercOrder" #maxPercOrder="ngModel">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text">%</div>
+                          </div>
+                        </div>
+                        <span class="help-block">
+                          <small>Giving a smaller percentage will make users order more often to utilize the wallet amount.</small>
+                        </span>
+                        <div *ngIf="maxPercOrder.invalid && (maxPercOrder.dirty || maxPercOrder.touched)" class="alert alert-danger">
+                          <div *ngIf="maxPercOrder.errors.required">Maximum Percentage to Utilize from Wallet per Transaction is required.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div ngModelGroup="setting">
+                      <div class="form-group">
+                        <label>Minimum Wallet Balance to Enable Wallet Usage
+                          <span>*</span>
+                        </label>
+                        <input class="form-control" type="number" required name="minBalance" [ngModel]="wallet?.setting?.minBalance" #minBalance="ngModel">
+                        <div *ngIf="minBalance.invalid && (minBalance.dirty || minBalance.touched)" class="alert alert-danger">
+                          <div *ngIf="minBalance.errors.required">Minimum Wallet Balance to Enable Wallet Usage is required.</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label>Maximum Amount to Hold in Wallet
+                          <span>*</span>
+                        </label>
+                        <input class="form-control" type="number" required name="maxBalance" [ngModel]="wallet?.setting?.maxBalance" #maxBalance="ngModel">
+                        <div *ngIf="maxBalance.invalid && (maxBalance.dirty || maxBalance.touched)" class="alert alert-danger">
+                          <div *ngIf="maxBalance.errors.required">Maximum Amount to Hold in Wallet is required.</div>
+                        </div>
+                        <span class="help-block">
+                          <small>If your country regulates maximum cash to hold, please follow the same regulations. If no such
+                            rule is applicable, leave empty to hold unlimited amount.</small>
+                        </span>
+                      </div>
+                      <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="isDisUseCoup" name="isDisUseCoup" [ngModel]="wallet?.setting?.isDisUseCoup"
+                            #isDisUseCoup="ngModel">
+                          <label class="custom-control-label" for="isDisUseCoup">Disable Wallet Usage when Other Coupons are availed</label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="isWalletTopup" name="isWalletTopup" [ngModel]="wallet?.setting?.isWalletTopup"
+                            #isWalletTopup="ngModel">
+                          <label class="custom-control-label" for="isWalletTopup">Enable Wallet Top-Up by Customer</label>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <!-- <div ngModelGroup="login">
+                      <div class="form-group">
+                        <label>Wallet Transaction Pin
+                        </label>
+                        <input class="form-control" type="password" maxlength="4" name="pin" [ngModel]="wallet?.login?.pin" #pin="ngModel">
+                        <span class="help-block">
+                          <small>Four Digit Numerical pin to validate manual addition of wallet Top-Ups.</small>
+                        </span>
+                      </div>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-md-12" *ngIf="wallet?.lang">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Language</h4>
+              <hr>
+              <div class="row" ngModelGroup="lang">
+                <div class="col-md-12" *ngFor="let langField of wallet?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                  <h5>{{langField?.value?.name}}</h5>
+                  <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                  <div class="row" ngModelGroup="lList">
+                    <div class="col-md-4" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                      <div class="form-group row">
+                        <label class="col-2 text-right">{{row?.id}}</label>
+                        <input type="hidden" name="id" [ngModel]="row?.id">
+                        <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

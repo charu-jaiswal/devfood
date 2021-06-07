@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button class="btn btn-success" type="button" [routerLink]="['/design/outlet-category/add/new']">
+            <i class="ti-plus"></i> &nbsp; Outlet Category</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let OutletCategory of OutletCategoryList;let i = index;" [ngClass]="{'table-warning': OutletCategory.isDisabled}">
+                <td>
+                  {{ OutletCategory.title }}
+                </td>
+                <td class="actionList">
+                  <button class="btn btn-sm btn-info" type="button" [routerLink]="['/design/outlet-category', 'edit', OutletCategory.id]">
+                    Edit
+                  </button>
+                  <button class="btn btn-sm btn-danger" type="button" (click)="deleteOutletCategory($event, OutletCategory.id)">
+                    Delete
+                  </button>
+                  <button class="btn btn-sm btn-info" type="button" (click)="disableOutletCate($event, OutletCategory)">
+                    <!-- <i class="ti-trash"></i> -->{{ OutletCategory.isDisabled ? 'Enable' : 'Disable'}}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

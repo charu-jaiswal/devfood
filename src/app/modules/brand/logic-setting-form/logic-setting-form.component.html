@@ -1,0 +1,265 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="col-12">
+      <h1 class="text-dark m-b-0 text-center">Logic Setting</h1>
+      <br><br>
+    </div>
+    <form class="form-horizontal" id="logicSettingForm" #LogicSetting="ngForm" (ngSubmit)="savelogicSetting(LogicSetting)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card" ngModelGroup="adminApp">
+            <div class="card-body">
+              <h4 class="card-title text-center">
+                Admin App</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="adminCheck" name="hideAdmin"
+                             #adminCheck="ngModel" [ngModel]="logicSetting?.adminApp?.hideAdmin">
+                      <label class="custom-control-label" for="adminCheck">Hide Admin Login Access in Admin App</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="driverCheck" name="hideDriver"
+                             #driverCheck="ngModel" [ngModel]="logicSetting?.adminApp?.hideDriver">
+                      <label class="custom-control-label" for="driverCheck">Hide Driver Login Access in Admin App</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="managerCheck" name="hideManager"
+                             #managerCheck="ngModel" [ngModel]="logicSetting?.adminApp?.hideManager">
+                      <label class="custom-control-label" for="managerCheck">Hide Manager Login Access in Admin App</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="hideManCheck" name="hideManAssignDriver"
+                             #hideManCheck="ngModel" [ngModel]="logicSetting?.adminApp?.hideManAssignDriver">
+                      <label class="custom-control-label" for="hideManCheck">Hide Assign Driver Option for Outlets</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isDriverSeenCheck" name="showAllDriverToManager"
+                             #isDriverSeenCheck="ngModel" [ngModel]="logicSetting?.adminApp?.showAllDriverToManager">
+                      <label class="custom-control-label" for="isDriverSeenCheck">Show all Drivers to Outlet Manager</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="autoAsDriverCheck" name="autoAssignDriver"
+                             #autoAsDriverCheck="ngModel" [ngModel]="logicSetting?.adminApp?.autoAssignDriver">
+                      <label class="custom-control-label" for="autoAsDriverCheck">Auto Assign Nearby Driver on Driver Request</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="takeawayOTPCustCheck" name="takeawayOTPCust"
+                             #takeawayOTPCustCheck="ngModel" [ngModel]="logicSetting?.adminApp?.takeawayOTPCust">
+                      <label class="custom-control-label" for="takeawayOTPCustCheck">Request OTP from Customer during Takeaway Completion</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="driverOTPCustCheck" name="driverOTPCust"
+                             #driverOTPCustCheck="ngModel" [ngModel]="logicSetting?.adminApp?.driverOTPCust">
+                      <label class="custom-control-label" for="driverOTPCustCheck">Request OTP from Customer during Delivery Completion</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="showPrepTimeModalCheck" name="showPrepTimeModal"
+                             #showPrepTimeModalCheck="ngModel" [ngModel]="logicSetting?.adminApp?.showPrepTimeModal">
+                      <label class="custom-control-label" for="showPrepTimeModalCheck">Change the Prep time for each order on Order Accept</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="DrOTPMngrCheck" name="driverOTPMngr"
+                             #DrOTPMngrCheck="ngModel" [ngModel]="logicSetting?.adminApp?.driverOTPMngr">
+                      <label class="custom-control-label" for="DrOTPMngrCheck">Request OTP from Outlet during Delivery Pickup</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Date Format</label>
+                    <select class="form-control" name="dateFormat" [ngModel]="logicSetting?.adminApp?.dateFormat"
+                            #dateFormat="ngModel">
+                      <option value='MMM/DD/YYYY'>MMM/DD/YYYY</option>
+                      <option value='MM/DD/YYYY'>MM/DD/YYYY</option>
+                      <option value='DD/MMM/YYYY'>DD/MMM/YYYY</option>
+                      <option value='DD/MM/YYYY'>DD/MM/YYYY</option>
+                      <option value='MMM-DD-YYYY'>MMM-DD-YYYY</option>
+                      <option value='MM-DD-YYYY'>MM-DD-YYYY</option>
+                      <option value='DD-MMM-YYYY'>DD-MMM-YYYY</option>
+                      <option value='DD-MM-YYYY'>DD-MM-YYYY</option>
+                      <option value='MMM/DD'>MMM/DD</option>
+                      <option value='MM/DD'>MM/DD</option>
+                      <option value='DD/MMM'>DD/MMM</option>
+                      <option value='DD/MM'>DD/MM</option>
+                      <option value='MMM-DD'>MMM-DD</option>
+                      <option value='MM-DD'>MM-DD</option>
+                      <option value='DD-MMM'>DD-MMM</option>
+                      <option value='DD-MM'>DD-MM</option>
+                      <option value='MMM/DD/YY'>MMM/DD/YY</option>
+                      <option value='MM/DD/YY'>MM/DD/YY</option>
+                      <option value='DD/MMM/YY'>DD/MMM/YY</option>
+                      <option value='DD/MM/YY'>DD/MM/YY</option>
+                      <option value='MMM-DD-YY'>MMM-DD-YY</option>
+                      <option value='MM-DD-YY'>MM-DD-YY</option>
+                      <option value='DD-MMM-YY'>DD-MMM-YY</option>
+                      <option value='DD-MM-YY'>DD-MM-YY</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card" ngModelGroup="orderApp">
+            <div class="card-body">
+              <h4 class="card-title text-center">
+                Customer App</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="showBrandCheck" name="showBrandTitle"
+                             #showBrandCheck="ngModel" [ngModel]="logicSetting?.orderApp?.showBrandTitle">
+                      <label class="custom-control-label" for="showBrandCheck">Show Brand Title Above Banner</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="showBrandLogo" name="showBrandLogo"
+                             #showBrandLogo="ngModel" [ngModel]="logicSetting?.orderApp?.showBrandLogo">
+                      <label class="custom-control-label" for="showBrandLogo">Show Brand Logo Above Banner</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="hideCancelCheck" name="hideCancelOrder"
+                             #hideCancelCheck="ngModel" [ngModel]="logicSetting?.orderApp?.hideCancelOrder">
+                      <label class="custom-control-label" for="hideCancelCheck">Hide Cancel Order in Order History Page</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="hideCouponProfCheck" name="hideCouponProfile"
+                             #hideCouponProfCheck="ngModel" [ngModel]="logicSetting?.orderApp?.hideCouponProfile">
+                      <label class="custom-control-label" for="hideCouponProfCheck">Hide Coupons in User Profile</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="showOutletCateCheck" name="showOutletCate"
+                             #showOutletCateCheck="ngModel" [ngModel]="logicSetting?.orderApp?.showOutletCate">
+                      <label class="custom-control-label" for="showOutletCateCheck">Enable Outlet Categories</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="hideTimeInPrefCheck" name="hideTimeInPref"
+                             #hideTimeInPrefCheck="ngModel" [ngModel]="logicSetting?.orderApp?.hideTimeInPref">
+                      <label class="custom-control-label" for="hideTimeInPrefCheck">Hide Delivery Time in Preference</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="hideTypeInPrefCheck" name="hideTypeInPref"
+                             #hideTypeInPrefCheck="ngModel" [ngModel]="logicSetting?.orderApp?.hideTypeInPref">
+                      <label class="custom-control-label" for="hideTypeInPrefCheck">Hide Delivery Type in Preference</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isTimeslotMaxCheck" name="isTimeslotMax"
+                             #isTimeslotMaxCheck="ngModel" [ngModel]="logicSetting?.orderApp?.isTimeslotMax">
+                      <label class="custom-control-label" for="isTimeslotMaxCheck">Enable PreCheckout Timeslot Max Order</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isItemCateSliderCheck" name="isItemCateSlider"
+                             #isItemCateSliderCheck="ngModel" [ngModel]="logicSetting?.orderApp?.isItemCateSlider">
+                      <label class="custom-control-label" for="isItemCateSliderCheck">Enable Item Category Slider</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="hideMapSearchCheck" name="hideMapSearch"
+                             #hideMapSearchCheck="ngModel" [ngModel]="logicSetting?.orderApp?.hideMapSearch">
+                      <label class="custom-control-label" for="hideMapSearchCheck">Hide Map Search</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isReverseTaxCheck" name="isReverseTax"
+                             #isReverseTaxCheck="ngModel" [ngModel]="logicSetting?.orderApp?.isReverseTax">
+                      <label class="custom-control-label" for="isReverseTaxCheck">Enable Reverse Tax</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6" [hidden]="!isReverseTaxCheck.value">
+                  <div class="form-group">
+                    <label>Reverse Tax
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="reverseTaxVal" [required]="isReverseTaxCheck.value" [ngModel]="logicSetting?.orderApp?.reverseTaxVal">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!deliverySetupID">Add Zone</h1>
+    <h1 class="text-center title" *ngIf="deliverySetupID">Edit Zone</h1>
+    <form class="form-horizontal" id="deliverySetupForm" #DeliverySetupForm="ngForm" (ngSubmit)="addDeliverySetup(DeliverySetupForm)">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-8">
+              <div>
+                <div id="map"></div>
+              </div>
+            </div>
+            <input type="hidden" id="paths" name="paths" [ngModel]="deliverySetup?.paths" #paths="ngModel">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Zone Name
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="name" required [ngModel]="deliverySetup?.name" #name="ngModel">
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                  <div *ngIf="name.errors.required">Zone Name is required.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Outlets</label>
+                <ng-select [items]="outletList" bindLabel="name" bindValue="id" name="outlets" [ngModel]="deliverySetup?.outlets" #tags="ngModel" [multiple]="true" [closeOnSelect]="false">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="deliverySetupID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="!deliverySetupID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light" [routerLink]="['../../list']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

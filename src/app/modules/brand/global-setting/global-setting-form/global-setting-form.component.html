@@ -1,0 +1,608 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title">Global Settings</h1>
+    <form class="form-horizontal" id="globalSettingForm" #GlobalSettingForm="ngForm"
+          (ngSubmit)="addGlobalSetting(GlobalSettingForm)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body" ngModelGroup="general">
+              <h4 class="card-title">General Settings</h4>
+              <hr>
+              <div class="form-group">
+                <label>Cuisines</label>
+                <ng-select name="cuisines" [ngModel]="globalSetting?.general?.cuisines" [addTag]="addCuisine"
+                           #cuisines="ngModel" [multiple]="true">
+                </ng-select>
+                <span class="help-block">
+                  <small>Cuisines will be used for filtering restaurants.</small>
+                </span>
+              </div>
+              <!-- <div class="form-group">
+                <label>Tags </label>
+                <ng-select name="tags" [ngModel]="globalSetting?.general?.tags" [addTag]="addTag" #tags="ngModel"
+                           [multiple]="true">
+                </ng-select>
+                <span class="help-block">
+                  <small>Tags Will be used for filtering restaurants.</small>
+                </span>
+              </div> -->
+              <div class="form-group">
+                <label>Outlet Filter</label>
+                <ng-select name="outletFilter" [ngModel]="globalSetting?.general?.outletFilter" [addTag]="addFilter"
+                           #filter="ngModel" [multiple]="true">
+                </ng-select>
+                <span class="help-block">
+                  <small>Outlet Filter Will display filter options in the app home screen.</small>
+                </span>
+              </div>
+              <div class="form-group">
+                <label>Areas Served</label>
+                <ng-select name="city" [ngModel]="globalSetting?.general?.city" [addTag]="addCity" #city="ngModel"
+                           [multiple]="true">
+                </ng-select>
+                <span class="help-block">
+                  <small> Main Areas of Operation. These Areas will be loaded in Take Away Areas inside the App. Each
+                    Outlet will be
+                    assigned a Area. This is a required field if you are using Take Away Options.</small>
+                </span>
+              </div>
+              <div class="form-group">
+                <label>UOM List</label>
+                <ng-select name="uomList" [ngModel]="globalSetting?.general?.uomList" [addTag]="addUomList" #uom="ngModel"
+                           [multiple]="true">
+                </ng-select>
+                <span class="help-block">
+                  <small>UOM list for Item.</small>
+                </span>
+              </div>
+              <div class="form-group">
+                <label>Delivery Radius
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="zoneRadius" required
+                       [ngModel]="globalSetting?.general?.zoneRadius" #zoneRadius="ngModel">
+                <span class="help-block">
+                  <small> Maximum Delivery Radius from the Each Restaurant. Value must be in KMs. (Conversion 1 mile =
+                    1.60934 kms)</small>
+                </span>
+                <div *ngIf="zoneRadius.invalid && (zoneRadius.dirty || zoneRadius.touched)" class="alert alert-danger">
+                  <div *ngIf="zoneRadius.errors.required">Maximum Delivery Radius from Outlets is required.</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isPreOrder" name="isPreOrder"
+                           [ngModel]="globalSetting?.general?.isPreOrder" #preOrderEnable="ngModel">
+                    <label class="custom-control-label" for="isPreOrder"> Enable Pre Ordering </label>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group" [hidden]="!preOrderEnable.value">
+                    <label>Pre Order Number of days
+                      <span>*</span>
+                    </label>
+
+                    <input class="form-control" type="number" maxlength="3" name="preOrderDay"
+                           [required]="preOrderEnable.value" [ngModel]="globalSetting?.general?.preOrderDay"
+                           #preOrderDay="ngModel">
+                    <div *ngIf="preOrderDay.invalid && (preOrderDay.dirty || preOrderDay.touched)"
+                         class="alert alert-danger">
+                      <div *ngIf="preOrderDay.errors.required">Pre-order Days is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" ngModelGroup="currency">
+              <h4 class="card-title">Currency Settings</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Currency
+                      <span>*</span>
+                    </label>
+                    <select class="form-control" name="currency" required [ngModel]="globalSetting?.currency?.currency"
+                            #currency="ngModel" [compareWith]="compareByOptionCode">
+                      <option *ngFor="let option of currencyList" [ngValue]="option.value">{{option.label}}</option>
+                    </select>
+                    <div *ngIf="currency.invalid && (currency.dirty || currency.touched)" class="alert alert-danger">
+                      <div *ngIf="currency.errors.required">Currency is required.</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Currency Symbol Placement
+                      <span>*</span>
+                    </label>
+                    <select class="form-control" name="symbPlace" required
+                            [ngModel]="globalSetting?.currency?.symbPlace" #symbPlace="ngModel">
+                      <option *ngFor="let option of currencySymbolPlacementList" [value]="option.value">{{option.label}}
+                      </option>
+                    </select>
+                    <div *ngIf="symbPlace.invalid && (symbPlace.dirty || symbPlace.touched)" class="alert alert-danger">
+                      <div *ngIf="symbPlace.errors.required">Currency Symbol Placement is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Decimal Separator
+                      <span>*</span>
+                    </label>
+                    <select class="form-control" name="seperator" required
+                            [ngModel]="globalSetting?.currency?.seperator" #seperator="ngModel">
+                      <option *ngFor="let option of decimalSeparatorList" [value]="option.value">{{option.label}}
+                      </option>
+                    </select>
+                    <div *ngIf="seperator.invalid && (seperator.dirty || seperator.touched)" class="alert alert-danger">
+                      <div *ngIf="seperator.errors.required">Decimal Separator is required.</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Digits After Decimal
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="decimal" required
+                           [ngModel]="globalSetting?.currency?.decimal" #decimal="ngModel">
+                    <div *ngIf="decimal.invalid && (decimal.dirty || decimal.touched)" class="alert alert-danger">
+                      <div *ngIf="decimal.errors.required">Digits After Decimal is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" ngModelGroup="time">
+              <h4 class="card-title">Time Settings</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Time Interval
+                    </label>
+                    <select class="form-control" name="interval" [ngModel]="globalSetting?.time?.interval"
+                            #interval="ngModel">
+                      <option *ngFor="let option of timeInterval" [value]="option.value">{{option.label}}</option>
+                    </select>
+                    <span class="help-block">
+                      <small> Time Slot Interval displayed for Pre-Orders & Table Reservation</small>
+                    </span>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Time Zone
+                      <span>*</span>
+                    </label>
+                    <select class="form-control" name="zone" required [ngModel]="globalSetting?.time?.zone"
+                            #zone="ngModel">
+                      <option *ngFor="let option of timezones" [value]="option.value">{{option.label}}</option>
+                    </select>
+                    <div *ngIf="zone.invalid && (zone.dirty || zone.touched)" class="alert alert-danger">
+                      <div *ngIf="zone.errors.required">Time Zone is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Operating Hours From
+                    </label>
+                    <select class="form-control" name="from" required [ngModel]="globalSetting?.time?.from"
+                            #from="ngModel">
+                      <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                        {{option.label}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Operating Hours To
+                    </label>
+                    <select class="form-control" name="to" required [ngModel]="globalSetting?.time?.to" #to="ngModel">
+                      <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                        {{option.label}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="card">
+            <div class="card-body" ngModelGroup="temporaryClosure">
+              <h4 class="card-title">Temporary Closure</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Close From
+                    </label>
+                    <div class="input-group">
+                      <input class="form-control" name="dateFrom" [ngModel]="globalSetting?.temporaryClosure?.dateFrom"
+                             ngbDatepicker #dateFrom="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="dateFrom.toggle()" type="button">
+                          <i class="ti-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Reason for Closure
+                    </label>
+                    <input class="form-control" type="text" name="reason" [ngModel]="globalSetting?.temporaryClosure?.reason"
+                           #reason="ngModel">
+                    <div *ngIf="reason.invalid && (reason.dirty || reason.touched)" class="alert alert-danger">
+                      <div *ngIf="reason.errors.required">Reason for Closure is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Upto
+                    </label>
+                    <div class="input-group">
+                      <input class="form-control" name="dateTo" [ngModel]="globalSetting?.temporaryClosure?.dateTo"
+                             ngbDatepicker #dateTo="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="dateTo.toggle()" type="button">
+                          <i class="ti-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group" ngModelGroup="apply">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isDelivery" name="isDelivery" [ngModel]="globalSetting?.temporaryClosure?.apply?.isDelivery">
+                      <label class="custom-control-label" for="isDelivery">Delivery</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isPickup" name="isPickup" [ngModel]="globalSetting?.temporaryClosure?.apply?.isPickup">
+                      <label class="custom-control-label" for="isPickup">Pickup</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isTableRes" name="isTableRes" [ngModel]="globalSetting?.temporaryClosure?.apply?.isTableRes">
+                      <label class="custom-control-label" for="isTableRes">Table Reservation</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div class="card">
+            <div class="card-body" ngModelGroup="seqOrder">
+              <h4 class="card-title">Sequence Order</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Prefix
+                    </label>
+                    <input class="form-control" type="text" name="prefix"
+                           [ngModel]="globalSetting?.seqOrder?.prefix" #prefix="ngModel">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Reset
+                    </label>
+                    <select class="form-control" name="reset" [ngModel]="globalSetting?.seqOrder?.reset"
+                            #reset="ngModel">
+                      <option value='day'>Day</option>
+                      <option value='month'>Month</option>
+                      <option value='year'>Year</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-3" [hidden]="!(reset.value === 'year')">
+                  <div class="form-group">
+                    <label>Reset Month
+                    </label>
+                    <select class="form-control" name="resetMonth" [ngModel]="globalSetting?.seqOrder?.resetMonth"
+                            #resetMonth="ngModel">
+                      <option value='1'>January</option>
+                      <option value='2'>February</option>
+                      <option value='3'>March</option>
+                      <option value='4'>April</option>
+                      <option value='5'>May</option>
+                      <option value='6'>June</option>
+                      <option value='7'>July</option>
+                      <option value='8'>August</option>
+                      <option value='9'>September</option>
+                      <option value='10'>October</option>
+                      <option value='11'>November</option>
+                      <option value='12'>December</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" ngModelGroup="itemIcons">
+              <h4 class="card-title">Item Icons</h4>
+              <hr>
+              <div class="row" *ngFor="let itemIcon of globalSetting?.itemIcons; let i = index" [ngModelGroup]="i">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Title <span>*</span></label>
+                    <input class="form-control" type="text" name="title" required [ngModel]="itemIcon?.title" #itemIcontitle="ngModel">
+                    <div *ngIf="itemIcontitle.invalid && (itemIcontitle.dirty || itemIcontitle.touched)" class="alert alert-danger">
+                      <div *ngIf="itemIcontitle.errors.required">Title is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-group">
+                    <label>URL <span>*</span></label>
+                    <input class="form-control" pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                    type="text" name="url" [ngModel]="itemIcon?.url" #itemIconUrl="ngModel" required>
+                    <div *ngIf="itemIconUrl.errors && (itemIconUrl.dirty || itemIconUrl.touched)" class="alert alert-danger">
+                      Enter a valid URL!
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1 mt-1">
+                  <br>
+                  <button type="button" class="btn btn-sm btn-danger" (click)="deleteItemIcon(i)">
+                    <i class="ti-close"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="text-center">
+                <button type="button" class="btn btn-sm btn-success" (click)="addMoreItemIcons()">
+                  <i class="ti-plus"></i> &nbsp; Add</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" ngModelGroup="links">
+              <h4 class="card-title">App Links</h4>
+              <hr>
+              <div class="row" *ngFor="let appLink of globalSetting?.links; let i = index" [ngModelGroup]="i">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Title <span>*</span></label>
+                    <input class="form-control" type="text" name="title" required [ngModel]="appLink?.title" #title="ngModel">
+                    <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+                      <div *ngIf="title.errors.required">Title is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Icon <span>*</span></label>
+                    <input class="form-control" type="text" name="icon" required [ngModel]="appLink?.icon" #icon="ngModel">
+                    <div *ngIf="icon.invalid && (icon.dirty || icon.touched)" class="alert alert-danger">
+                      <div *ngIf="icon.errors.required">Icon is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-group">
+                    <label>URL <span>*</span></label>
+                    <input class="form-control" pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                    type="text" name="url" [ngModel]="appLink?.url" #url="ngModel" required>
+                    <div *ngIf="url.errors && (url.dirty || url.touched)" class="alert alert-danger">
+                      Enter a valid URL!
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1 mt-1">
+                  <br>
+                  <button type="button" class="btn btn-sm btn-danger" (click)="deleteAppLink(i)">
+                    <i class="ti-close"></i>
+                  </button>
+                </div>
+
+                <div class="col-md-12 row" *ngIf="appLink?.lList" ngModelGroup="lList">
+                  <div class="col-md-12 mb-2">
+                    Language
+                  </div>
+                  <div class="col-md-4" *ngFor="let row of appLink?.lList; let i = index" [ngModelGroup]="i">
+                    <div class="form-group row">
+                      <label class="col-3 text-right">{{row?.id}}</label>
+                      <input type="hidden" name="id" [ngModel]="row?.id">
+                      <input class="col-9 form-control" type="text" name="val" [ngModel]="row?.val">
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <hr><br>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <button type="button" class="btn btn-sm btn-success" (click)="addMoreAppLinks()">
+                  <i class="ti-plus"></i> &nbsp; Add</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" ngModelGroup="appearance">
+              <h4 class="card-title">Appearance</h4>
+              <hr>
+              <!-- <div class="row" ngModelGroup="layout">
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                  <div class="form-group">
+                    <label>Outlet Listing Page Layout
+                      <span>*</span>
+                    </label>
+                    <br />
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="singleColOutlet" checked="checked" required
+                             name="outlet" [ngModel]="globalSetting?.appearance?.layout?.outlet" #outlet="ngModel" value="OneCol">
+                      <label class="custom-control-label" for="singleColOutlet">Single Column </label>
+                      <br />
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="towColOutlet" required name="outlet"
+                             [ngModel]="globalSetting?.appearance?.layout?.outlet" #outlet="ngModel" value="TwoCol">
+                      <label class="custom-control-label" for="towColOutlet">Two Column</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                  <div class="form-group">
+                    <label>Menu Item Listing Page Layout
+                      <span>*</span>
+                    </label>
+                    <br />
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="singleColMenu" required name="menu"
+                             [ngModel]="globalSetting?.appearance?.layout?.menu" #menu="ngModel" value="OneCol">
+                      <label class="custom-control-label" for="singleColMenu">Single Column </label>
+                      <br />
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="twoColMenu" checked="checked" required name="menu"
+                             [ngModel]="globalSetting?.appearance?.layout?.menu" #menu="ngModel" value="TwoCol">
+                      <label class="custom-control-label" for="twoColMenu">Two Column</label>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isRTL" name="isRTL" #isRTL="ngModel"
+                         [ngModel]="globalSetting?.appearance?.isRTL">
+                  <label class="custom-control-label" for="isRTL">Primary Language is RTL</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="is24Hour" name="is24Hour" #is24Hour="ngModel"
+                         [ngModel]="globalSetting?.appearance?.is24Hour">
+                  <label class="custom-control-label" for="is24Hour">Use 24hrs Format</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isAddressRequired" name="isAddressRequired" #isAddressRequired="ngModel"
+                         [ngModel]="globalSetting?.appearance?.isAddressRequired">
+                  <label class="custom-control-label" for="isAddressRequired">Make Customer Address fields as mandatory fields</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="isHomeOutletName" name="isHomeOutletName" #isHomeOutletName="ngModel"
+                         [ngModel]="globalSetting?.appearance?.isHomeOutletName">
+                  <label class="custom-control-label" for="isHomeOutletName">Hide Outlet Titles on top of Outlet Images in Home Page</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" ngModelGroup="driverFee">
+              <h4 class="card-title">Commision & Driver Fee Calculation</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="byDistCheck" name="isDistance"
+                             #byDistCheck="ngModel" [ngModel]="globalSetting?.driverFee?.isDistance">
+                      <label class="custom-control-label" for="byDistCheck">Calculate by Distance Travelled</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6" [hidden]="!byDistCheck.value">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input class="form-control" type="number" name="distance"
+                             [ngModel]="globalSetting?.driverFee?.distance" [required]="byDistCheck.value"
+                             #travelMiles="ngModel">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">Per KM</div>
+                      </div>
+                    </div>
+                    <div *ngIf="travelMiles.invalid && (travelMiles.dirty || travelMiles.touched)"
+                         class="alert alert-danger">
+                      <div *ngIf="travelMiles.errors.required">Kilometer is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="byTimeCheck" name="isTime"
+                             #byTimeCheck="ngModel" [ngModel]="globalSetting?.driverFee?.isTime">
+                      <label class="custom-control-label" for="byTimeCheck">Calculate by time taken for Delivery</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6" [hidden]="!byTimeCheck.value">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input class="form-control" type="number" name="time" [ngModel]="globalSetting?.driverFee?.time"
+                             [required]="byTimeCheck.value" #takenMins="ngModel">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">Per Min</div>
+                      </div>
+                    </div>
+                    <div *ngIf="takenMins.invalid && (takenMins.dirty || takenMins.touched)" class="alert alert-danger">
+                      <div *ngIf="takenMins.errors.required">Minute is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="flatOrderCheck" name="isOrder"
+                             #flatOrderCheck="ngModel" [ngModel]="globalSetting?.driverFee?.isOrder">
+                      <label class="custom-control-label" for="flatOrderCheck">Flat Order Fee</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6" [hidden]="!flatOrderCheck.value">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input class="form-control" type="number" name="order" [ngModel]="globalSetting?.driverFee?.order"
+                             [required]="flatOrderCheck.value" #perOrder="ngModel">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">Per Order</div>
+                      </div>
+                    </div>
+                    <div *ngIf="perOrder.invalid && (perOrder.dirty || perOrder.touched)" class="alert alert-danger">
+                      <div *ngIf="perOrder.errors.required">Per Order is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>Commission Type</label>
+                    <select class="form-control" name="commissionType" [ngModel]="globalSetting?.driverFee?.commissionType">
+                      <option value="type1">Type 1</option>
+                      <option value="type2">Type 2</option>
+                      <option value="type3">Type 3</option>
+                      <option value="type4">Type 4</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12 col-md-12">
+                  <p>To know more about Commission types, <a href="https://www.dropbox.com/s/ll59tu71r1knegn/OutletCommissionReport.pdf?dl=0" target="_blank">Click here.</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row m-0 pb-2 border-bottom mb-3">
+      <table class="w-100">
+        <tbody>
+          <td>
+            <h5 class="m-0 color-555555">Addons</h5>
+          </td>
+          <td class="text-right">
+            <button class="btn btn-success btn-sm" type="button" [routerLink]="['../addon/add/new']">
+              <i class="fa fa-plus"></i> &nbsp; Add</button>
+          </td>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="row m-0 my-2 p-2 border bg-light" *ngFor="let addon of addonList | async">
+        <table class="w-100">
+          <tbody>
+            <tr>
+              <td>
+                <h5 class="m-0">{{ addon?.machine }}</h5>
+                <small>{{ addon?.name }}</small>
+              </td>
+              <td class="text-right w-25px">
+                <button class="btn btn-sm btn-default bg-initial p-0 text-primary" type="button" [routerLink]="['../addon/edit', addon.id]">
+                  <i class="fa fa-pencil"></i>
+                </button>
+              </td>
+              <td class="text-right w-25px">
+                <button class="btn btn-sm btn-default bg-initial p-0 text-secondary" type="button" (click)="copyAddon(addon.name, addon)">
+                  <i class="fa fa-copy"></i>
+                </button>
+              </td>
+              <td class="text-right w-25px">
+                <button class="btn btn-sm btn-default bg-initial p-0 text-danger" type="button" (click)="deleteAddon($event, addon.id)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

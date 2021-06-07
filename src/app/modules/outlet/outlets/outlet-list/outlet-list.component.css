@@ -1,0 +1,50 @@
+
+.icon-90-deg {
+  filter: progid: DXImageTransform.Microsoft.BasicImage(rotation=0.5);
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  display: inline-block;
+}
+
+table td {
+  vertical-align: middle;
+}
+
+.btn-gray {
+  color: #fff;
+  background-color: #a8adb1;
+  border-color: #a8adb1;
+}
+
+.btn-manage:hover {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-edit:hover {
+  color: #fff;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.btn-delete:hover {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-disable:hover {
+  color: #212529;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+.btn-copy:hover {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}

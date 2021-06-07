@@ -1,0 +1,114 @@
+<div class="row customer-report h-100 doNotPrint">
+  <!-- <div class="col-lg-2"></div> -->
+  <div class="col-lg-12">
+    <h1 class="text-center">Rating and Feedback Reporting</h1>
+    <div class="card px-4 pb-4 pt-2">
+      <div class="row m-0 p-3">
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label>Order Date Range</label>
+            <input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event, daterange)"
+                   class="form-control" />
+          </div>
+        </div>
+        <div class="col-6 col-md-3" [hidden]="outletID !== undefined && outletID !== null">
+          <div class="form-group">
+            <label>Outlet Category</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.outletCat">
+              <option value="">All</option>
+              <option *ngFor="let item of outletCatList" [value]="item.id">{{item.title}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label>Outlet</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.outlet" [disabled]="outletID !== undefined && outletID !== null">
+              <option value="">All</option>
+              <option *ngFor="let item of listOutlets" [value]="item.id">{{item.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12" id="daterangepicker-panel"></div>
+      </div>
+
+      <div class="row m-0 px-3">
+        <!-- <div class="col-md-6 col-12 px-3">
+          <button class="btn btn-primary" (click)="exportData()">Export Data</button>
+        </div> -->
+        <div class="col-md-6 col-12 px-3 text-align-webkit-right">
+          <div class="w-100">
+            <table class="">
+              <td class="pr-4">View</td>
+              <td class="">
+                <div class="row m-0 flex-wrap-initial">
+                  <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.pageSize">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                  </select>
+                  <span class="pl-2 line-height-40px"> items</span>
+                </div>
+              </td>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <br>
+        <div class="overflow-auto report-table mb-3">
+          <table class="table table-bordered table-hover mb-0">
+            <thead>
+              <tr>
+                <!-- <th>ID</th> -->
+                <th>Outlet</th>
+                <th *ngIf="showCol.orderTime">Order Time</th>
+                <th class="text-right" *ngIf="showCol.subtotal">Subtotal</th>
+                <th class="text-center" *ngIf="showCol.overall">Rating</th>
+                <th class="text-center" *ngIf="showCol.taste">Taste</th>
+                <th class="text-center" *ngIf="showCol.quantity">Quantity</th>
+                <th class="text-center" *ngIf="showCol.packing">Packing</th>
+                <th class="text-center" *ngIf="showCol.delivery">Delivery</th>
+                <th style="max-width: 170px;" *ngIf="showCol.review">Review</th>
+                <th style="max-width: 150px;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr [hidden]="!loading">
+                <td colspan="10">
+                  <app-wave></app-wave>
+                </td>
+              </tr>
+              <tr [hidden]="loading || reportsList.length != 0">
+                <td [colSpan]="selectedItems.length + 2" class="text-center">
+                  No Data.
+                </td>
+              </tr>
+              <tr *ngFor="let reports of reportsList" [hidden]="loading">
+                <!-- <td>{{ reports.id }}</td> -->
+                <td>{{ reports?.outlet?.name }}</td>
+                <td *ngIf="showCol.orderTime">{{ reports?.info?.timeslot | date:'medium' }}</td>
+                <td class="text-right" *ngIf="showCol.subtotal">{{reports?.total?.subtotal | number: digitNum }}</td>
+                <td class="text-center" *ngIf="showCol.overall">{{reports?.feedback?.rating?.overall }}</td>
+                <td class="text-center" *ngIf="showCol.taste">{{reports?.feedback?.rating?.taste }}</td>
+                <td class="text-center" *ngIf="showCol.quantity">{{reports?.feedback?.rating?.quantity }}</td>
+                <td class="text-center" *ngIf="showCol.packing">{{reports?.feedback?.rating?.packing }}</td>
+                <td class="text-center" *ngIf="showCol.delivery">{{reports?.feedback?.rating?.delivery }}</td>
+                <td style="max-width: 170px;" *ngIf="showCol.review">{{reports?.feedback?.review }}</td>
+                <td style="max-width: 150px;" class="text-center">
+                  <button class="btn btn-primary mr-3" (click)="viewDetails(reports)">View Details</button>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div [hidden]="reportsList.length===0&&!loading">
+          <ngb-pagination (pageChange)="onPaginationChange($event)" [collectionSize]="response.total" [(page)]="dataPost.pageNo"
+                          [(pageSize)]="response.limit" [maxSize]="5" [boundaryLinks]="true" class="d-flex justify-content-center"></ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

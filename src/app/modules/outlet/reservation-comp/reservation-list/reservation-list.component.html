@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button class="btn btn-success" type="button" [routerLink]="['add/new']">
+            <i class="ti-plus"></i> &nbsp; Add Reservation</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Reservation Name</th>
+                <!-- <th>Available For</th> -->
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let Reservation of ReservationList; let i = index">
+                <td>
+                  {{ Reservation.name }}
+                </td>
+                <!-- <td>
+                  <span *ngIf="Reservation.available.isDelivery">Delivery</span>
+                  <span *ngIf="(Reservation.available.isPickup && Reservation.available.isDelivery) || (Reservation.available.isTableRes && Reservation.available.isDelivery)">, </span>
+                  <span *ngIf="Reservation.available.isPickup"> Take Away</span>
+                  <span *ngIf="Reservation.available.isTableRes && Reservation.available.isPickup">, </span>
+                  <span *ngIf="Reservation.available.isTableRes"> Table Reservation</span>
+                </td> -->
+                <td class="actionList">
+                  <button class="btn btn-sm btn-info" type="button" [routerLink]="['edit', Reservation.id]">Edit
+                    <!-- <i class="ti-pencil"></i> -->
+                  </button>
+                  <button class="btn btn-sm btn-danger" type="button" (click)="deleteReservation($event, Reservation.id)">Delete
+                    <!-- <i class="ti-trash"></i> -->
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>

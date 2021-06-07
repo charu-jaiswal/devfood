@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-sm-12 ">
+    <h1 class="text-center title" *ngIf="!ZoneID">Add Zone Manager</h1>
+    <h1 class="text-center title" *ngIf="ZoneID">Edit Zone Manager</h1>
+    <form class="form-horizontal" id="zoneForm" #zoneForm="ngForm" (ngSubmit)="addZone(zoneForm)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="col-sm-12">
+            <div class="card ">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Zone Name </label>                      
+                      <input class="form-control" type="text" name="zoneName" required [ngModel]="zoneManagerForm?.zoneName" #zoneName="ngModel">
+                      <div *ngIf="zoneName.invalid && (zoneName.dirty || zoneName.touched)" class="alert alert-danger">
+                        <div *ngIf="zoneName.errors.required">zoneName is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label> Name  </label>
+                      <input class="form-control" type="text" name="user" required [ngModel]="zoneManagerForm?.user" #user="ngModel">
+                      <div *ngIf="user.invalid && (user.dirty || user.touched)" class="alert alert-danger">
+                        <div *ngIf="user.errors.required"> Name is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>             
+               <div class="row">
+                 <div class="col-sm-6">
+                  <div class="form-group">
+                    <label> Email </label>
+                      <input class="form-control" type="email" name="email" required [ngModel]="zoneManagerForm?.email" email #premail="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                    <div *ngIf="premail.invalid && (premail.dirty || premail.touched)" class="alert alert-danger">
+                      <div *ngIf="premail.errors.required"> Email is required.</div>
+                      <div *ngIf="premail.errors?.email">Enter Valid Email.</div>
+                    </div>
+                  </div>
+                 </div> 
+                 <div class="col-sm-6">
+                  <div class="form-group">
+                    <label> Password </label>
+                    <input class="form-control" type="password" name="password" required [ngModel]="zoneManagerForm?.password" #password="ngModel" >
+                    <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+                      <div *ngIf="password.errors.required"> Password is required.</div>
+                     </div>
+                  </div>
+                </div> 
+               </div>
+                <div class="form-group">
+                  <label> Outlets </label>
+                  <ng-select [items]="outletList"  bindLabel="name" bindValue="id" name="outletId" [ngModel]="zoneManagerForm?.outletId" #outletId="ngModel" [multiple]="true" [closeOnSelect]="false">
+                  </ng-select>    
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      
+      <div class="text-center">
+        <button type="submit"
+          class="btn btn-lg btn-success waves-effect waves-light m-r-10">{{ZoneID !== null  ? "Update" : "Submit"}}</button>
+          <button class="btn btn-lg btn-inverse waves-effect waves-light mlB"
+          [routerLink]="['/settings/zonemanager/list']">Cancel</button>
+      </div>
+
+    </form>
+  </div>
+</div>

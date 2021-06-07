@@ -1,0 +1,65 @@
+
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!deliverySetupID">Add Delivery Area</h1>
+    <h1 class="text-center title" *ngIf="deliverySetupID">Edit Delivery Area</h1>
+    <form class="form-horizontal" id="deliverySetupForm" #DeliverySetupForm="ngForm" (ngSubmit)="addDeliverySetup(DeliverySetupForm)">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-8">
+              <div>
+                <div id="map"></div>
+              </div>
+              <div class="text-center" *ngIf="circleDistance">
+                Updated zone radius is {{(circleDistance/1000) | number : '1.2-2'}} km.
+              </div>
+            </div>
+            <input type="hidden" id="paths" name="paths" [ngModel]="deliverySetup?.paths" #paths="ngModel">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Zone Name
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="name" required [ngModel]="deliverySetup?.name" #name="ngModel">
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                  <div *ngIf="name.errors.required">Zone Name is required.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Minimum Order Value
+                </label>
+                <input class="form-control" type="number" name="minCartAmnt" [ngModel]="deliverySetup?.minCartAmnt" #minCartAmnt="ngModel">
+              </div>
+              <div class="form-group">
+                  <label>Minimum Amount for Free Delivery
+                  </label>
+                  <input class="form-control" type="number" name="minFreeDel" [ngModel]="deliverySetup?.minFreeDel" #minFreeDel="ngModel">
+                </div>
+              <div class="form-group">
+                <label>Delivery Fee
+                </label>
+                <input class="form-control" type="number" name="deliveryFee" [ngModel]="deliverySetup?.deliveryFee" #deliveryFee="ngModel">
+              </div>
+              <div class="form-group">
+                <label>Average Delivery Minutes
+                </label>
+                <input class="form-control" type="number" name="deliveryTime" [ngModel]="deliverySetup?.deliveryTime" #deliveryTime="ngModel">
+              </div>
+              <div class="form-group">
+                <label>Priority
+                </label>
+                <input class="form-control" type="number" name="sort" [ngModel]="deliverySetup?.sort" #sort="ngModel">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="deliverySetupID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10" *ngIf="!deliverySetupID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light" [routerLink]="['../..']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

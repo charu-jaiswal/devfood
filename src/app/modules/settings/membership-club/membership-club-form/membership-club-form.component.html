@@ -1,0 +1,228 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title">Membership Program</h1>
+    <form class="form-horizontal" id="membershipClubForm" #MembershipClubForm="ngForm" (ngSubmit)="addMembershipClub(MembershipClubForm)">
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+
+              <div class="form-group">
+                <label>Name of Membership
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="name" [ngModel]="membershipClub?.name" #name="ngModel">
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                  <div *ngIf="name.errors.required">Name of Membership Program is required.</div>
+                </div>
+                <span class="help-block">
+                  <small>Ex. Amazon Prime Members.</small>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Description</h4>
+              <hr>
+              <div ngModelGroup="desc">
+                <div class="form-group">
+                  <label>Description
+                    <span>*</span>
+                  </label>
+                  <textarea class="form-control" rows="3" name="desc" #desc="ngModel" [ngModel]="membershipClub?.desc?.desc"></textarea>
+                  <div *ngIf="desc.invalid && (desc.dirty || desc.touched)" class="alert alert-danger">
+                    <div *ngIf="desc.errors.required">Description is required.</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Terms & Conditions
+                  </label>
+                  <textarea class="form-control" rows="3" name="terms" #terms="ngModel" [ngModel]="membershipClub?.desc?.terms"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Plans</h4>
+              <hr>
+              <div class="row" ngModelGroup="plans">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Membership Plan Cost
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="cost" [ngModel]="membershipClub?.plans?.cost" #cost="ngModel">
+                    <div *ngIf="cost.invalid && (cost.dirty || cost.touched)" class="alert alert-danger">
+                      <div *ngIf="cost.errors.required">Membership Plan Cost is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Membership Validity
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="number" name="validity" [ngModel]="membershipClub?.plans?.validity" #validity="ngModel">
+                    <div *ngIf="validity.invalid && (validity.dirty || validity.touched)" class="alert alert-danger">
+                      <div *ngIf="validity.errors.required">Membership Validity is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div ngModelGroup="incentives">
+                <h4 class="card-title">Incentive</h4>
+                <hr>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="discPercentage" required name="type" [ngModel]="membershipClub?.incentives?.type"
+                          #type="ngModel" value="Discount Percentage">
+                        <label class="custom-control-label" for="discPercentage">Discount Percentage</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="discFixedAmt" required name="type" [ngModel]="membershipClub?.incentives?.type"
+                          #type="ngModel" value="Discount Fixed Amount">
+                        <label class="custom-control-label" for="discFixedAmt">Discount Fixed Amount</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="cashPercentage" required name="type" [ngModel]="membershipClub?.incentives?.type"
+                        #type="ngModel" value="Cashback Percentage">
+                      <label class="custom-control-label" for="cashPercentage">Cashback Percentage</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="cashFixedAmt" required name="type" [ngModel]="membershipClub?.incentives?.type"
+                        #type="ngModel" value="Cashback Fixed Amount">
+                      <label class="custom-control-label" for="cashFixedAmt">Cashback Fixed Amount</label>
+                    </div>
+                  </div>
+                </div>
+                <br/>
+                <div class="row" [hidden]="(type.value !== 'Discount Percentage')">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Discount Percentage
+                        <span>*</span>
+                      </label>
+                      <div class="input-group">
+                        <input class="form-control" type="number" name="percAmnt" [required]="(type.value === 'Discount Percentage')" [ngModel]="membershipClub?.incentives?.percAmnt"
+                          #percAmnt="ngModel">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">%</div>
+                        </div>
+                      </div>
+                      <div *ngIf="percAmnt.invalid && (percAmnt.dirty || percAmnt.touched)" class="alert alert-danger">
+                        <div *ngIf="percAmnt.errors.required">Discount Percentage is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Max. Discount Amount
+                        <span>*</span>
+                      </label>
+                      <input class="form-control" type="number" name="maxPercAmnt" [required]="(type.value === 'Discount Percentage')" [ngModel]="membershipClub?.incentives?.maxPercAmnt"
+                        #maxPercAmnt="ngModel">
+                      <div *ngIf="maxPercAmnt.invalid && (maxPercAmnt.dirty || maxPercAmnt.touched)" class="alert alert-danger">
+                        <div *ngIf="maxPercAmnt.errors.required">Maximum Discount Amount is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" [hidden]="(type.value !== 'Cashback Percentage')">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Cashback Percentage
+                        <span>*</span>
+                      </label>
+                      <div class="input-group">
+                        <input class="form-control" type="number" name="percAmnt" [required]="(type.value === 'Cashback Percentage')" [ngModel]="membershipClub?.incentives?.percAmnt"
+                          #percAmnt="ngModel">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">%</div>
+                        </div>
+                      </div>
+                      <div *ngIf="percAmnt.invalid && (percAmnt.dirty || percAmnt.touched)" class="alert alert-danger">
+                        <div *ngIf="percAmnt.errors.required">Cashback Percentage is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Max Cashback Amount
+                        <span>*</span>
+                      </label>
+                      <input class="form-control" type="number" name="maxPercAmnt" [required]="(type.value === 'Cashback Percentage')" [ngModel]="membershipClub?.incentives?.maxPercAmnt"
+                        #maxPercAmnt="ngModel">
+                      <div *ngIf="maxPercAmnt.invalid && (maxPercAmnt.dirty || maxPercAmnt.touched)" class="alert alert-danger">
+                        <div *ngIf="maxPercAmnt.errors.required">Maximum Cashback Amount is required.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="!(type.value === 'Discount Fixed Amount')">
+                  <label>Discount Amount
+                    <span>*</span>
+                  </label>
+                  <input class="form-control" type="number" name="fixedAmnt" [required]="(type.value === 'Discount Fixed Amount')" [ngModel]="membershipClub?.incentives?.fixedAmnt"
+                    #fixedAmnt="ngModel">
+                  <div *ngIf="fixedAmnt.invalid && (fixedAmnt.dirty || fixedAmnt.touched)" class="alert alert-danger">
+                    <div *ngIf="fixedAmnt.errors.required">Discount Amount is required.</div>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="!(type.value === 'Cashback Fixed Amount')">
+                  <label>Cashback Amount
+                    <span>*</span>
+                  </label>
+                  <input class="form-control" type="number" name="fixedAmnt" [required]="(type.value === 'Cashback Fixed Amount')" [ngModel]="membershipClub?.incentives?.fixedAmnt"
+                    #fixedAmnt="ngModel">
+                  <div *ngIf="fixedAmnt.invalid && (fixedAmnt.dirty || fixedAmnt.touched)" class="alert alert-danger">
+                    <div *ngIf="fixedAmnt.errors.required">Cashback Amount is required.</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isFreeDel" name="isFreeDel" [ngModel]="membershipClub?.incentives?.isFreeDel">
+                    <label class="custom-control-label" for="isFreeDel">Free Delivery on All Orders</label>
+                    <br/>
+                    <span class="help-block">
+                      <small>Enabling this will override all other settings for delivery charges and make all orders free delivery.</small>
+                    </span>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isNoMinOrder" name="isNoMinOrder" [ngModel]="membershipClub?.incentives?.isNoMinOrder">
+                    <label class="custom-control-label" for="isNoMinOrder">Remove Minimum Order Value for orders</label>
+                    <br/>
+                    <span class="help-block">
+                      <small>Enabling this will override minimum order value set for each delivery zone and outlet.</small>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3"></div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+/* table td {
+  vertical-align: middle;
+}
+
+table td:nth-child(1) {
+  padding-left: 0;
+}
+
+.actionList {
+  min-width: 130px;
+} */
+table tr td:nth-child(1),
+table tr td:nth-child(2) {
+  cursor: pointer;
+}
+
+.w-25px {
+  width: 25px;
+}
+
+.color-555555 {
+  color: #555555;
+  font-weight: bold;
+}
+
+.color-b3b3b3 {
+  color: #b3b3b3;
+}
+
+.bg-initial {
+  background-color: initial;
+}
+
+.bg-active {
+  background-color: #cecece;
+}
+
+.pd-015rem {
+  padding-right: 0.15rem;
+}
+
+.w-20px {
+  width: 20px;
+}
+
+.category-table .active {
+  background-color: #555555;
+}
+
+.bg-efefef {
+  background-color: #efefef;
+}
+
+h5, .h5 {
+  font-size: 1.1rem;
+  font-weight: 350;
+}

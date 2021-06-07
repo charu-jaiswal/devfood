@@ -1,0 +1,73 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12" [hidden]="!selCatID">
+        <div class="row m-0 pb-2 border-bottom mb-3">
+          <table class="w-100">
+            <tbody>
+              <td class="text-right">
+                <button class="btn btn-success btn-sm" type="button" [routerLink]="['../menu-item/add-new', selCatID]">
+                  <i class="fa fa-plus"></i> &nbsp; Add Menu Item</button>
+              </td>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div>
+        <div class="row m-0 my-2 p-2" *ngIf="!selCatID && !loading">
+          <table class="w-100">
+            <tbody>
+              <tr>
+                <td class="text-center" colspan="4">
+                  No Menu items in this category.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row m-4 p-2 text-center" *ngIf="loading">
+          <app-wave class="m-auto"></app-wave>
+        </div>
+        <div [ngClass]="menuItem.isDisabled ? 'bg-warning': 'bg-light'" class="row m-0 my-2 p-2 border" *ngFor="let menuItem of finalListData; let j = index">
+          <table class="w-100">
+            <tbody>
+              <tr>
+                <td>
+                  <div>
+                    <h5 class="m-0">{{ menuItem?.name }}</h5>
+                  </div>
+                  <div>
+                    <small class="m-0">{{ menuItem?.display?.desc }}</small>
+                  </div>
+
+                </td>
+                <td class="text-right w-25px">
+                  <button class="btn btn-sm btn-secondary" type="button" [routerLink]="['../menu-item/edit', menuItem.id]">
+                    Edit
+                  </button>
+                </td>
+                <td class="text-right w-25px">
+                  <button class="btn btn-sm btn-secondary" type="button" (click)="copyMenuItem(menuItem.name, menuItem)">
+                    Clone
+                  </button>
+                </td>
+                <td class="text-right w-25px">
+                  <button class="btn btn-sm btn-secondary" type="button" (click)="deleteMenuItem($event, menuItem.id)">
+                    Delete
+                  </button>
+                </td>
+                <td class="text-right w-25px">
+                  <button class="btn btn-sm btn-secondary" type="button" (click)="disableMenuItem($event, menuItem)">
+                    {{menuItem.isDisabled ? 'Enable' : 'Disable'}}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

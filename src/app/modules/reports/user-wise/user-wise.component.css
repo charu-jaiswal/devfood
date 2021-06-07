@@ -1,0 +1,26 @@
+
+
+.table thead th,
+.table th {
+  border: 1px solid #dee2e6 !important;
+}
+
+.outlet {
+  min-width: 560px;
+  overflow: auto;
+}
+
+.pt-btn {
+  padding-top: 30px;
+}
+
+.pl-2, .px-2 {
+  align-self: center;
+}
+.col-6.col-md-3.px-3 {
+  align-self: center;
+}
+
+.w-80px {
+  width: 80px;
+}

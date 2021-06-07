@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row m-0 pb-2 border-bottom mb-3">
+      <table class="w-100">
+        <tbody>
+          <td>
+            <h5 class="m-0 color-555555">Categories</h5>
+          </td>
+          <td class="text-right">
+            <button class="btn btn-success btn-sm" type="button" [routerLink]="['../category/add/new']">
+              <i class="fa fa-plus"></i> &nbsp; Add</button>
+          </td>
+        </tbody>
+      </table>
+    </div>
+    <div class="category-table">
+      <div class="row m-0 my-2 p-2 border" *ngFor="let category of categoryList; let i = index" [ngClass]="selected == category.id? 'bg-active': 'bg-light'">
+        <table class="w-100">
+          <tbody>
+            <tr (click)="categorySelect(category.id)">
+              <td>
+                <h5 class="m-0">{{ category.name }}</h5>
+              </td>
+              <td class="text-right w-25px">
+                <button class="btn btn-sm btn-default bg-initial p-0 text-primary" type="button" [routerLink]="['../category/edit', category.id]">
+                  <i class="fa fa-pencil"></i>
+                </button>
+              </td>
+              <td class="text-right w-25px">
+                <button class="btn btn-sm btn-default bg-initial p-0 text-danger" type="button" (click)="deleteCategory($event, category.id)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="col-12">
+      <h1 class="text-dark m-b-0 text-center">Push Notification</h1>
+    </div>
+    <form class="form-horizontal" id="pushNotificationForm" #PushNotification="ngForm"
+          (ngSubmit)="addPushNotificationForm(PushNotification)">
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="form-group">
+                <label>Title
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="title" required [ngModel]="pushNotification?.title"
+                       #title="ngModel">
+                <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+                  <div *ngIf="title.errors.required">Title is required.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Body
+                  <span>*</span>
+                </label>
+                <input class="form-control" type="text" name="body" required [ngModel]="pushNotification?.body"
+                       #body="ngModel">
+                <div *ngIf="body.invalid && (body.dirty || body.touched)" class="alert alert-danger">
+                  <div *ngIf="body.errors.required">Body is required.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>App Type:
+                  <!-- <span>*</span> -->
+                </label>
+                <br />
+                <div class="row m-0">
+                  <div class="custom-control custom-radio col-4">
+                    <input type="radio" class="custom-control-input" id="Customer" name="appType"
+                           [ngModel]="pushNotification?.appType" #appType="ngModel" value="Customer">
+                    <label class="custom-control-label" for="Customer">Customer</label>
+                  </div>
+                  <div class="custom-control custom-radio col-4">
+                    <input type="radio" class="custom-control-input" id="Outlet" name="appType"
+                           [ngModel]="pushNotification?.appType" #appType="ngModel" value="Outlet">
+                    <label class="custom-control-label" for="Outlet">Outlet</label>
+                  </div>
+                  <div class="custom-control custom-radio col-4">
+                    <input type="radio" class="custom-control-input" id="Driver" name="appType"
+                           [ngModel]="pushNotification?.appType" #appType="ngModel" value="Driver">
+                    <label class="custom-control-label" for="Driver">Driver</label>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-group">
+                <label>Device:
+                  <!-- <span>*</span> -->
+                </label>
+                <br />
+                <div class="row m-0">
+                  <div class="custom-control custom-radio col-4">
+                    <input type="radio" class="custom-control-input" id="all" name="device"
+                           [ngModel]="pushNotification?.device" #device="ngModel" value="all">
+                    <label class="custom-control-label" for="all">All</label>
+                  </div>
+                  <div class="custom-control custom-radio col-4">
+                    <input type="radio" class="custom-control-input" id="android" name="device"
+                           [ngModel]="pushNotification?.device" #device="ngModel" value="android">
+                    <label class="custom-control-label" for="android">Android Only</label>
+                  </div>
+                  <div class="custom-control custom-radio col-4">
+                    <input type="radio" class="custom-control-input" id="iOS" name="device"
+                           [ngModel]="pushNotification?.device" #device="ngModel" value="iOS">
+                    <label class="custom-control-label" for="iOS">iOS Only</label>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-group">
+                <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                <input type="hidden" name="image" [ngModel]="pushNotification?.image">
+                <br>
+                <br>
+                <span class="help-block">
+                  <small> Max File Size: 300kb. Max Image Size : 640px by 480px. Format: jpg only. </small>
+                </span>
+                <div *ngIf="pushNotification?.image">
+                  <img [src]="pushNotification?.image" class="img-upload-disp-wrapper">
+                  <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3"></div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">SEND</button>
+      </div>
+    </form>
+  </div>
+</div>

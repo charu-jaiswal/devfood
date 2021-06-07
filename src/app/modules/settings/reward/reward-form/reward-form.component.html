@@ -1,0 +1,108 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!rewardID">Add Reward</h1>
+    <h1 class="text-center title" *ngIf="rewardID">Edit Reward</h1>
+    <form class="form-horizontal" id="rewardForm" #Reward="ngForm" (ngSubmit)="addRewardForm(Reward)">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Title
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="title" required [ngModel]="reward?.title" #title="ngModel">
+                    <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+                      <div *ngIf="title.errors.required">Title is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isDisabled" name="isDisabled"
+                             [ngModel]="reward?.isDisabled">
+                      <label class="custom-control-label" for="isDisabled">Disable</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Sub Title
+                      <!-- <span>*</span> -->
+                    </label>
+                    <input class="form-control" type="text" name="subTitle" [ngModel]="reward?.subTitle" #subTitle="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Sort Weight
+                    </label>
+                    <input class="form-control" type="number" name="sort" [ngModel]="reward?.sort" #sort="ngModel">
+                    <span class="help-block">
+                      <small> Enter higher value to list this item at the top of the category. (Ex. 100) </small>
+                    </span>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Image </label> &nbsp;&nbsp;
+                    <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                    <input type="hidden" name="image" [ngModel]="reward?.image">
+                    <br>
+                    <br>
+                    <span class="help-block">
+                      <small> Max File Size: 300kb. Max Image Size : 640px by 480px. Format: jpg only. </small>
+                    </span>
+                    <div *ngIf="reward?.image">
+                      <img [src]="reward?.image" class="img-upload-disp-wrapper">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image')">Delete</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Points
+                    </label>
+                    <input class="form-control" type="number" name="point" required [ngModel]="reward?.point" #point="ngModel">
+                    <div *ngIf="point.invalid && (point.dirty || point.touched)" class="alert alert-danger">
+                      <div *ngIf="point.errors.required">Points is required.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Coupon
+                      <span>*</span>
+                    </label>
+                    <select class="form-control" name="coupon" required [ngModel]="reward?.coupon" #coupon="ngModel">
+                      <option *ngFor="let option of couponList" [value]="option.code">{{option.name}}</option>
+                    </select>
+                    <div *ngIf="coupon.invalid && (coupon.dirty || coupon.touched)" class="alert alert-danger">
+                      <div *ngIf="coupon.errors.required">Coupon is required.</div>
+                    </div>
+                    <span class="help-block">
+                      <small>Add a Coupon from "Promo" section for benefits and conditions.</small>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                *ngIf="rewardID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                *ngIf="!rewardID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light"
+                [routerLink]="['/settings/reward/list']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

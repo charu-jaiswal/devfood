@@ -1,0 +1,9 @@
+th {
+    width: 17%;
+}
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

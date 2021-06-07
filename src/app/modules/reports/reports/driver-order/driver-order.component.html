@@ -1,0 +1,195 @@
+<div class="row customer-report h-100 doNotPrint">
+  <!-- <div class="col-lg-2"></div> -->
+  <div class="col-lg-12">
+    <h1 class="text-center">Driver Order List</h1>
+    <div class="card px-4 pb-4 pt-2">
+      <div class="row m-0 p-3">
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label>Order Date Range</label>
+            <input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event, daterange)"
+                   class="form-control" />
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label>Driver</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.driverID">
+              <option value="">All</option>
+              <option *ngFor="let item of listDriver" [value]="item.id">{{item.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label>Outlet</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.outlet" [disabled]="outletID !== undefined && outletID !== null">
+              <option value="">All</option>
+              <option *ngFor="let item of listOutlets" [value]="item.id">{{item.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label>Payment</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.payment">
+              <option value="">All</option>
+              <option *ngFor="let item of listPaymentType" [value]="item.value">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label>Type</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.type">
+              <option value="">All</option>
+              <option *ngFor="let item of listOrderType" [value]="item.value">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="form-group">
+            <label>Status</label>
+            <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.status">
+              <option value="">All</option>
+              <option *ngFor="let item of listStatus" [value]="item.value">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12" id="daterangepicker-panel"></div>
+      </div>
+
+      <div class="row m-0 px-3">
+        <div class="col-md-6 col-12 px-3">
+          <!-- <button class="btn btn-primary mr-3" [hidden]="outletID !== undefined && outletID !== null" (click)="exportData()">Export Data</button> -->
+          <!-- <button class="btn btn-info mr-3" (click)="syncOrder()">ReSync</button> -->
+          <button class="btn btn-info mr-3" (click)="loadList()">Refresh</button>
+        </div>
+        <div class="col-md-6 col-12 px-3 text-align-webkit-right">
+          <div class="w-100">
+            <table class="">
+              <td class="pr-4">View</td>
+              <td class="">
+                <div class="row m-0 flex-wrap-initial">
+                  <select class="form-control" (change)="onSearch()" [(ngModel)]="dataPost.pageSize">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                  </select>
+                  <span class="pl-2 line-height-40px"> items</span>
+                </div>
+              </td>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="row m-0 px-3">
+        <div class="col-md-6 col-12 px-3">
+          <div class="form-group">
+            <label>Show column: </label>
+            <angular2-multiselect [data]="listColumn" [(ngModel)]="selectedItems" [settings]="dropdownSettings"
+                                  (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                                  (onDeSelectAll)="onDeSelectAll($event)"></angular2-multiselect>
+          </div>
+
+        </div>
+      </div>
+      <div class="card-body pt-0">
+        <br>
+        <div class="overflow-auto report-table mb-3">
+          <table class="table table-bordered table-hover mb-0">
+            <thead>
+              <tr>
+                <!-- <th>ID</th> -->
+                <th>S.NO</th>
+                <th>Outlet</th>
+                <th>Driver</th>
+                <th *ngIf="showCol.type">Type</th>
+                <th *ngIf="showCol.payment">Payment</th>
+                <th *ngIf="showCol.orderTime">Order Time</th>
+                <th *ngIf="showCol.orderId">Order ID</th>
+                <th *ngIf="showCol.status">Status</th>
+                <th class="text-right" *ngIf="showCol.subtotal">Subtotal</th>
+                <th *ngIf="showCol.discountAmt">Discount Amount</th>
+                <th *ngIf="showCol.tax">Tax</th>
+                <th *ngIf="showCol.charge">Charge</th>
+                <th *ngIf="showCol.packingFee">Packing Fee</th>
+                <th *ngIf="showCol.deliveryFee">Delivery Fee</th>
+                <th *ngIf="showCol.total">Total</th>
+                <th *ngIf="showCol.walletUse">Wallet Use</th>
+                <th *ngIf="showCol.tips">Tips</th>
+                <th class="text-right" *ngIf="showCol.finalAmt">Final Amount</th>
+                <th *ngIf="showCol.cardFee">Card Fee</th>
+                <th class="text-right" *ngIf="showCol.finalPay">Final Payable </th>
+                <th *ngIf="showCol.customerName">Customer Name</th>
+                <th *ngIf="showCol.addressName">Address Name</th>
+                <th *ngIf="showCol.addressStreet">Address Street</th>
+                <th *ngIf="showCol.mobileNo">Mobile No</th>
+                <th *ngIf="showCol.driverName">Driver Name</th>
+                <th *ngIf="showCol.itemCashback">Item Cashback</th>
+                <th *ngIf="showCol.couponCashback">Coupon Cashback</th>
+                <th *ngIf="showCol.couponCode">Coupon Code</th>
+                <th *ngIf="showCol.overallRating">Overall Rating</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr [hidden]="!loading">
+                <td colspan="10">
+                  <app-wave></app-wave>
+                </td>
+              </tr>
+              <tr [hidden]="loading || reportsList.length != 0">
+                <td [colSpan]="selectedItems.length + 2" class="text-center">
+                  No Data.
+                </td>
+              </tr>
+              <tr *ngFor="let reports of reportsList; let i = index" [hidden]="loading">
+                <!-- <td>{{ reports.id }}</td> -->
+                <td>{{ (((dataPost.pageNo - 1) * dataPost.pageSize) + i + 1) }}</td>
+                <td>{{ reports?.outlet?.name }}</td>
+                <th>{{ reports?.other?.driver?.name }}</th>
+                <td *ngIf="showCol.type">{{ reports?.info?.ordType }}</td>
+                <td *ngIf="showCol.payment">{{ reports?.info?.payment }}</td>
+                <td *ngIf="showCol.orderTime">{{ reports?.info?.timeslot | date:'medium' }}</td>
+                <td *ngIf="showCol.orderId">{{ reports?.orderID }}</td>
+                <td *ngIf="showCol.status">{{ reports?.info?.status }}</td>
+                <td class="text-right" *ngIf="showCol.subtotal">{{reports?.total?.subtotal | number: digitNum }}</td>
+                <td *ngIf="showCol.discountAmt">{{reports?.total?.discount | number: digitNum }}</td>
+                <td *ngIf="showCol.tax">{{reports?.total?.pretotal?.tax | number: digitNum }}</td>
+                <td *ngIf="showCol.charge">{{reports?.total?.pretotal?.charge | number: digitNum }}</td>
+                <td *ngIf="showCol.packingFee">{{reports?.total?.pretotal?.packFee | number: digitNum }}</td>
+                <td *ngIf="showCol.deliveryFee">{{reports?.total?.pretotal?.deliFee | number: digitNum }}</td>
+                <td *ngIf="showCol.total">{{reports?.total?.amount | number: digitNum }}</td>
+                <td *ngIf="showCol.walletUse">{{reports?.total?.walletUse | number: digitNum }}</td>
+                <td *ngIf="showCol.tips">{{reports?.total?.tip | number: digitNum }}</td>
+                <td class="text-right" *ngIf="showCol.finalAmt">{{reports?.total?.finalAmnt | number: digitNum }}</td>
+                <td *ngIf="showCol.cardFee">{{reports?.total?.cardFee | number: digitNum }}</td>
+                <td class="text-right" *ngIf="showCol.finalPay">{{reports?.total?.finalPay | number: digitNum }}</td>
+                <td *ngIf="showCol.customerName">{{ reports?.user?.name }}</td>
+                <td *ngIf="showCol.addressName">{{ reports?.user?.address?.name }}</td>
+                <td *ngIf="showCol.addressStreet">{{ reports?.user?.address?.street }}</td>
+                <td *ngIf="showCol.mobileNo">{{ reports?.user?.uid === '' ? '' : '+' + reports?.user?.uid }}</td>
+                <td *ngIf="showCol.driverName">{{ reports?.other?.driver?.name }}</td>
+                <td *ngIf="showCol.itemCashback">{{ reports?.total?.cashback?.item | number: digitNum }}</td>
+                <td *ngIf="showCol.couponCashback">{{ reports?.total?.cashback?.coupon | number: digitNum }}</td>
+                <td *ngIf="showCol.couponCode">{{ reports?.coupon?.code }}</td>
+                <td *ngIf="showCol.overallRating">{{ reports?.feedback?.rating?.overall | number: digitNum }}</td>
+                <td class="text-center w-230px">
+                  <button class="btn btn-primary mr-3" (click)="viewDetails(reports)">View Details</button>
+                  <!-- <button class="btn btn-danger" (click)="deleteItem(reports)" [hidden]="outletID !== undefined && outletID !== null">Delete</button> -->
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div [hidden]="reportsList.length===0&&!loading">
+          <ngb-pagination (pageChange)="onPaginationChange($event)" [collectionSize]="response.total" [(page)]="dataPost.pageNo"
+                          [(pageSize)]="response.limit" [maxSize]="5" [boundaryLinks]="true" class="d-flex justify-content-center"></ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

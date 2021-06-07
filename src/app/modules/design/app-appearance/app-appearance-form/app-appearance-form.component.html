@@ -1,0 +1,106 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="col-12">
+      <h1 class="text-dark m-b-0 text-center">App Appearance</h1>
+    </div>
+    <form class="form-horizontal" id="appAppearanceForm" #AppAppearance="ngForm" (ngSubmit)="addAppAppearance(AppAppearance)">
+      <div class="row">
+        <div class="col-md-3 hidden-xs hidden-sm"></div>
+        <div class="col-sm-12 col-xs-12 col-md-6 col-md-push-3">
+          <!-- <div class="card">
+            <div class="card-body">
+              <div ngModelGroup="color">
+                <h4 class="card-title">App Color Settings</h4>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Primary Color
+                      </label>
+                      <input class="form-control" [hidden]="true" type="color" name="primary" [ngModel]="appAppearance?.color?.primary" #pColor="ngModel">
+                      <input class="form-control text-center" [value]="primaryColor" [style.background]="primaryColor" [cpAlphaChannel]="'always'" [cpOutputFormat]="'hex'" [cpPresetColors]="['#fff', '#2889e9']"
+                        [cpAddColorButton]="true" [(colorPicker)]="primaryColor" name="primary" (colorPickerChange)="onChangeColor($event, AppAppearance, 'primary')"/>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Secondary Color
+                      </label>
+                      <input class="form-control" [hidden]="true" type="color" name="secondary" [ngModel]="appAppearance?.color?.secondary" #sColor="ngModel">
+                      <input class="form-control text-center" [value]="secondaryColor" [style.background]="secondaryColor" [cpAlphaChannel]="'always'" [cpOutputFormat]="'hex'" [cpPresetColors]="['#fff', '#2889e9']"
+                        [cpAddColorButton]="true" [(colorPicker)]="secondaryColor" name="primary" (colorPickerChange)="onChangeColor($event, AppAppearance, 'secondary')"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Brand Icon&nbsp;&nbsp; </label>
+                <input type="file" (change)="uploadFile($event, 'image')" accept=".jpg" />
+                <input type="hidden" name="icon" [ngModel]="appAppearance?.icon">
+                <br>
+                <div *ngIf="appAppearance?.icon">
+                  <img [src]="appAppearance?.icon" class="img-upload-disp-wrapper">
+                  <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile('image', 'brand', 'original')">Delete</button>
+                </div>
+                <span class="help-block">
+                  <small> Max File Size: 300kb. Max Image Size : 640px by 480px. Format: jpg only. </small>
+                </span>
+              </div>
+            </div>
+          </div> -->
+          <div class="card">
+            <div class="card-body">
+              <div ngModelGroup="layout">
+                <h4 class="cart-title text-center">App Layout</h4>
+                <hr>
+                <div class="row">
+                  <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label>Outlet Listing Page Layout
+                        <span>*</span>
+                      </label>
+                      <br />
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="singleColOutlet" checked="checked" required name="outlet" [ngModel]="appAppearance?.layout?.outlet"
+                          #outlet="ngModel" value="OneCol">
+                        <label class="custom-control-label" for="singleColOutlet">Single Column </label>
+                        <br />
+                      </div>
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="towColOutlet" required name="outlet" [ngModel]="appAppearance?.layout?.outlet"
+                          #outlet="ngModel" value="TwoCol">
+                        <label class="custom-control-label" for="towColOutlet">Two Column</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label>Menu Item Listing Page Layout
+                        <span>*</span>
+                      </label>
+                      <br />
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="singleColMenu" required name="menu" [ngModel]="appAppearance?.layout?.menu"
+                          #menu="ngModel" value="OneCol">
+                        <label class="custom-control-label" for="singleColMenu">Single Column </label>
+                        <br />
+                      </div>
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="twoColMenu" checked="checked" required name="menu" [ngModel]="appAppearance?.layout?.menu"
+                          #menu="ngModel" value="TwoCol">
+                        <label class="custom-control-label" for="twoColMenu">Two Column</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

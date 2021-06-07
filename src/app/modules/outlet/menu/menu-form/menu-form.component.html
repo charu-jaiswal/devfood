@@ -1,0 +1,181 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h1 class="text-center title" *ngIf="!menuID">Add Menu</h1>
+    <h1 class="text-center title" *ngIf="menuID">Edit Menu</h1>
+    <br>
+    <form class="form-horizontal" id="menuForm" #MenuForm="ngForm" (ngSubmit)="addMenu(MenuForm)">
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Menu Name
+                      <span>*</span>
+                    </label>
+                    <input class="form-control" type="text" name="name" required [ngModel]="menu?.name" #name="ngModel">
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                      <div *ngIf="name.errors.required">Menu Name is required.</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Menu Subtitle
+                    </label>
+                    <input class="form-control" type="text" name="desc" #desc="ngModel" [ngModel]="menu?.desc">
+                  </div>
+                  <div class="row m-0">
+                    <div class="col-12 p-0 pr-1">
+                      <div class="form-group">
+                        <label>Categories
+                        </label>
+                        <ng-select [items]="categoryList" bindLabel="name" bindValue="id" name="category"
+                                   [ngModel]="menu?.category" #category="ngModel" [multiple]="true"
+                                   [closeOnSelect]="false">
+                        </ng-select>
+                        <span class="help-block">
+                  <small>Add Categories here if you are using Normal Layout, else leave empty.</small>
+                </span>
+                      </div>
+                    </div>
+                    <div class="col-12 p-0 pr-1">
+                      <div class="form-group">
+                        <label>Category Groups
+                        </label>
+                        <ng-select [items]="catGroupList" bindLabel="name" bindValue="id" name="catGroup"
+                                   [ngModel]="menu?.catGroup" #catGroup="ngModel" [multiple]="true"
+                                   [closeOnSelect]="false">
+                        </ng-select>
+                         <span class="help-block">
+                  <small>Add Category Groups here <u>ONLY</u> you are using Category Layout, else leave empty. Category Layout is Configured on Settings page of this Outlet.</small>
+                </span>
+                      </div>
+                    </div>
+                    <div class="col-6 p-0 pl-1">
+                      <div class="form-group">
+                        <label>Sort Weight</label>
+                        <input class="form-control" type="number" name="sort" [ngModel]="menu?.sort" #sort="ngModel">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group" ngModelGroup="available">
+                    <label>Available for 
+                      <span>*</span>
+                    </label>
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="isDelivery" name="isDelivery"
+                                   [ngModel]="menu?.available?.isDelivery" [required]="!(pickUp.value)" #del="ngModel">
+                            <label class="custom-control-label" for="isDelivery">Delivery</label>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="isPickup" name="isPickup"
+                                   [ngModel]="menu?.available?.isPickup" [required]="!(del.value)" #pickUp="ngModel">
+                            <label class="custom-control-label" for="isPickup">Take Away</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <h4 class="text-center m-4">Menu Availability</h4>
+                  <div class="form-grouping-wrapper my-3" ngModelGroup="opHrs">
+                    <div class="row" *ngFor="let opHr of menu?.opHrs; let i = index" [ngModelGroup]="i">
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <label>Day
+                          </label>
+                          <select class="custom-select col-12" name="day" [ngModel]="opHr?.day" #day="ngModel" required>
+                            <option *ngFor="let option of dayList" [value]="option.value">{{option.label}}</option>
+                          </select>
+                          <div *ngIf="day.invalid && (day.dirty || day.touched)" class="alert alert-danger">
+                            <div *ngIf="day.errors.required">Day is required.</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="form-group">
+                          <label>From</label>
+                          <select class="form-control" name="fromTime" [ngModel]="opHr?.fromTime" #fromTime="ngModel"
+                                  required>
+                            <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                              {{option.label}}</option>
+                          </select>
+                          <div *ngIf="fromTime.invalid && (fromTime.dirty || fromTime.touched)"
+                               class="alert alert-danger">
+                            <div *ngIf="fromTime.errors.required">Day is required.</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="form-group">
+                          <label>To</label>
+                          <select class="form-control" name="toTime" [ngModel]="opHr?.toTime" #toTime="ngModel"
+                                  required>
+                            <option *ngFor="let option of this.fireDB.getTimeRangeArray()" [value]="option.value">
+                              {{option.label}}</option>
+                          </select>
+                          <div *ngIf="toTime.invalid && (toTime.dirty || toTime.touched)" class="alert alert-danger">
+                            <div *ngIf="toTime.errors.required">Day is required.</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-1 mt-1">
+                        <br>
+                        <button type="button" class="btn btn-sm btn-danger" (click)="deleteOperatingHour(i)">
+                          <i class="ti-close"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="text-center">
+                      <button type="button" class="btn btn-sm btn-success" (click)="addMoreOperatingHours()">
+                        <i class="ti-plus"></i> &nbsp; Add</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3"></div>
+          <div class="col-md-12" *ngIf="menu?.lang">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Language</h4>
+                <hr>
+                <div class="row" ngModelGroup="lang">
+                  <div class="col-md-12" *ngFor="let langField of menu?.lang | keyvalue" [ngModelGroup]="langField?.key">
+                    <h5>{{langField?.value?.name}}</h5>
+                    <input type="hidden" name="name" [ngModel]="langField?.value?.name">
+                    <div class="row" ngModelGroup="lList">
+                      <div class="col-md-6" *ngFor="let row of langField?.value?.lList; let i = index" [ngModelGroup]="i">
+                        <div class="form-group row">
+                          <label class="col-2 text-right">{{row?.id}}</label>
+                          <input type="hidden" name="id" [ngModel]="row?.id">
+                          <input class="col-10 form-control" type="text" name="val" [ngModel]="row?.val">
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                *ngIf="menuID">Update</button>
+        <button type="submit" class="btn btn-lg btn-success waves-effect waves-light m-r-10"
+                *ngIf="!menuID">Submit</button>
+        <button type="button" class="btn btn-lg btn-inverse waves-effect waves-light"
+                [routerLink]="['../..']">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

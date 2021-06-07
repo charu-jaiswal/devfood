@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center">
+          <button class="btn btn-success" type="button" [routerLink]="['/settings/zonemanager/add/new']">
+            <i class="ti-plus"></i> &nbsp; Add Zone Manager</button>
+        </div>
+        <br>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>S.NO</th>
+                <th>ZoneName</th>
+                <th>Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr [ngClass]="{'table-warning': zone.isDisabled,'table-danger': zone.isHidden}"
+                *ngFor="let zone of ZoneList; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ zone.zoneName }}</td>
+                <td>{{ zone.user }}</td>
+
+                <td class="actionList">
+                  <button class="btn btn-sm btn-info" type="button"
+                    [routerLink]="['/settings/zonemanager', 'edit', zone.id]">Edit</button>
+                  <button class="btn btn-sm btn-danger" type="button"
+                    (click)="deleteZone($event, zone.id)">Delete</button>
+                  <button class="btn btn-sm btn-info  btn-disable" type="button" (click)="disablezone($event, zone)">
+                    {{ zone.isDisabled ? 'Enable' : 'Disable'}}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>
